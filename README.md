@@ -50,6 +50,29 @@ Without step 1 and with `.env` left empty, `npm run dev` runs the storefront sta
 | Content | `/pages/about-us`, `/pages/contact`, `/pages/google-reviews`, `/blogs/news`, `/policies/*` | |
 | Account | `/account/login`, `/account/register`, `/account`, `/search`, 404 | |
 
+## Deploying (Railway)
+
+The test deployment is Railway project **photobooth-city** (four services: Postgres, Redis,
+`backend`, `storefront`). Code is uploaded with the Railway CLI rather than linked to GitHub:
+
+```bash
+railway up backend --path-as-root --service backend      # Medusa
+railway up . --path-as-root --service storefront         # Astro (backend/ excluded by .railwayignore)
+```
+
+Service settings (set in Railway, not in files):
+
+| Service | Build | Pre-deploy | Start |
+| --- | --- | --- | --- |
+| backend | `cd apps/backend && npx medusa build` | `cd apps/backend/.medusa/server && npx medusa db:migrate` + admin user from `MEDUSA_ADMIN_EMAIL` / `MEDUSA_ADMIN_PASSWORD` | `cd apps/backend/.medusa/server && npx medusa start` |
+| storefront | `npm run build` | none | `npx serve@14.2.4 dist -l tcp://0.0.0.0:$PORT` |
+
+Backend variables: `DATABASE_URL=${{Postgres.DATABASE_URL}}`, `REDIS_URL=${{Redis.REDIS_URL}}`,
+`JWT_SECRET`, `COOKIE_SECRET`, `STORE_CORS` (storefront URL), `ADMIN_CORS` (backend URL), `AUTH_CORS`
+(both), `NODE_ENV=production`. Storefront variables: `PUBLIC_MEDUSA_BACKEND_URL`,
+`PUBLIC_MEDUSA_PUBLISHABLE_KEY`. The storefront reads the catalog at build time, so redeploy it after
+changing products in the admin.
+
 ## The backend (`backend/`)
 
 Medusa's DTC starter (a Turborepo workspace; the app is `backend/apps/backend`). Read
