@@ -1,0 +1,237 @@
+---
+// Description / specs / box / shipping. Tabs on desktop; on the Ring Roamer
+// (pdp layout) the same panels become an accordion below lg (PDPMobile).
+import Icon from '@/components/Icon.astro';
+import { PAGES } from '@/lib/routes';
+import type { PdpExtras } from '@/lib/product-extras';
+import type { Product } from '@/lib/types';
+
+interface Props {
+  product: Product;
+  extras?: PdpExtras;
+  class?: string;
+}
+
+const { product: p, extras: x, class: className } = Astro.props;
+const pdp = !!x;
+
+type Tab = { id: string; tab: string; acc: string };
+const tabs: Tab[] = pdp
+  ? [
+      { id: 'desc', tab: 'Description', acc: 'Description' },
+      { id: 'specs', tab: 'Specs', acc: 'Specs' },
+      { id: 'box', tab: 'What’s in the box', acc: 'What’s in the box' },
+      { id: 'ship', tab: 'Shipping', acc: 'Shipping & returns' },
+    ]
+  : [
+      { id: 'desc', tab: 'Description', acc: 'Description' },
+      { id: 'ship', tab: 'Shipping & returns', acc: 'Shipping & returns' },
+    ];
+const body = p.body ?? [];
+const textCls = pdp ? 'text-base leading-[1.65] lg:text-[17px] lg:leading-7' : 'text-base leading-[1.65] lg:text-[17px]';
+---
+
+<section
+  id="specs"
+  aria-label="Product details"
+  data-pdetails
+  data-mode={pdp ? 'acc' : 'tabs'}
+  class:list={['scroll-mt-6', pdp ? 'mt-7 lg:mt-24' : 'mt-12 lg:mt-[88px]', className]}
+>
+  <div role="tablist" aria-label="Product details" class:list={['flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]', pdp && 'max-lg:hidden']}>
+    {
+      tabs.map((t, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`pd-tab-${t.id}`}
+          aria-controls={`pd-panel-${t.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          data-tab={t.id}
+          class:list={['-mb-px flex-none border-b-[3px] border-transparent px-[18px] text-base font-extrabold text-ink-500 transition-colors duration-150 hover:text-ink-900 aria-selected:border-ink-900 aria-selected:text-ink-900', pdp ? 'h-14 lg:px-5' : 'h-[54px]']}
+        >
+          {t.tab}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class:list={[pdp ? 'max-lg:border-t max-lg:border-line lg:max-w-[960px] lg:py-10' : 'max-w-[880px] py-8 lg:py-8']}>
+    {
+      tabs.map((t, i) => (
+        <div class:list={[pdp && 'max-lg:border-b max-lg:border-line']}>
+          {pdp && (
+            <h2 class="m-0 lg:hidden">
+              <button
+                type="button"
+                data-acc={t.id}
+                aria-expanded={i === 0 ? 'true' : 'false'}
+                aria-controls={`pd-panel-${t.id}`}
+                class="group flex min-h-[60px] w-full items-center justify-between gap-3 p-0 text-left text-base font-extrabold text-ink-900"
+              >
+                {t.acc}
+                <Icon name="chevron-down" size={20} stroke={2.4} class="transition-transform duration-150 group-aria-expanded:rotate-180" />
+              </button>
+            </h2>
+          )}
+          <div
+            id={`pd-panel-${t.id}`}
+            role="tabpanel"
+            aria-labelledby={`pd-tab-${t.id}`}
+            tabindex="0"
+            data-panel={t.id}
+            data-on={i === 0 ? '' : undefined}
+            data-open={i === 0 ? '' : undefined}
+            class:list={['pd-panel focus-visible:outline-offset-4', pdp && 'max-lg:pb-5']}
+          >
+            {t.id === 'desc' &&
+              (x ? (
+                <div class:list={['flex flex-col gap-4 text-ink-700', textCls]}>
+                  <h2 class="m-0 font-display text-[22px] leading-7 font-bold text-ink-900 lg:text-[28px] lg:leading-8">{x.description.heading}</h2>
+                  {x.description.paragraphs.map((t) => <p class="m-0">{t}</p>)}
+                  <p class="m-0 font-bold text-ink-900">{x.description.strong}</p>
+                </div>
+              ) : (
+                <div class:list={['flex flex-col gap-3 text-ink-700', textCls]}>
+                  {body.map((b) =>
+                    b.type === 'heading' ? (
+                      <h2 class="m-0 mt-4 font-display text-[22px] leading-7 font-bold text-ink-900">{b.text}</h2>
+                    ) : b.type === 'li' ? (
+                      <p class="relative m-0 pl-5">
+                        <span aria-hidden="true" class="absolute top-0 left-1 font-extrabold text-brand-600">·</span>
+                        {b.text}
+                      </p>
+                    ) : (
+                      <p class="m-0">{b.text}</p>
+                    ),
+                  )}
+                  {!body.length && p.lead && <p class="m-0">{p.lead}</p>}
+                </div>
+              ))}
+
+            {t.id === 'specs' && x && (
+              <dl class="m-0 grid grid-cols-[minmax(0,120px)_minmax(0,1fr)] gap-x-4 border-t border-line sm:grid-cols-[240px_minmax(0,1fr)] sm:gap-x-0">
+                {x.specs.map((s) => (
+                  <>
+                    <dt class="border-b border-line py-4 text-[15px] font-extrabold">{s.k}</dt>
+                    <dd class="m-0 border-b border-line py-4 text-[15px] leading-[23px] whitespace-pre-line text-ink-700">{s.v}</dd>
+                  </>
+                ))}
+              </dl>
+            )}
+
+            {t.id === 'box' && x && (
+              <div class="flex flex-wrap gap-6 lg:gap-12">
+                <ul class="m-0 flex flex-[1_1_380px] list-none flex-col gap-3 p-0">
+                  {x.box.map((b) => (
+                    <li class="flex items-center gap-3.5 text-[15px] lg:text-base">
+                      <span class="flex size-9 flex-none items-center justify-center rounded-md bg-brand-50 text-sm font-extrabold text-brand-600">1×</span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+                <div class="flex flex-[1_1_280px] flex-col gap-2 rounded-card bg-canvas p-5 text-[15px] leading-[22px] text-ink-700">
+                  <strong class="text-ink-900">Sold separately</strong>
+                  <span>{x.soldSeparately}</span>
+                </div>
+              </div>
+            )}
+
+            {t.id === 'ship' && (
+              <div class:list={['flex flex-col gap-3.5 text-ink-700', textCls]}>
+                <p class="m-0">
+                  <strong class="text-ink-900">Leadtime:</strong> {x ? x.shipping.lead : p.leadTime ? p.leadTime + '.' : 'shown at checkout for your configuration.'}
+                </p>
+                <p class="m-0">
+                  <strong class="text-ink-900">Where we ship:</strong> the United States only — all 50 states and Puerto Rico. Economy from $20; UPS options at checkout.
+                </p>
+                <p class="m-0">
+                  <strong class="text-ink-900">Returns:</strong> {x ? x.shipping.returns : 'see our'} <a href={PAGES.refund}>Refund Policy</a> and{' '}
+                  <a href={PAGES.shipping}>Shipping Policy</a>.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* Tabs mode: only the selected panel shows. Accordion mode (below lg): open panels show. */
+  [data-pdetails][data-mode='tabs'] .pd-panel:not([data-on]) {
+    display: none;
+  }
+  @media (width >= 64rem) {
+    [data-pdetails][data-mode='acc'] .pd-panel:not([data-on]) {
+      display: none;
+    }
+  }
+  @media (width < 64rem) {
+    [data-pdetails][data-mode='acc'] .pd-panel:not([data-open]) {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-pdetails]')) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const accs = [...root.querySelectorAll<HTMLButtonElement>('[data-acc]')];
+
+    const select = (id: string, focus = false) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === id;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      panels.forEach((p) => p.toggleAttribute('data-on', p.dataset.panel === id));
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t.dataset.tab!));
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (e.key === 'Home' || e.key === 'End') {
+          e.preventDefault();
+          select(tabs[e.key === 'Home' ? 0 : tabs.length - 1].dataset.tab!, true);
+        } else if (d) {
+          e.preventDefault();
+          select(tabs[(i + d + tabs.length) % tabs.length].dataset.tab!, true);
+        }
+      });
+    });
+
+    if (accs.length) {
+      // accordion: one open at a time, Description open by default
+      const open = (id: string | null) => {
+        accs.forEach((a) => a.setAttribute('aria-expanded', String(a.dataset.acc === id)));
+        panels.forEach((p) => p.toggleAttribute('data-open', p.dataset.panel === id));
+      };
+      open(accs[0].dataset.acc!);
+      accs.forEach((a) => a.addEventListener('click', () => open(a.getAttribute('aria-expanded') === 'true' ? null : a.dataset.acc!)));
+
+      // panels are tabpanels on desktop, plain regions under the accordion on mobile
+      const mq = window.matchMedia('(min-width: 64rem)');
+      const roles = () =>
+        panels.forEach((p) => {
+          p.setAttribute('role', mq.matches ? 'tabpanel' : 'region');
+          const acc = accs.find((a) => a.dataset.acc === p.dataset.panel);
+          if (!mq.matches && acc) {
+            acc.id ||= `pd-acc-${p.dataset.panel}`;
+            p.setAttribute('aria-labelledby', acc.id);
+          } else p.setAttribute('aria-labelledby', `pd-tab-${p.dataset.panel}`);
+        });
+      roles();
+      mq.addEventListener('change', roles);
+    }
+
+    // "Which iPad do I have?" → open Specs
+    document.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest?.('a[href="#specs"]') && tabs.some((t) => t.dataset.tab === 'specs')) select('specs');
+    });
+  }
+</script>

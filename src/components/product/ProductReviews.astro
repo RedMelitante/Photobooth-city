@@ -1,0 +1,75 @@
+---
+// Ring Roamer reviews block (design copy: store rating + two Google reviews).
+import { designImage } from '@/lib/catalog';
+import { GOOGLE, type PdpReview } from '@/lib/product-extras';
+
+interface Props {
+  reviews: PdpReview[];
+  class?: string;
+}
+
+const { reviews, class: className } = Astro.props;
+---
+
+<section aria-labelledby="pr-title" data-previews class:list={['flex flex-col gap-3.5 lg:flex-row lg:flex-wrap lg:gap-14', className]}>
+  <div class="flex flex-col gap-3.5 max-lg:contents lg:max-w-[380px] lg:flex-[1_1_300px] lg:gap-4">
+    <h2 id="pr-title" class="m-0 font-display text-2xl font-bold lg:text-[32px] lg:leading-9 lg:tracking-[-0.02em]">Reviews</h2>
+    <p class="m-0 text-sm text-ink-700 lg:hidden">
+      <strong class="text-lg text-ink-900">{GOOGLE.rating}</strong> Photobooth City <a href={GOOGLE.listing} target="_blank" rel="noopener" class="font-bold">store rating on Google</a>
+    </p>
+    <div class="flex items-center gap-3.5 max-lg:hidden">
+      <span class="font-display text-[56px] leading-none font-extrabold tracking-[-0.04em]">{GOOGLE.rating}</span>
+      <span class="text-sm leading-5 text-ink-700">
+        Photobooth City<br /><a href={GOOGLE.listing} target="_blank" rel="noopener" class="font-bold">store rating on Google</a>
+      </span>
+    </div>
+    <p class="m-0 text-[15px] leading-[23px] text-ink-700 max-lg:hidden">[Product-level reviews appear here once collected — star breakdown, photos and verified-buyer tags.]</p>
+    <a
+      href={GOOGLE.write}
+      target="_blank"
+      rel="noopener"
+      class="flex h-12 items-center rounded-lg border-[1.5px] border-ink-900 bg-surface px-[22px] text-[15px] font-bold text-ink-900 no-underline hover:bg-ink-900 hover:text-white max-lg:order-last max-lg:justify-center lg:self-start"
+    >
+      Write a review on Google
+    </a>
+  </div>
+  <div class="grid min-w-0 content-start gap-5 lg:flex-[999_1_560px] lg:grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))]">
+    {
+      reviews.map((r, i) => (
+        <figure class:list={['m-0 flex flex-col gap-3 rounded-card border border-line p-[18px] lg:gap-4 lg:p-6', i > 0 && 'max-lg:hidden']}>
+          <blockquote class="m-0 text-[15px] leading-[23px] lg:text-[17px] lg:leading-[27px]">
+            “<span data-short>{r.short}</span><span data-full hidden>{r.full}</span>”
+          </blockquote>
+          <button
+            type="button"
+            data-more
+            aria-expanded="false"
+            class="-mt-2 self-start border-0 bg-transparent py-1.5 text-sm font-extrabold text-brand-600 underline"
+          >
+            Read more
+          </button>
+          <figcaption class="flex items-center gap-3 text-[13px] text-ink-500 lg:text-sm">
+            <img src={designImage(r.avatar)} alt="" width="40" height="40" loading="lazy" class="size-9 flex-none rounded-full bg-brand-100 object-cover lg:size-10" />
+            <span>
+              <a href={r.profile} target="_blank" rel="noopener" class="font-extrabold text-ink-900 no-underline hover:underline">{r.name}</a> · {r.when}
+              <span class="max-lg:hidden"> · Google review</span>
+            </span>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-previews] [data-more]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const fig = b.closest('figure')!;
+      const open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(open));
+      b.textContent = open ? 'Show less' : 'Read more';
+      fig.querySelector<HTMLElement>('[data-short]')!.hidden = open;
+      fig.querySelector<HTMLElement>('[data-full]')!.hidden = !open;
+    }),
+  );
+</script>

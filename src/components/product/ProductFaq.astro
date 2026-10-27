@@ -1,0 +1,61 @@
+---
+// FAQ accordion (one open at a time, first open). Answers stay in the HTML
+// (hidden attribute) so they are crawlable and match the FAQPage JSON-LD.
+import Icon from '@/components/Icon.astro';
+
+interface Props {
+  heading: string;
+  items: { q: string; a: string }[];
+  class?: string;
+}
+
+const { heading, items, class: className } = Astro.props;
+---
+
+<section aria-labelledby="pp-faq" data-pfaq class:list={['max-w-[960px]', className]}>
+  <h2 id="pp-faq" class="m-0 mb-3.5 font-display text-[26px] leading-[1.15] font-bold tracking-[-0.02em] lg:mb-5 lg:text-[32px]">{heading}</h2>
+  <div class="border-t border-line">
+    {
+      items.map((f, i) => (
+        <div class="border-b border-line">
+          <h3 class="m-0">
+            <button
+              type="button"
+              id={`pfaq-q${i}`}
+              aria-expanded={i === 0 ? 'true' : 'false'}
+              aria-controls={`pfaq-a${i}`}
+              class="group flex min-h-[60px] w-full items-center justify-between gap-4 py-3.5 text-left text-base leading-[1.35] font-extrabold text-ink-900 lg:min-h-[68px] lg:text-lg"
+            >
+              {f.q}
+              <span
+                aria-hidden="true"
+                class="flex size-8 flex-none items-center justify-center rounded-full bg-chip text-ink-900 transition-colors duration-150 group-aria-expanded:bg-ink-900 group-aria-expanded:text-white"
+              >
+                <Icon name="chevron-down" size={16} stroke={2.6} class="transition-transform duration-150 group-aria-expanded:rotate-180" />
+              </span>
+            </button>
+          </h3>
+          <div id={`pfaq-a${i}`} role="region" aria-labelledby={`pfaq-q${i}`} hidden={i !== 0} class="pr-12 pb-5 text-[15px] leading-[1.65] text-ink-700 lg:text-[17px]">
+            {f.a}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-pfaq]')) {
+    const btns = [...root.querySelectorAll<HTMLButtonElement>('button[aria-controls]')];
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        const opening = b.getAttribute('aria-expanded') !== 'true';
+        btns.forEach((o) => {
+          const on = o === b && opening;
+          o.setAttribute('aria-expanded', String(on));
+          document.getElementById(o.getAttribute('aria-controls')!)!.hidden = !on;
+        });
+      }),
+    );
+  }
+</script>

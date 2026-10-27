@@ -1,0 +1,193 @@
+---
+// Product detail page — one template (ProductPage) for every product in the
+// catalog; the Ring Roamer adds the richer PDPDesktop / PDPMobile sections.
+import Layout from '@/layouts/Layout.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import Gallery from '@/components/product/Gallery';
+import BuyBox from '@/components/product/BuyBox';
+import FrequentlyBought from '@/components/product/FrequentlyBought';
+import ProductDetails from '@/components/product/ProductDetails.astro';
+import ProductFaq from '@/components/product/ProductFaq.astro';
+import ProductReviews from '@/components/product/ProductReviews.astro';
+import { toClientProduct, variantParam } from '@/components/product/state';
+import { getCollection, getProduct, isOnSale, listProducts, relatedProducts } from '@/lib/catalog';
+import { pdpExtras } from '@/lib/product-extras';
+import { toCartLine } from '@/lib/product';
+import { collectionUrl, PAGES, productUrl } from '@/lib/routes';
+import type { Product } from '@/lib/types';
+
+export function getStaticPaths() {
+  return listProducts().map((p) => ({ params: { handle: p.handle } }));
+}
+
+const { handle } = Astro.params;
+const p = getProduct(handle!)!;
+const x = pdpExtras(p.handle);
+const layout = x ? 'pdp' : 'template';
+const col = getCollection(p.collection);
+const colTitle = col?.title ?? 'Photo Booths';
+const colHref = col ? collectionUrl(col.handle) : PAGES.home;
+
+const related: Product[] = x ? x.related.map((h) => getProduct(h)).filter((r): r is Product => !!r) : relatedProducts(p, 4);
+const faq = x?.faq ?? (p.faq && p.faq.items.length ? p.faq : null);
+
+// Frequently bought together (Ring Roamer only)
+const fbtItems = (x?.fbt ?? [])
+  .map((h) => getProduct(h))
+  .filter((a): a is Product => !!a && a.available)
+  .map((a) => {
+    const v = [...a.variants].filter((y) => y.available).sort((m, n) => m.price - n.price)[0];
+    return { key: a.handle, name: a.title, img: a.images[0]?.url ?? '', line: toCartLine(a, v) };
+  });
+
+// ── SEO ─────────────────────────────────────────────────────────────
+const firstText = p.body.find((b) => b.type === 'p' && b.text.length > 40)?.text;
+const description = (p.lead || firstText || `${p.title} from Photobooth City.`).slice(0, 300);
+const site = Astro.site ?? new URL('https://photoboothcity.com');
+const url = new URL(productUrl(p.handle), site).toString();
+const avail = (a: boolean) => (a ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock');
+const money = (c: number) => (c / 100).toFixed(2);
+const offer = (v: Product['variants'][number]) => ({
+  '@type': 'Offer',
+  url: p.variants.length > 1 ? `${url}?variant=${variantParam(v.id)}` : url,
+  ...(v.sku ? { sku: v.sku } : {}),
+  ...(p.variants.length > 1 ? { name: v.title } : {}),
+  price: money(v.price),
+  priceCurrency: 'USD',
+  availability: avail(v.available),
+  itemCondition: 'https://schema.org/NewCondition',
+});
+const productLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: p.title,
+  description,
+  url,
+  image: p.images.map((i) => i.url),
+  brand: { '@type': 'Brand', name: 'Photobooth City' },
+  ...(p.variants[0]?.sku ? { sku: p.variants[0].sku } : {}),
+  ...(p.kind ? { category: p.kind } : {}),
+  offers:
+    p.variants.length === 1
+      ? offer(p.variants[0])
+      : {
+          '@type': 'AggregateOffer',
+          priceCurrency: 'USD',
+          lowPrice: money(p.minPrice),
+          highPrice: money(p.maxPrice),
+          offerCount: p.variants.length,
+          availability: avail(p.available),
+          offers: p.variants.map(offer),
+        },
+};
+const crumbs = [
+  { name: 'Home', href: PAGES.home },
+  { name: colTitle, href: colHref },
+  { name: p.title, href: productUrl(p.handle) },
+];
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.href, site).toString() })),
+};
+const faqLd = faq && {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const ld = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
+const sale = isOnSale(p) && p.available;
+---
+
+<Layout title={p.title} description={description} image={p.images[0]?.url}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={ld(productLd)} />
+    <script type="application/ld+json" set:html={ld(breadcrumbLd)} />
+    {faqLd && <script type="application/ld+json" set:html={ld(faqLd)} />}
+  </Fragment>
+
+  <div class="container-page">
+    <nav aria-label="Breadcrumb" class:list={['py-3.5 lg:py-6', x && 'max-lg:py-3']}>
+      <ol class="m-0 flex list-none flex-wrap items-center gap-x-2 gap-y-1 p-0 text-[13px] text-ink-500 lg:text-sm">
+        <li><a href={PAGES.home} class="text-ink-500 hover:text-ink-900">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href={colHref} class="text-ink-500 hover:text-ink-900">{colTitle}</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="min-w-0 font-bold text-ink-900">{p.title}</li>
+      </ol>
+    </nav>
+
+    <!-- Gallery + buy box -->
+    <div class:list={['flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(360px,440px)] xl:grid-cols-[minmax(0,1fr)_minmax(400px,540px)] lg:items-start lg:gap-12 xl:gap-14', x ? 'gap-5' : 'gap-6']}>
+      <Gallery
+        client:load
+        images={p.images}
+        title={p.title}
+        layout={layout}
+        labels={x?.imageLabels}
+        labelsMobile={x?.imageLabelsMobile}
+        sale={sale}
+        soldOut={!p.available}
+      />
+      <BuyBox
+        client:load
+        product={toClientProduct(p)}
+        kicker={x?.kicker ?? p.kind}
+        lead={x?.lead ?? p.lead}
+        note={x?.note ?? p.note}
+        layout={layout}
+        swatches={x?.swatches}
+      />
+    </div>
+
+    <div class="flex flex-col">
+      <ProductDetails product={p} extras={x} class="order-1" />
+
+      {
+        faq && (
+          <ProductFaq
+            heading={faq.heading}
+            items={faq.items}
+            class={x ? 'max-lg:order-4 max-lg:pt-10 lg:order-2 lg:mt-24' : 'order-2 mt-2 lg:mt-6'}
+          />
+        )
+      }
+
+      {
+        x && (
+          <section aria-labelledby="fbt-title" class="order-2 mt-9 rounded-panel bg-canvas px-4 py-5 lg:order-3 lg:mt-8 lg:rounded-hero lg:p-10">
+            <h2 id="fbt-title" class="m-0 mb-3.5 font-display text-[22px] leading-[26px] font-bold lg:mb-6 lg:text-[32px] lg:leading-9 lg:tracking-[-0.02em]">
+              Frequently bought together
+            </h2>
+            <FrequentlyBought
+              client:visible
+              main={{ handle: p.handle, title: p.title, img: p.images[0]?.url ?? '', variants: p.variants, multi: p.variants.length > 1 }}
+              items={fbtItems}
+            />
+          </section>
+        )
+      }
+
+      {x && <ProductReviews reviews={x.reviews} class="order-3 pt-10 lg:order-4 lg:mt-24 lg:pt-0" />}
+
+      {
+        related.length > 0 && (
+          <section aria-labelledby="pp-rel" class:list={['order-5', x ? 'pt-10 pb-12 lg:my-24 lg:py-0' : 'mt-6 mb-14 lg:mt-10 lg:mb-24']}>
+            <div class:list={['flex flex-wrap items-end justify-between gap-3', x ? 'mb-4 lg:mb-7' : 'mb-6']}>
+              <h2 id="pp-rel" class="m-0 font-display text-2xl leading-[1.1] font-bold tracking-[-0.02em] lg:text-[32px]">You may also like</h2>
+              <a href={colHref} class="text-[15px] font-bold no-underline hover:underline">{x?.relatedLabel ?? `All ${colTitle}`} →</a>
+            </div>
+            <div
+              class:list={[
+                'grid grid-cols-2 gap-x-3 gap-y-7',
+                x ? 'lg:grid-cols-[repeat(auto-fill,minmax(min(280px,100%),1fr))] lg:gap-6' : 'lg:grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] lg:gap-x-6 lg:gap-y-10',
+              ]}
+            >
+              {related.map((r) => <ProductCard product={r} />)}
+            </div>
+          </section>
+        )
+      }
+    </div>
+  </div>
+</Layout>
