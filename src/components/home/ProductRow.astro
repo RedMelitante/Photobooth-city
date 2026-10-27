@@ -1,0 +1,93 @@
+---
+// A row of catalog product cards. Mobile: native scroll-snap carousel
+// (172px cards, zero JS). Desktop: `rail` keeps a horizontal row with
+// previous/next buttons; otherwise it becomes a grid.
+import ProductCard from '@/components/ProductCard.astro';
+import Icon from '@/components/Icon.astro';
+import SectionHead from './SectionHead.astro';
+import type { Product } from '@/lib/types';
+
+interface Props {
+  id: string;
+  title: string;
+  eyebrow?: string;
+  intro?: string;
+  products: Product[];
+  rail?: boolean;
+  /** desktop link (right of the title) */
+  link?: { href: string; label: string };
+  /** mobile "View all" link next to the title */
+  mobileLink?: string;
+}
+const { id, title, eyebrow, intro, products, rail = false, link, mobileLink } = Astro.props;
+const rowId = `${id}-row`;
+---
+
+<section aria-labelledby={id} class="container-page pt-12 lg:pt-24">
+  {intro ? (
+    <div class="mb-[18px] flex flex-wrap items-end justify-between gap-6 lg:mb-8">
+      <div class="flex max-w-[620px] flex-col gap-2 lg:gap-3">
+        <h2 id={id} class="m-0 font-display text-[28px] leading-8 font-bold tracking-[-0.02em] lg:text-[40px] lg:leading-[44px] lg:tracking-[-0.025em]">{title}</h2>
+        <p class="m-0 text-[15px] leading-[23px] text-pretty text-ink-700 lg:text-body-lg lg:leading-[27px]">{intro}</p>
+      </div>
+      {link && <a href={link.href} class="hidden text-[15px] font-bold hover:underline lg:block">{link.label}</a>}
+    </div>
+  ) : (
+    <SectionHead id={id} title={title} eyebrow={eyebrow}>
+      {mobileLink && <a href={mobileLink} class="py-2.5 text-sm font-bold hover:underline lg:hidden">View all</a>}
+      {link && <a href={link.href} class="hidden text-[15px] font-bold hover:underline lg:block">{link.label}</a>}
+      {rail && (
+        <div class="hidden items-center gap-2 lg:flex" data-rail-controls={rowId}>
+          <button type="button" data-dir="-1" aria-controls={rowId} aria-label="Previous products" class="flex size-11 items-center justify-center rounded-full border border-line-strong bg-white text-ink-900 transition-colors hover:border-ink-900 disabled:cursor-default disabled:opacity-40 disabled:hover:border-line-strong">
+            <Icon name="chevron-left" size={18} stroke={2.2} />
+          </button>
+          <button type="button" data-dir="1" aria-controls={rowId} aria-label="Next products" class="flex size-11 items-center justify-center rounded-full border border-ink-900 bg-ink-900 text-white transition-colors hover:bg-ink-700 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-ink-900">
+            <Icon name="chevron-right" size={18} stroke={2.2} />
+          </button>
+        </div>
+      )}
+    </SectionHead>
+  )}
+  <div
+    id={rowId}
+    class:list={[
+      'snap-row -mx-4 scroll-px-4 gap-3 px-4 pb-2',
+      rail
+        ? 'lg:mx-0 lg:scroll-px-0 lg:gap-6 lg:px-0 lg:pb-0'
+        : 'lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0 xl:grid-cols-6',
+    ]}
+    data-rail={rail ? '' : undefined}
+  >
+    {products.map((p) => (
+      <div class:list={['min-w-0 flex-[0_0_172px]', rail && 'lg:basis-[calc((100%-4*24px)/5)] xl:basis-[calc((100%-5*24px)/6)]']}>
+        <ProductCard product={p} />
+      </div>
+    ))}
+  </div>
+</section>
+
+{rail && (
+  <script>
+    // Desktop prev/next for product rails: scroll one card at a time and
+    // disable a button when the row can't move further that way.
+    for (const controls of document.querySelectorAll<HTMLElement>('[data-rail-controls]')) {
+      const row = document.getElementById(controls.dataset.railControls!);
+      if (!row) continue;
+      const buttons = controls.querySelectorAll<HTMLButtonElement>('button[data-dir]');
+      const update = () => {
+        const max = row.scrollWidth - row.clientWidth - 2;
+        buttons.forEach((b) => (b.disabled = b.dataset.dir === '-1' ? row.scrollLeft <= 2 : row.scrollLeft >= max));
+      };
+      buttons.forEach((b) =>
+        b.addEventListener('click', () => {
+          const card = row.firstElementChild as HTMLElement | null;
+          const step = card ? card.offsetWidth + parseFloat(getComputedStyle(row).columnGap || '0') : row.clientWidth;
+          row.scrollBy({ left: Number(b.dataset.dir) * step, behavior: 'smooth' });
+        }),
+      );
+      row.addEventListener('scroll', update, { passive: true });
+      new ResizeObserver(update).observe(row);
+      update();
+    }
+  </script>
+)}

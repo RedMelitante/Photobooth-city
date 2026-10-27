@@ -1,0 +1,70 @@
+---
+// Newsletter sign-up. Validates on submit and swaps to a thank-you state.
+// No email provider is wired yet: hook the POST in the submit handler.
+import Icon from '@/components/Icon.astro';
+---
+
+<section aria-labelledby="nl-title" class="container-page py-12 lg:py-24">
+  <div class="flex flex-col gap-3.5 rounded-panel bg-brand-600 px-[22px] py-7 text-white lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-8 lg:rounded-hero lg:px-16 lg:py-14">
+    <div class="flex flex-col gap-3.5 lg:flex-[1_1_400px] lg:gap-2.5">
+      <span class="text-xs font-extrabold tracking-[0.12em] text-flash-400 uppercase">Subscribe to our emails</span>
+      <h2 id="nl-title" class="m-0 font-display text-[28px] leading-8 font-bold tracking-[-0.02em] lg:text-[40px] lg:leading-[44px] lg:tracking-[-0.025em]">Flash sales and new booths, first.</h2>
+      <p class="m-0 text-[15px] leading-[22px] text-brand-100 lg:text-body-lg lg:leading-[26px]">Join the Photobooth City list. Unsubscribe anytime.</p>
+    </div>
+
+    <form novalidate data-newsletter class="flex flex-col gap-2 lg:flex-[1_1_440px]">
+      <label for="nl-email" class="text-[13px] font-bold text-white lg:text-sm">Email address</label>
+      <div class="flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:gap-2.5">
+        <input
+          id="nl-email"
+          name="email"
+          type="email"
+          required
+          placeholder="you@yourbusiness.com"
+          autocomplete="email"
+          aria-invalid="false"
+          aria-describedby="nl-err"
+          class="h-[52px] min-w-0 rounded-lg border-0 bg-white px-4 text-base text-ink-900 placeholder:text-ink-500 aria-invalid:shadow-[0_0_0_3px_var(--color-flash-400)] lg:h-14 lg:flex-[1_1_240px] lg:px-[18px]"
+        />
+        <button type="submit" class="h-[52px] rounded-lg border-0 bg-flash-400 px-7 text-base font-extrabold text-ink-950 transition-colors hover:bg-[#FFDB66] lg:h-14">Subscribe</button>
+      </div>
+      <p id="nl-err" role="alert" class="m-0 text-sm font-bold text-flash-400 empty:hidden"></p>
+    </form>
+
+    <div role="status" data-newsletter-done hidden class="flex items-start gap-3.5 rounded-card bg-white/12 p-4 lg:flex-[1_1_440px] lg:px-[22px] lg:py-5">
+      <span aria-hidden="true" class="flex size-10 flex-none items-center justify-center rounded-full bg-flash-400 text-ink-950">
+        <Icon name="check" size={20} stroke={2.8} />
+      </span>
+      <span class="flex flex-col gap-1">
+        <strong class="text-lg leading-[1.3] lg:text-xl">Thanks for subscribing!</strong>
+        <span class="text-[15px] leading-[22px] text-brand-100">We’ll send flash sales and new booths to <span data-newsletter-email></span>.</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-newsletter]');
+  if (form) {
+    const input = form.querySelector<HTMLInputElement>('input[type=email]')!;
+    const err = form.querySelector<HTMLElement>('#nl-err')!;
+    const done = document.querySelector<HTMLElement>('[data-newsletter-done]')!;
+    const setError = (on: boolean) => {
+      input.setAttribute('aria-invalid', String(on));
+      err.textContent = on ? 'Please enter a valid email address.' : '';
+    };
+    input.addEventListener('input', () => setError(false));
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
+        setError(true);
+        input.focus();
+        return;
+      }
+      done.querySelector('[data-newsletter-email]')!.textContent = v;
+      form.hidden = true;
+      done.hidden = false;
+    });
+  }
+</script>

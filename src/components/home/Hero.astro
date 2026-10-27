@@ -1,0 +1,90 @@
+---
+import Icon from '@/components/Icon.astro';
+import Stars from './Stars.astro';
+import { getProduct } from '@/lib/catalog';
+import { HERO, RATING, SHOP_URL, GOOGLE_REVIEWS_URL } from '@/lib/home';
+import { formatShort } from '@/lib/money';
+import { productUrl } from '@/lib/routes';
+import { PROMO, STORE } from '@/lib/commerce';
+
+const featured = getProduct(HERO.featured)!;
+const from = formatShort(featured.minPrice);
+---
+
+<section aria-labelledby="hero-title" class="container-page pt-3 lg:pt-6">
+  <div class="flex flex-col overflow-hidden rounded-[22px] bg-ink-950 text-white lg:min-h-[600px] lg:flex-row lg:items-stretch lg:gap-4 lg:rounded-[28px] lg:p-4">
+    <!-- Copy -->
+    <div class="flex min-w-0 flex-col justify-center gap-[18px] px-[22px] pt-[26px] pb-6 lg:flex-[1_1_520px] lg:gap-[26px] lg:py-12 lg:pr-10 lg:pl-12">
+      <span class="flex items-center gap-2 self-start rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold lg:px-3.5 lg:py-[7px] lg:text-[13px]">
+        <span class="size-[7px] rounded-full bg-flash-400 lg:size-2" aria-hidden="true"></span>
+        <span class="lg:hidden">Expert guidance for new businesses</span>
+        <span class="max-lg:hidden">Expert guidance for new photo booth businesses</span>
+      </span>
+      <h1 id="hero-title" class="m-0 font-display text-[44px] leading-[0.98] font-extrabold tracking-[-0.035em] text-balance lg:text-[60px] lg:leading-[0.96] lg:tracking-[-0.04em] xl:text-[76px]">
+        Ready to start your <span class="text-flash-400">photo booth</span> business?
+      </h1>
+      <p class="m-0 max-w-[500px] text-base leading-6 text-pretty text-ink-200 lg:text-[19px] lg:leading-[29px]">
+        Photobooth City offers expert guidance to help you find a photo booth tailored to your business.
+      </p>
+      <div class="flex flex-col gap-2.5 md:flex-row md:flex-wrap lg:gap-3">
+        <a href={SHOP_URL} class="flex h-[54px] items-center justify-center gap-2.5 rounded-[14px] bg-flash-400 px-7 text-base font-extrabold text-ink-950 transition-colors hover:bg-[#FFDB66] hover:text-ink-950 lg:h-[58px]">
+          Shop photo booths <Icon name="arrow-right" size={18} stroke={2.4} />
+        </a>
+        <a href={STORE.phoneHref} class="flex h-[54px] items-center justify-center gap-2.5 rounded-[14px] border-[1.5px] border-white/35 px-6 text-base font-bold text-white transition-colors hover:border-white hover:text-white lg:h-[58px]">
+          <Icon name="phone" size={18} /> Talk to an expert
+        </a>
+      </div>
+      <ul aria-label="Why Photobooth City" class="m-0 flex list-none flex-col gap-2.5 border-t border-white/14 p-0 pt-4 text-sm leading-5 text-ink-200 lg:mt-2 lg:flex-row lg:flex-wrap lg:gap-x-7 lg:gap-y-3.5 lg:pt-[22px]">
+        <li class="flex items-center gap-2.5">
+          <Stars size={16} empty="rgba(255,255,255,0.28)" class="text-flash-400 lg:hidden" />
+          <Stars size={18} empty="rgba(255,255,255,0.28)" class="text-flash-400 max-lg:hidden" />
+          <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener" class="font-bold text-white hover:text-white hover:underline">{RATING.value} · {RATING.count} Google reviews</a>
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="globe" size={18} class="text-flash-400" />
+          <strong class="text-white">Ships across the US</strong>
+        </li>
+        <li class="flex items-center gap-2">
+          <Icon name="clock" size={18} class="text-flash-400" />
+          <span>Experts <strong class="text-white">Mon–Fri, 10–6 PT</strong></span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Photo (first on mobile) -->
+    <div class="relative order-first h-[250px] min-w-0 md:h-[380px] overflow-hidden bg-[#E9E9E4] lg:order-none lg:h-auto lg:min-h-[568px] lg:flex-[1_1_580px] lg:rounded-[20px]">
+      <img
+        src={HERO.image}
+        alt={HERO.imageAlt}
+        width="1200"
+        height="1136"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="absolute inset-0 size-full object-cover object-[50%_35%] lg:object-[50%_40%]"
+      />
+      <a
+        href={SHOP_URL}
+        class="absolute top-3 left-3 flex items-center gap-2 rounded-full bg-flash-400 px-3 py-[7px] text-xs font-extrabold text-ink-950 hover:text-ink-950 lg:top-5 lg:right-5 lg:left-auto lg:gap-2.5 lg:px-3.5 lg:py-2.5 lg:text-sm lg:shadow-[0_10px_24px_-8px_rgba(11,16,32,0.45)]"
+      >
+        Flash sale · 7% off $3,500+
+        <span class="font-mono lg:rounded-sm lg:bg-ink-950 lg:px-2 lg:py-0.5 lg:text-xs lg:text-flash-400">{PROMO.code}</span>
+      </a>
+      <a
+        href={productUrl(featured.handle)}
+        class="group absolute bottom-3 left-3 flex items-center gap-2.5 rounded-[14px] bg-white py-2 pr-3 pl-2 text-ink-900 shadow-[0_12px_24px_-10px_rgba(11,16,32,0.5)] hover:text-ink-900 lg:bottom-5 lg:left-5 lg:gap-3.5 lg:rounded-[18px] lg:py-3 lg:pr-[18px] lg:pl-3 lg:shadow-[0_18px_36px_-12px_rgba(11,16,32,0.45)]"
+      >
+        <span class="size-11 flex-none overflow-hidden rounded-[10px] bg-canvas lg:size-16 lg:rounded-lg">
+          <img src={HERO.featuredImage} alt="" width="128" height="128" class="product-shot size-full p-[3px] lg:p-1" />
+        </span>
+        <span class="flex flex-col lg:gap-0.5">
+          <span class="hidden text-[11px] font-extrabold tracking-[0.08em] text-brand-600 uppercase lg:block">Best seller</span>
+          <strong class="text-sm leading-[18px] lg:text-base lg:leading-5">Ring Roamer for iPad</strong>
+          <span class="text-[13px] text-ink-700 lg:text-sm">
+            From <strong class="text-ink-900">{from}</strong> · <span class="lg:hidden">Best seller</span><span class="max-lg:hidden group-hover:underline">Shop now →</span>
+          </span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>

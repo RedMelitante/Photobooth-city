@@ -1,0 +1,20 @@
+---
+// Section title row: optional eyebrow (desktop only, as in the design),
+// h2, and whatever goes on the right via the default slot.
+interface Props {
+  id: string;
+  title: string;
+  eyebrow?: string;
+  class?: string;
+}
+import { H2 } from '@/lib/home';
+const { id, title, eyebrow, class: className } = Astro.props;
+---
+
+<div class:list={['mb-4 flex items-end justify-between gap-4 lg:mb-8', className]}>
+  <div class="flex flex-col gap-2">
+    {eyebrow && <span class="hidden text-xs font-extrabold tracking-[0.1em] text-brand-600 uppercase lg:block">{eyebrow}</span>}
+    <h2 id={id} class={H2}>{title}</h2>
+  </div>
+  <slot />
+</div>

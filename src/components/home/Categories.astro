@@ -1,0 +1,40 @@
+---
+import Icon from '@/components/Icon.astro';
+import { CATEGORIES, H2, SHOP_URL } from '@/lib/home';
+---
+
+<section aria-labelledby="cat-title" class="container-page pt-12 lg:pt-24">
+  <div class="mb-[18px] flex flex-wrap items-end justify-between gap-4 lg:mb-8">
+    <h2 id="cat-title" class={H2}>Shop by category</h2>
+    <a href={SHOP_URL} class="hidden text-[15px] font-bold hover:underline lg:block">View all booths →</a>
+  </div>
+  <div class="grid grid-cols-2 gap-3 lg:gap-6 xl:grid-cols-4">
+    {CATEGORIES.map((c) => (
+      <a
+        href={c.href}
+        class="group flex h-[200px] flex-col gap-2.5 rounded-card bg-tile p-4 text-ink-900 transition-colors duration-150 hover:bg-tile-hover hover:text-ink-900 lg:h-[400px] lg:gap-0 lg:rounded-panel lg:p-7"
+      >
+        <span class="flex min-h-0 flex-1 items-center justify-center">
+          <img
+            src={c.img}
+            alt={c.name}
+            loading="lazy"
+            decoding="async"
+            width="500"
+            height="500"
+            class="product-shot h-[120px] w-full transition-transform duration-200 group-hover:scale-[1.03] lg:h-[250px]"
+          />
+        </span>
+        <span class="flex items-end justify-between gap-4">
+          <span class="flex flex-col gap-1.5">
+            <span class="font-display text-[17px] leading-[21px] font-bold lg:text-2xl lg:leading-7 lg:tracking-[-0.015em]">{c.name}</span>
+            <span class="hidden text-sm leading-5 text-ink-500 lg:block">{c.sub}</span>
+          </span>
+          <span class="hidden size-11 flex-none items-center justify-center rounded-full bg-white text-ink-900 transition-colors duration-150 group-hover:bg-ink-900 group-hover:text-white lg:flex" aria-hidden="true">
+            <Icon name="arrow-right" size={18} stroke={2.2} />
+          </span>
+        </span>
+      </a>
+    ))}
+  </div>
+</section>

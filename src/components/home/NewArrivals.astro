@@ -1,0 +1,25 @@
+---
+import ProductCard from '@/components/ProductCard.astro';
+import SectionHead from './SectionHead.astro';
+import { SHOP_URL } from '@/lib/home';
+import type { Product } from '@/lib/types';
+
+interface Props {
+  products: Product[];
+}
+const { products } = Astro.props;
+// Mobile board shows the first four, then "View all 8 new arrivals".
+const MOBILE_COUNT = 4;
+---
+
+<section aria-labelledby="new-title" class="container-page pt-12 lg:pt-24">
+  <SectionHead id="new-title" title="New arrivals" eyebrow="Just landed">
+    <a href={SHOP_URL} class="py-2.5 text-sm font-bold hover:underline lg:py-0 lg:text-[15px]">View all<span class="max-lg:hidden"> →</span></a>
+  </SectionHead>
+  <div class="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-4 lg:gap-x-6 lg:gap-y-8">
+    {products.map((p, i) => <ProductCard product={p} badge="new" class={i >= MOBILE_COUNT ? 'max-md:hidden' : undefined} />)}
+  </div>
+  <a href={SHOP_URL} class="mt-5 flex h-12 items-center justify-center rounded-lg border-[1.5px] border-ink-900 text-[15px] font-bold text-ink-900 transition-colors hover:bg-ink-900 hover:text-white md:hidden">
+    View all {products.length} new arrivals
+  </a>
+</section>

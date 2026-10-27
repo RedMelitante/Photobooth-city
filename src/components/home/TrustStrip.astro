@@ -1,0 +1,29 @@
+---
+import Icon from '@/components/Icon.astro';
+import { TRUST } from '@/lib/home';
+---
+
+<section aria-label="Why buy from Photobooth City" class="border-b border-line">
+  <div class="container-page grid grid-cols-2 gap-x-3 gap-y-5 py-8 lg:grid-cols-4 lg:gap-8 lg:py-12">
+    {TRUST.map((t) => (
+      <div class="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:gap-4">
+        <span class="flex size-11 flex-none items-center justify-center rounded-lg bg-brand-50 text-brand-600 lg:size-[52px] lg:rounded-[14px]">
+          <Icon name={t.icon} size={22} class="lg:size-6" />
+        </span>
+        <span class="flex flex-col gap-0.5">
+          <span class="text-[15px] font-extrabold lg:text-base">{t.title}</span>
+          <span class="text-[13px] text-ink-500 lg:text-sm">
+            {'subShort' in t ? (
+              <>
+                <span class="lg:hidden">{t.subShort}</span>
+                <span class="max-lg:hidden">{t.sub}</span>
+              </>
+            ) : (
+              t.sub
+            )}
+          </span>
+        </span>
+      </div>
+    ))}
+  </div>
+</section>

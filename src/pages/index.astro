@@ -1,11 +1,37 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import ProductCard from '@/components/ProductCard.astro';
-import { collectionProducts } from '@/lib/catalog';
-const items = collectionProducts('ipad-booths').slice(0, 8);
+import Hero from '@/components/home/Hero.astro';
+import Categories from '@/components/home/Categories.astro';
+import ProductRow from '@/components/home/ProductRow.astro';
+import NewArrivals from '@/components/home/NewArrivals.astro';
+import PromoBanner from '@/components/home/PromoBanner.astro';
+import Reviews from '@/components/home/Reviews.astro';
+import TrustStrip from '@/components/home/TrustStrip.astro';
+import Faq from '@/components/home/Faq.astro';
+import Newsletter from '@/components/home/Newsletter.astro';
+import { affordable, bestSellers, faqJsonLd, HERO, newArrivals, SHOP_URL } from '@/lib/home';
+
+const description =
+  'Ready to start your photo booth business? Photobooth City offers expert guidance to help you find a photo booth tailored to your business. iPad, DSLR and 360 photo booths, shipped across the US.';
 ---
-<Layout title="Photo Booths for Sale">
-  <div class="container-page grid grid-cols-2 gap-6 py-12 lg:grid-cols-4">
-    {items.map((p) => <ProductCard product={p} />)}
-  </div>
+
+<Layout title="Photo Booths for Sale | Photobooth City" description={description} image={new URL(HERO.image, Astro.site).href}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqJsonLd())} />
+
+  <Hero />
+  <Categories />
+  <ProductRow id="best-title" title="Best sellers" eyebrow="Most ordered" products={bestSellers()} rail mobileLink={SHOP_URL} />
+  <NewArrivals products={newArrivals()} />
+  <PromoBanner />
+  <ProductRow
+    id="aff-title"
+    title="Affordable products"
+    intro="Every booth we sell is carefully sourced and rigorously tested, so you get professional, event-ready equipment at a price that fits a growing business."
+    products={affordable()}
+    link={{ href: SHOP_URL, label: 'Shop all booths →' }}
+  />
+  <Reviews />
+  <TrustStrip />
+  <Faq />
+  <Newsletter />
 </Layout>

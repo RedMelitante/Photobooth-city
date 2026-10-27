@@ -4,6 +4,9 @@ import SearchBox from './react/SearchBox';
 import CartButton from './react/CartButton';
 import { MEGA_COLUMNS, NAV_LINKS, menuHref, PAGES, collectionUrl } from '@/lib/routes';
 import { STORE } from '@/lib/commerce';
+
+// Below 1280px these stay reachable through the mega menu.
+const XL_ONLY = new Set(['Mirror Booth Package', 'Vintage Enclosed', 'System Packages', 'DJ Gear']);
 ---
 
 <header class="relative z-40 w-full bg-surface text-ink-900">
@@ -44,7 +47,7 @@ import { STORE } from '@/lib/commerce';
 
   <!-- Desktop nav row -->
   <nav aria-label="Main" class="hidden border-y border-line lg:block" data-mega-root>
-    <ul class="mx-auto flex h-[52px] max-w-(--container-page) items-center gap-1 px-7">
+    <ul class="mx-auto flex h-[52px] max-w-(--container-page) items-center gap-1 overflow-x-auto px-7 [scrollbar-width:none]">
       <li>
         <button
           type="button"
@@ -59,7 +62,7 @@ import { STORE } from '@/lib/commerce';
         </button>
       </li>
       {NAV_LINKS.map((t) => (
-        <li>
+        <li class:list={[XL_ONLY.has(t) && 'hidden xl:block']}>
           <a href={menuHref(t)} class="flex h-10 items-center rounded-md px-3 text-sm font-semibold whitespace-nowrap text-ink-900 no-underline hover:bg-canvas hover:text-ink-900">{t}</a>
         </li>
       ))}

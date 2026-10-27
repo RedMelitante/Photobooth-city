@@ -1,0 +1,72 @@
+---
+import Icon from '@/components/Icon.astro';
+import { PROMO_POINTS, SHOP_URL } from '@/lib/home';
+import { PROMO } from '@/lib/commerce';
+---
+
+<section aria-labelledby="promo-title" class="container-page pt-12 lg:pt-24">
+  <div class="flex flex-col gap-[18px] rounded-panel bg-flash-400 px-[22px] py-7 text-ink-950 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-12 lg:rounded-hero lg:px-16 lg:py-14">
+    <div class="flex flex-col gap-[18px] lg:flex-[1_1_480px] lg:gap-5">
+      <span class="text-[11px] font-extrabold tracking-[0.12em] uppercase lg:text-xs">Limited-time offer</span>
+      <h2 id="promo-title" class="m-0 font-display text-[44px] leading-[0.95] font-extrabold tracking-[-0.035em] lg:text-[60px] xl:text-[72px]">FLASH SALE IS HERE!</h2>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="hidden text-lg font-semibold lg:inline">Use code</span>
+        <span class="flex w-full items-center justify-between gap-2 rounded-lg border-2 border-dashed border-ink-950 bg-flash-100 py-1 pr-1 pl-3.5 lg:w-auto lg:justify-start lg:gap-1 lg:pl-4">
+          <span class="flex flex-col">
+            <span class="text-[11px] font-bold lg:hidden">Use code</span>
+            <span class="font-mono text-[17px] font-extrabold tracking-[0.05em] lg:text-xl lg:tracking-[0.06em]" id="promo-code">{PROMO.code}</span>
+          </span>
+          <button
+            type="button"
+            data-copy-code={PROMO.code}
+            aria-describedby="promo-code"
+            class="h-11 min-w-[72px] rounded-[9px] bg-ink-950 px-4 text-sm font-bold text-white transition-colors hover:bg-ink-700 lg:h-10 lg:rounded-lg lg:px-3.5"
+          >
+            <span data-copy-label>Copy</span>
+          </button>
+          <span class="sr-only" role="status" data-copy-status></span>
+        </span>
+      </div>
+    </div>
+    <div class="flex flex-col gap-[18px] lg:flex-[1_1_420px] lg:gap-7">
+      <ul class="m-0 grid list-none grid-cols-2 gap-x-3 gap-y-2.5 p-0 lg:grid-cols-[repeat(auto-fit,minmax(min(190px,100%),1fr))] lg:gap-x-6 lg:gap-y-3.5">
+        {PROMO_POINTS.map((b) => (
+          <li class="flex items-start gap-2 text-sm leading-[19px] font-bold lg:items-center lg:gap-2.5 lg:text-base">
+            <span class="flex size-5 flex-none items-center justify-center rounded-full bg-ink-950 text-flash-400 lg:size-6">
+              <Icon name="check" size={12} stroke={3} class="lg:size-3.5" />
+            </span>
+            {b}
+          </li>
+        ))}
+      </ul>
+      <a href={SHOP_URL} class="flex h-[52px] items-center justify-center gap-2.5 rounded-lg bg-ink-950 px-8 text-base font-extrabold text-white transition-colors hover:bg-ink-700 hover:text-white lg:h-14 lg:self-start">
+        Shop now <Icon name="arrow-right" size={18} stroke={2.4} class="max-lg:hidden" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-copy-code]')) {
+    const label = btn.querySelector('[data-copy-label]')!;
+    const status = btn.parentElement?.querySelector('[data-copy-status]');
+    let t: ReturnType<typeof setTimeout>;
+    btn.addEventListener('click', async () => {
+      const code = btn.dataset.copyCode!;
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch {
+        // Clipboard blocked (http, old browser): select the code so it can be copied by hand.
+        const el = document.getElementById(btn.getAttribute('aria-describedby') || '');
+        if (el) getSelection()?.selectAllChildren(el);
+      }
+      label.textContent = 'Copied';
+      if (status) status.textContent = `Code ${code} copied`;
+      clearTimeout(t);
+      t = setTimeout(() => {
+        label.textContent = 'Copy';
+        if (status) status.textContent = '';
+      }, 2500);
+    });
+  }
+</script>
