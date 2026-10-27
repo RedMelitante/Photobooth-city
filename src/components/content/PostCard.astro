@@ -1,0 +1,24 @@
+---
+// Blog post card. Links to the article when one exists; otherwise renders as a
+// plain (non-linking) card so there are no dead links.
+interface Props {
+  title: string;
+  image: string;
+  bg: string;
+  href: string | null;
+  tag?: string;
+  excerpt?: string;
+  size?: 'md' | 'sm';
+}
+const { title, image, bg, href, tag, excerpt, size = 'md' } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+<Tag href={href ?? undefined} class:list={['group flex flex-col text-ink-900 no-underline hover:text-ink-900', size === 'md' ? 'gap-3.5' : 'gap-3']}>
+  <span class:list={['block aspect-[16/10] overflow-hidden', size === 'md' ? 'rounded-[18px]' : 'rounded-card']} style={`background:${bg}`}>
+    <img src={image} alt="" loading="lazy" class:list={['block h-full w-full object-cover', href && 'transition-transform duration-300 group-hover:scale-[1.03]']} />
+  </span>
+  {tag && <span class="text-eyebrow font-extrabold tracking-[0.08em] text-brand-600 uppercase">{tag}</span>}
+  <span class:list={['font-display font-bold', size === 'md' ? 'text-[22px] leading-[27px] tracking-[-0.015em]' : 'text-xl leading-[25px]', href && 'group-hover:underline decoration-2 underline-offset-4']}>{title}</span>
+  {excerpt && <span class="text-[15px] leading-[23px] text-ink-700">{excerpt}</span>}
+  {href && <span class="text-sm font-extrabold text-brand-600">Read article →</span>}
+</Tag>

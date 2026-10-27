@@ -1,0 +1,48 @@
+---
+import { BLOG } from '@/lib/content';
+const nl = BLOG.newsletter;
+---
+<section aria-labelledby="bl-nl" class="flex flex-wrap items-center justify-between gap-5 rounded-hero bg-brand-600 px-5 py-6 text-white lg:p-10">
+  <div class="flex flex-[1_1_360px] flex-col gap-1.5">
+    <h2 id="bl-nl" class="m-0 font-display text-[26px] leading-[1.1] font-bold lg:text-[34px]">{nl.heading}</h2>
+    <span class="text-[15px] text-brand-100">{nl.sub}</span>
+  </div>
+  <form data-newsletter novalidate class="flex flex-[1_1_420px] flex-wrap gap-2.5">
+    <label class="flex flex-[1_1_220px]">
+      <span class="sr-only">Email address</span>
+      <input type="email" name="email" required autocomplete="email" placeholder={nl.placeholder} aria-describedby="bl-nl-msg" class="box-border h-[52px] w-full rounded-lg border-0 bg-surface px-4 text-base text-ink-900" />
+    </label>
+    <button type="submit" class="h-[52px] flex-[1_1_100%] rounded-lg border-0 bg-flash-400 px-6 text-base font-extrabold text-ink-950 hover:bg-[#ffdb66] sm:flex-none">{nl.button}</button>
+    <p id="bl-nl-msg" role="status" aria-live="polite" class="m-0 w-full text-sm font-semibold empty:hidden"></p>
+  </form>
+</section>
+
+<script>
+  import { EMAIL_RE, subscribeNewsletter } from '@/lib/content-forms';
+  document.querySelectorAll<HTMLFormElement>('form[data-newsletter]').forEach((form) => {
+    const input = form.querySelector('input')!;
+    const msg = form.querySelector<HTMLElement>('[role=status]')!;
+    const button = form.querySelector('button')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = input.value.trim();
+      if (!EMAIL_RE.test(email)) {
+        msg.textContent = 'Enter a valid email address, like you@yourbusiness.com.';
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+        return;
+      }
+      input.removeAttribute('aria-invalid');
+      button.disabled = true;
+      try {
+        await subscribeNewsletter(email);
+        form.reset();
+        msg.textContent = 'Thanks — you’re subscribed. Watch your inbox for the next guide.';
+      } catch {
+        msg.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

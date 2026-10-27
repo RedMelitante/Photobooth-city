@@ -1,0 +1,45 @@
+---
+// Highlights the link for the section currently in view in any
+// <nav data-scrollspy> on the page (links must be href="#id").
+---
+<script>
+  function init() {
+    document.querySelectorAll<HTMLElement>('nav[data-scrollspy]').forEach((nav) => {
+      const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+      const targets = links
+        .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+        .filter((el): el is HTMLElement => !!el);
+      if (!targets.length) return;
+      const setActive = (id: string) => {
+        links.forEach((a) => {
+          const on = a.hash.slice(1) === id;
+          a.toggleAttribute('data-active', on);
+          if (on) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        });
+        // keep the active link visible in a scrollable TOC
+        const active = links.find((a) => a.hasAttribute('data-active'));
+        const box = nav.querySelector<HTMLElement>('[data-scrollspy-box]');
+        if (active && box && box.scrollHeight > box.clientHeight) {
+          const top = active.offsetTop - box.offsetTop;
+          if (top < box.scrollTop || top > box.scrollTop + box.clientHeight - active.offsetHeight) box.scrollTo({ top: top - 40 });
+        }
+      };
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const line = window.innerHeight * 0.3;
+        let current = targets[0];
+        for (const t of targets) {
+          if (t.getBoundingClientRect().top - line <= 0) current = t;
+          else break;
+        }
+        setActive(current.id);
+      };
+      window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    });
+  }
+  init();
+</script>

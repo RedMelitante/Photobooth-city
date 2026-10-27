@@ -1,0 +1,61 @@
+---
+interface Props {
+  slug: string;
+  heading: string;
+  note: string;
+  button: string;
+}
+const { slug, heading, note, button } = Astro.props;
+const input = 'box-border h-[52px] w-full rounded-md border-[1.5px] border-line-strong px-3.5 text-base font-normal aria-[invalid=true]:border-sale-600';
+---
+<section aria-labelledby="cm" class="mt-12 flex flex-col gap-3.5">
+  <h2 id="cm" class="m-0 text-[22px] font-extrabold text-ink-900">{heading}</h2>
+  <p class="m-0 text-sm text-ink-500">{note}</p>
+  <form data-comment-form data-slug={slug} novalidate class="flex flex-col gap-3.5">
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <label class="flex flex-col gap-1.5 text-[13px] font-bold text-ink-900">Name<input name="name" type="text" required autocomplete="name" class={input} /></label>
+      <label class="flex flex-col gap-1.5 text-[13px] font-bold text-ink-900">Email<input name="email" type="email" required autocomplete="email" class={input} /></label>
+    </div>
+    <label class="flex flex-col gap-1.5 text-[13px] font-bold text-ink-900">Comment<textarea name="body" rows="4" required class="box-border w-full rounded-md border-[1.5px] border-line-strong p-3.5 text-base font-normal aria-[invalid=true]:border-sale-600"></textarea></label>
+    <p role="status" aria-live="polite" class="m-0 text-sm font-semibold empty:hidden"></p>
+    <button type="submit" class="h-[52px] self-start rounded-lg border-0 bg-ink-900 px-[26px] text-[15px] font-extrabold text-white hover:bg-ink-700 disabled:opacity-70">{button}</button>
+  </form>
+</section>
+
+<script>
+  import { EMAIL_RE, submitBlogComment } from '@/lib/content-forms';
+  document.querySelectorAll<HTMLFormElement>('form[data-comment-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[role=status]')!;
+    const button = form.querySelector('button')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = form.elements.namedItem('name') as HTMLInputElement;
+      const email = form.elements.namedItem('email') as HTMLInputElement;
+      const body = form.elements.namedItem('body') as HTMLTextAreaElement;
+      const bad: [HTMLInputElement | HTMLTextAreaElement, string][] = [];
+      if (!name.value.trim()) bad.push([name, 'your name']);
+      if (!EMAIL_RE.test(email.value.trim())) bad.push([email, 'a valid email']);
+      if (!body.value.trim()) bad.push([body, 'a comment']);
+      [name, email, body].forEach((el) => el.setAttribute('aria-invalid', String(bad.some(([b]) => b === el))));
+      status.classList.toggle('text-sale-600', bad.length > 0);
+      status.classList.toggle('text-success-700', bad.length === 0);
+      if (bad.length) {
+        status.textContent = `Please add ${bad.map(([, l]) => l).join(', ')}.`;
+        bad[0][0].focus();
+        return;
+      }
+      button.disabled = true;
+      try {
+        await submitBlogComment({ articleSlug: form.dataset.slug ?? '', name: name.value.trim(), email: email.value.trim(), body: body.value.trim() });
+        form.reset();
+        [name, email, body].forEach((el) => el.removeAttribute('aria-invalid'));
+        status.textContent = 'Thanks — your comment was submitted and will appear once it’s approved.';
+      } catch {
+        status.classList.replace('text-success-700', 'text-sale-600');
+        status.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

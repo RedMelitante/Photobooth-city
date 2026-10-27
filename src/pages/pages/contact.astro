@@ -1,0 +1,51 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import Breadcrumb from '@/components/content/Breadcrumb.astro';
+import ContactForm from '@/components/content/ContactForm';
+import { PAGES } from '@/lib/routes';
+import { STORE } from '@/lib/commerce';
+
+const RETURNS_EMAIL = 'myphotoboothcity@gmail.com';
+---
+<Layout title="Contact Us" description="Questions about a booth, an order or a return? Call 1 (888) 312-4449 or send the Photobooth City team a message.">
+  <div class="container-page pb-14 lg:pb-24">
+    <Breadcrumb items={[{ label: 'Contact Us' }]} />
+
+    <header class="mb-6 flex max-w-[760px] flex-col gap-3.5 lg:mb-10">
+      <h1 class="m-0 font-display text-[40px] leading-none font-extrabold tracking-[-0.035em] lg:text-[64px]">Contact us</h1>
+      <p class="m-0 text-base leading-[1.6] text-ink-700 lg:text-lg">Questions about a booth, an order or a return? To ensure we can assist you effectively, please include as many details as possible — the booth you’re looking at, your devices and the events you serve.</p>
+    </header>
+
+    <div class="flex flex-wrap items-start gap-6 lg:gap-10">
+      <!-- FORM -->
+      <section aria-label="Contact form" class="min-w-0 flex-[999_1_560px] rounded-hero border border-line p-5 lg:p-9">
+        <ContactForm client:visible phone={STORE.phone} />
+      </section>
+
+      <!-- CONTACT CARDS -->
+      <aside aria-label="Other ways to reach us" class="flex flex-[1_1_360px] flex-col gap-3.5">
+        <a href={STORE.phoneHref} class="flex items-center gap-4 rounded-panel bg-ink-950 p-[22px] text-white no-underline hover:bg-ink-900 hover:text-white">
+          <span class="flex size-[52px] flex-none items-center justify-center rounded-full bg-flash-400 text-ink-950"><Icon name="phone" size={22} stroke={2.2} /></span>
+          <span class="flex flex-col gap-0.5"><span class="text-[13px] text-ink-200">Talk to an expert</span><strong class="text-xl">{STORE.phone}</strong><span class="text-[13px] text-ink-200">{STORE.hours}</span></span>
+        </a>
+        <a href={`mailto:${STORE.email}`} class="flex items-center gap-4 rounded-panel border border-line p-[22px] text-ink-900 no-underline hover:border-line-strong hover:text-ink-900">
+          <span class="flex size-[52px] flex-none items-center justify-center rounded-full bg-brand-50 text-brand-600"><Icon name="mail" size={22} /></span>
+          <span class="flex min-w-0 flex-col gap-0.5"><span class="text-[13px] text-ink-500">General questions</span><strong class="text-[17px] break-words">{STORE.email}</strong></span>
+        </a>
+        <a href={`mailto:${RETURNS_EMAIL}`} class="flex items-center gap-4 rounded-panel border border-line p-[22px] text-ink-900 no-underline hover:border-line-strong hover:text-ink-900">
+          <span class="flex size-[52px] flex-none items-center justify-center rounded-full bg-brand-50 text-brand-600"><Icon name="return" size={22} /></span>
+          <span class="flex min-w-0 flex-col gap-0.5"><span class="text-[13px] text-ink-500">Returns &amp; damaged shipments</span><strong class="text-[17px] break-words">{RETURNS_EMAIL}</strong></span>
+        </a>
+        <div class="flex flex-col gap-3 rounded-panel bg-canvas p-[22px]">
+          <strong class="text-[15px]">Quick answers</strong>
+          <ul class="m-0 flex list-none flex-col gap-2.5 p-0 text-sm leading-5 text-ink-700">
+            <li><strong class="text-ink-900">Returns:</strong> within 7 days of receipt, original packaging — <a href={PAGES.refund} class="font-bold text-brand-600">Refund Policy</a></li>
+            <li><strong class="text-ink-900">Damaged item?</strong> Report it within 48 hours with photos.</li>
+            <li><strong class="text-ink-900">Delivery:</strong> Economy arrives in 5–8 business days — <a href={PAGES.shipping} class="font-bold text-brand-600">Shipping Policy</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>

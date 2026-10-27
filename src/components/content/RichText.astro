@@ -1,0 +1,20 @@
+---
+// Plain text with bare URLs and email addresses turned into links.
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+const RE = /(https?:\/\/[^\s\])]*[^\s\]).,;:’”])|([\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[a-z]{2,})/gi;
+const parts: { t: string; href?: string; ext?: boolean }[] = [];
+let last = 0;
+for (const m of text.matchAll(RE)) {
+  const i = m.index ?? 0;
+  if (i > last) parts.push({ t: text.slice(last, i) });
+  parts.push(m[1] ? { t: m[1], href: m[1], ext: true } : { t: m[2], href: `mailto:${m[2]}` });
+  last = i + m[0].length;
+}
+if (last < text.length) parts.push({ t: text.slice(last) });
+---
+{parts.map((p) => p.href ? (
+  <a href={p.href} class="font-semibold break-words text-brand-600 underline underline-offset-2" {...(p.ext ? { target: '_blank', rel: 'noopener' } : {})}>{p.t}</a>
+) : p.t)}

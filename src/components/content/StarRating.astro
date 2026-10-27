@@ -1,0 +1,16 @@
+---
+import Icon from '@/components/Icon.astro';
+interface Props {
+  rating: number;
+  filled: number;
+  total?: number;
+  size?: number;
+  class?: string;
+}
+const { rating, filled, total = 5, size = 24, class: className } = Astro.props;
+---
+<div role="img" aria-label={`Rated ${rating} out of ${total}`} class:list={['flex gap-[3px]', className]}>
+  {Array.from({ length: total }, (_, i) => (
+    <Icon name="star" size={size} class={i < filled ? 'text-star' : 'text-[#D8DBE2]'} />
+  ))}
+</div>

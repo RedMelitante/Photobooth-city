@@ -1,0 +1,35 @@
+---
+import { getProduct } from '@/lib/catalog';
+import { productUrl } from '@/lib/routes';
+import { img } from '@/lib/content';
+
+interface Props {
+  label: string;
+  items: { handle: string; name: string; price: string; cta: string; image: string | null }[];
+}
+const { label, items } = Astro.props;
+for (const it of items) {
+  if (!getProduct(it.handle)) throw new Error(`ShopTheGuide: unknown product handle "${it.handle}"`);
+}
+---
+<aside aria-label="Systems mentioned in this article" class="my-6 flex flex-col gap-3.5 rounded-[18px] border-2 border-brand-600 bg-brand-50 p-5">
+  <strong class="text-[13px] tracking-[0.08em] text-brand-700 uppercase">{label}</strong>
+  <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+    {items.map((it) => (
+      <a href={productUrl(it.handle)} class="group flex items-center gap-3.5 rounded-[14px] bg-surface p-3.5 text-ink-900 no-underline hover:text-ink-900 hover:shadow-pop">
+        {it.image ? (
+          <span class="size-16 flex-none overflow-hidden rounded-lg bg-canvas"><img src={img(it.image)} alt="" loading="lazy" class="product-shot h-full w-full" /></span>
+        ) : (
+          <span class="flex size-16 flex-none items-center justify-center rounded-lg bg-tile">
+            <svg width="40" height="40" viewBox="0 0 120 120" fill="none" stroke="#8B91A0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="60" cy="42" r="26" stroke-width="6" /><path d="M60 68V104M44 114L60 104L76 114" /></svg>
+          </span>
+        )}
+        <span class="flex flex-col gap-0.5 leading-[1.3]">
+          <strong class="text-[15px]">{it.name}</strong>
+          <span class="text-sm text-ink-700">{it.price}</span>
+          <span class="text-[13px] font-extrabold text-brand-600 group-hover:underline">{it.cta}</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</aside>

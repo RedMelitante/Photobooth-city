@@ -1,0 +1,46 @@
+{
+  "categories": [
+    {
+      "name": "iPad photo booths",
+      "sub": "Portable and roaming setups.",
+      "image": "0a2f0b5e068aaf3643bdef1597361669"
+    },
+    {
+      "name": "DSLR photo booths",
+      "sub": "Camera-based setups and DIY shells.",
+      "image": "5d76e4cd0ba295b50d87be781fc1f15a"
+    },
+    {
+      "name": "360 photo booths",
+      "sub": "Platform, overhead and bundle options.",
+      "image": "7a34810eee0a2f08cf08a74abd8b4fba"
+    },
+    {
+      "name": "Full system packages",
+      "sub": "More complete setups, ready to work.",
+      "image": "1e163e71983b3fb479473264dba7f180"
+    }
+  ],
+  "checklist": [
+    {
+      "title": "Compare configurations",
+      "text": "Every product page lists the available configurations and included components."
+    },
+    {
+      "title": "Check compatibility",
+      "text": "Confirm device compatibility, power needs, transport options and lead time before ordering."
+    },
+    {
+      "title": "Know what’s included",
+      "text": "Equipment, software and accessories vary by product and the option you select."
+    },
+    {
+      "title": "Ships across the US",
+      "text": "We ship to all 50 states and Puerto Rico — shipping costs and delivery times depend on the product and destination."
+    },
+    {
+      "title": "Ask before you buy",
+      "text": "Unsure which model fits? Contact the team and we’ll help you decide."
+    }
+  ]
+}

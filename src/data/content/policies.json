@@ -1,0 +1,1313 @@
+{
+  "refund": {
+    "key": "refund",
+    "slug": "refund-policy",
+    "label": "Refund Policy",
+    "intro": "",
+    "glance": [
+      {
+        "value": "7 days",
+        "label": "to return eligible items, unused and in original packaging"
+      },
+      {
+        "value": "20%",
+        "label": "restocking fee, plus shipping, deducted from refunds"
+      },
+      {
+        "value": "48 hrs",
+        "label": "to report damaged, defective or incorrect items"
+      },
+      {
+        "value": "Final sale",
+        "label": "on all Clearance Sale purchases"
+      }
+    ],
+    "contacts": [
+      {
+        "label": "Returns",
+        "value": "myphotoboothcity@gmail.com",
+        "href": "mailto:myphotoboothcity@gmail.com"
+      },
+      {
+        "label": "Email",
+        "value": "info@photoboothcity.com",
+        "href": "mailto:info@photoboothcity.com"
+      },
+      {
+        "label": "Call",
+        "value": "1 (888) 312-4449",
+        "href": "tel:18883124449"
+      }
+    ],
+    "sections": [
+      {
+        "id": "items-that-are-non-refundable",
+        "heading": "Items that are non-refundable",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Due to the custom fabrication of the products some, returns will not be accepted."
+          },
+          {
+            "type": "xli",
+            "text": "360 Photo Booth Platforms and Cases"
+          },
+          {
+            "type": "xli",
+            "text": "Full System Photo Booth Packages"
+          },
+          {
+            "type": "xli",
+            "text": "Photo Booth Shells and Cases"
+          },
+          {
+            "type": "xli",
+            "text": "Photo Printer (Photo Printers (Primera iP60, Sinfonis CS2, DNP RX1, DNP 620A, DNP DS40)"
+          },
+          {
+            "type": "xli",
+            "text": "Any products with custom graphics which include enclosures, inflatable enclosures, custom vinyl logo prints."
+          },
+          {
+            "type": "xli",
+            "text": "Any items imported from or sourced from China, including but not limited to the Eclipse E5 and 360 Photo Booths."
+          }
+        ]
+      },
+      {
+        "id": "warranty",
+        "heading": "Warranty",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "360 photo booth platforms, photo booth shells, mirror booths products have a 1 year manufacturers warranty, if any part fails we will work with you to resolve any issues."
+          },
+          {
+            "type": "p",
+            "text": "If a part fails, please reach out to our support team on our contact page so we can help you try to fix the issue."
+          }
+        ]
+      },
+      {
+        "id": "return-policy",
+        "heading": "Return policy",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "In some cases, we understand that you might change your mind about your purchase and want to return the item. Again, we will ONLY refund items not listed above."
+          },
+          {
+            "type": "p",
+            "text": "We accept returns within 7 days of product receipt, provided the item is in its original packaging and condition. Initiate your return by emailing or messaging us through our contact page."
+          }
+        ]
+      },
+      {
+        "id": "return-fees",
+        "heading": "Return Fees",
+        "blocks": [
+          {
+            "type": "li",
+            "text": "A 20% restocking fee plus shipping costs will be deducted from your refund."
+          }
+        ]
+      },
+      {
+        "id": "incorrect-or-defective-shipments",
+        "heading": "Incorrect or Defective Shipments",
+        "blocks": [
+          {
+            "type": "li",
+            "text": "Items must be returned within 48 hours of receipt for a refund."
+          },
+          {
+            "type": "li",
+            "text": "Products should be in new condition and original packaging."
+          }
+        ]
+      },
+      {
+        "id": "refund-process",
+        "heading": "Refund Process",
+        "blocks": [
+          {
+            "type": "li",
+            "text": "We'll inspect the returned item upon receipt."
+          },
+          {
+            "type": "li",
+            "text": "If approved, refunds are processed to your original payment method, such as a credit card. The timeframe for receiving the credit depends on your card issuer's policies."
+          }
+        ]
+      },
+      {
+        "id": "change-of-mind",
+        "heading": "Change of Mind",
+        "blocks": [
+          {
+            "type": "li",
+            "text": "We understand you may change your mind. However, we only refund items not listed above."
+          }
+        ]
+      },
+      {
+        "id": "damaged-shipments",
+        "heading": "Damaged Shipments",
+        "blocks": [
+          {
+            "type": "li",
+            "text": "Report damages within 48 hours of receipt and provide photos within 2 days."
+          },
+          {
+            "type": "li",
+            "text": "Replacement requests for damages not reported within this timeframe may be declined."
+          },
+          {
+            "type": "li",
+            "text": "We're not responsible for lost revenue due to shipping damages. For claims, provide photos of the package and contents as received."
+          }
+        ]
+      },
+      {
+        "id": "general-return-conditions",
+        "heading": "General Return Conditions",
+        "blocks": [
+          {
+            "type": "li",
+            "text": "Returns must be in the original packaging."
+          },
+          {
+            "type": "li",
+            "text": "Email or message us within 48 hours of receiving your product."
+          },
+          {
+            "type": "li",
+            "text": "Refunds will be the purchase amount minus shipping fees and the 20% restocking fee, with return shipping at your expense."
+          },
+          {
+            "type": "p",
+            "text": "Damaged shipments MUST be reported within 48 hours of receiving the product and photos MUST be provided within 4 days. We are not responsible for any lost revenue due to damages caused by the shipping carrier."
+          },
+          {
+            "type": "p",
+            "text": "You can always contact us for any return question at myphotoboothcity@gmail.com."
+          }
+        ]
+      },
+      {
+        "id": "damages-and-issues",
+        "heading": "Damages and issues",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Please inspect your order upon reception and contact us immediately if the item is defective, damaged or if you receive the wrong item, so that we can evaluate the issue and make it right."
+          }
+        ]
+      },
+      {
+        "id": "exchanges",
+        "heading": "Exchanges",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The fastest way to ensure you get what you want is to return the item you have, and once the return is accepted, make a separate purchase for the new item."
+          }
+        ]
+      },
+      {
+        "id": "refunds",
+        "heading": "Refunds",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We will notify you once we’ve received and inspected your return, and let you know if the refund was approved or not. If approved, you’ll be automatically refunded on your original payment method. Please remember it can take some time for your bank or credit card company to process and post the refund too."
+          }
+        ]
+      },
+      {
+        "id": "clearance-sale-policy",
+        "heading": "Clearance Sale Policy",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Thank you for shopping at our Clearance Sale. We are excited to offer you great discounts on our products. Please take a moment to review our no refund policy, as all purchases made during this sale are final."
+          },
+          {
+            "type": "p",
+            "text": "1. All Sales are Final: We do not offer refunds or exchanges on any items purchased during our Clearance Sale. Please choose your items carefully and ensure they meet your requirements before making a purchase."
+          },
+          {
+            "type": "p",
+            "text": "2. Exceptions: In the rare event that an item you receive is damaged or defective at the time of delivery, please contact our customer service within 7 days of receiving your order. We will evaluate your case and may offer a replacement or store credit at our discretion."
+          },
+          {
+            "type": "p",
+            "text": "3. Returns and Exchanges: We do not accept returns or exchanges during our Clearance Sale unless the item is damaged or defective upon delivery, as stated in point 2."
+          },
+          {
+            "type": "p",
+            "text": "4. Final Sale: All items marked as \"Clearance\" or \"Final Sale\" are not eligible for returns or exchanges, regardless of the circumstances."
+          },
+          {
+            "type": "p",
+            "text": "5. Store Credit: If a return is approved due to a damaged or defective item, store credit will be issued for the original purchase price. This store credit can only be used for future purchases."
+          },
+          {
+            "type": "p",
+            "text": "By making a purchase during our Clearance Sale, you acknowledge and agree to our no refund policy. We appreciate your understanding and hope you enjoy your discounted items."
+          },
+          {
+            "type": "p",
+            "text": "If you have any questions or concerns about this policy, please contact our customer service"
+          }
+        ]
+      }
+    ]
+  },
+  "shipping": {
+    "key": "shipping",
+    "slug": "shipping-policy",
+    "label": "Shipping Policy",
+    "intro": "",
+    "glance": [
+      {
+        "value": "5–7 days",
+        "label": "typical delivery, in business days, after your order ships"
+      },
+      {
+        "value": "Estimates",
+        "label": "all delivery time-frames are estimated and may change"
+      },
+      {
+        "value": "US only",
+        "label": "we ship to all 50 states and Puerto Rico"
+      },
+      {
+        "value": "Plan ahead",
+        "label": "don’t book events until your order has arrived"
+      }
+    ],
+    "contacts": [
+      {
+        "label": "Email",
+        "value": "info@photoboothcity.com",
+        "href": "mailto:info@photoboothcity.com"
+      },
+      {
+        "label": "Call",
+        "value": "1 (888) 312-4449",
+        "href": "tel:18883124449"
+      }
+    ],
+    "sections": [
+      {
+        "id": "shipping-and-delivery",
+        "heading": "Shipping and delivery",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "All delivery time-frames stated are estimated and may be subject to change."
+          },
+          {
+            "type": "p",
+            "text": "While your order is being processed and delivered we encourage you not to book events during this time until you have confirmation of receiving your booth. Photobooth City is not responsible for any missed events that you may have."
+          },
+          {
+            "type": "p",
+            "text": "After the product has been shipped, delivery timeframes can range between 5-7 business days."
+          }
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "key": "terms",
+    "slug": "terms-of-service",
+    "label": "Terms of Service",
+    "intro": "",
+    "glance": [],
+    "contacts": [
+      {
+        "label": "Returns",
+        "value": "myphotoboothcity@gmail.com",
+        "href": "mailto:myphotoboothcity@gmail.com"
+      },
+      {
+        "label": "Call",
+        "value": "1 (888) 312-4449",
+        "href": "tel:18883124449"
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "heading": "Overview",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This website is operated by Photobooth City. Throughout the site, the terms “we”, “us” and “our” refer to Photobooth City. Photobooth City offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here."
+          },
+          {
+            "type": "p",
+            "text": "By visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content."
+          },
+          {
+            "type": "p",
+            "text": "Please read these Terms of Service carefully before accessing or using our website. By accessing or using any part of the site, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any services. If these Terms of Service are considered an offer, acceptance is expressly limited to these Terms of Service."
+          },
+          {
+            "type": "p",
+            "text": "Any new features or tools which are added to the current store shall also be subject to the Terms of Service. You can review the most current version of the Terms of Service at any time on this page. We reserve the right to update, change or replace any part of these Terms of Service by posting updates and/or changes to our website. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website following the posting of any changes constitutes acceptance of those changes."
+          },
+          {
+            "type": "p",
+            "text": "Our store is hosted on Shopify Inc. They provide us with the online e-commerce platform that allows us to sell our products and services to you."
+          }
+        ]
+      },
+      {
+        "id": "section-1-online-store-terms",
+        "heading": "Section 1 — Online store terms",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "By agreeing to these Terms of Service, you represent that you are at least the age of majority in your state or province of residence, or that you are the age of majority in your state or province of residence and you have given us your consent to allow any of your minor dependents to use this site."
+          },
+          {
+            "type": "p",
+            "text": "You may not use our products for any illegal or unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright laws)."
+          },
+          {
+            "type": "p",
+            "text": "You must not transmit any worms or viruses or any code of a destructive nature."
+          },
+          {
+            "type": "p",
+            "text": "A breach or violation of any of the Terms will result in an immediate termination of your Services."
+          }
+        ]
+      },
+      {
+        "id": "section-2-general-conditions",
+        "heading": "Section 2 — General conditions",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We reserve the right to refuse service to anyone for any reason at any time."
+          },
+          {
+            "type": "p",
+            "text": "You understand that your content (not including credit card information), may be transferred unencrypted and involve (a) transmissions over various networks; and (b) changes to conform and adapt to technical requirements of connecting networks or devices. Credit card information is always encrypted during transfer over networks."
+          },
+          {
+            "type": "p",
+            "text": "You agree not to reproduce, duplicate, copy, sell, resell or exploit any portion of the Service, use of the Service, or access to the Service or any contact on the website through which the service is provided, without express written permission by us."
+          },
+          {
+            "type": "p",
+            "text": "The headings used in this agreement are included for convenience only and will not limit or otherwise affect these Terms."
+          }
+        ]
+      },
+      {
+        "id": "section-3-accuracy-completeness-and-timeliness-of-informatio",
+        "heading": "Section 3 — Accuracy, completeness and timeliness of information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We are not responsible if information made available on this site is not accurate, complete or current. The material on this site is provided for general information only and should not be relied upon or used as the sole basis for making decisions without consulting primary, more accurate, more complete or more timely sources of information. Any reliance on the material on this site is at your own risk."
+          },
+          {
+            "type": "p",
+            "text": "This site may contain certain historical information. Historical information, necessarily, is not current and is provided for your reference only. We reserve the right to modify the contents of this site at any time, but we have no obligation to update any information on our site. You agree that it is your responsibility to monitor changes to our site."
+          }
+        ]
+      },
+      {
+        "id": "section-4-modifications-to-the-service-and-prices",
+        "heading": "Section 4 — Modifications to the service and prices",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Prices for our products are subject to change without notice."
+          },
+          {
+            "type": "p",
+            "text": "We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time."
+          },
+          {
+            "type": "p",
+            "text": "We shall not be liable to you or to any third-party for any modification, price change, suspension or discontinuance of the Service."
+          }
+        ]
+      },
+      {
+        "id": "section-5-products-or-services-if-applicable",
+        "heading": "Section 5 — Products or services (if applicable)",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Certain products or services may be available exclusively online through the website. These products or services may have limited quantities and are subject to return or exchange only according to our Return Policy."
+          },
+          {
+            "type": "p",
+            "text": "We have made every effort to display as accurately as possible the colors and images of our products that appear at the store. We cannot guarantee that your computer monitor's display of any color will be accurate."
+          },
+          {
+            "type": "p",
+            "text": "We reserve the right, but are not obligated, to limit the sales of our products or Services to any person, geographic region or jurisdiction. We may exercise this right on a case-by-case basis. We reserve the right to limit the quantities of any products or services that we offer. All descriptions of products or product pricing are subject to change at anytime without notice, at the sole discretion of us. We reserve the right to discontinue any product at any time. Any offer for any product or service made on this site is void where prohibited."
+          },
+          {
+            "type": "p",
+            "text": "We do not warrant that the quality of any products, services, information, or other material purchased or obtained by you will meet your expectations, or that any errors in the Service will be corrected."
+          }
+        ]
+      },
+      {
+        "id": "section-6-accuracy-of-billing-and-account-information",
+        "heading": "Section 6 — Accuracy of billing and account information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We reserve the right to refuse any order you place with us. We may, in our sole discretion, limit or cancel quantities purchased per person, per household or per order. These restrictions may include orders placed by or under the same customer account, the same credit card, and/or orders that use the same billing and/or shipping address. In the event that we make a change to or cancel an order, we may attempt to notify you by contacting the e‑mail and/or billing address/phone number provided at the time the order was made. We reserve the right to limit or prohibit orders that, in our sole judgment, appear to be placed by dealers, resellers or distributors."
+          },
+          {
+            "type": "p",
+            "text": "You agree to provide current, complete and accurate purchase and account information for all purchases made at our store. You agree to promptly update your account and other information, including your email address and credit card numbers and expiration dates, so that we can complete your transactions and contact you as needed."
+          },
+          {
+            "type": "p",
+            "text": "For more detail, please review our Returns Policy."
+          }
+        ]
+      },
+      {
+        "id": "section-7-optional-tools",
+        "heading": "Section 7 — Optional tools",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We may provide you with access to third-party tools over which we neither monitor nor have any control nor input."
+          },
+          {
+            "type": "p",
+            "text": "You acknowledge and agree that we provide access to such tools ”as is” and “as available” without any warranties, representations or conditions of any kind and without any endorsement. We shall have no liability whatsoever arising from or relating to your use of optional third-party tools."
+          },
+          {
+            "type": "p",
+            "text": "Any use by you of optional tools offered through the site is entirely at your own risk and discretion and you should ensure that you are familiar with and approve of the terms on which tools are provided by the relevant third-party provider(s)."
+          },
+          {
+            "type": "p",
+            "text": "We may also, in the future, offer new services and/or features through the website (including, the release of new tools and resources). Such new features and/or services shall also be subject to these Terms of Service."
+          }
+        ]
+      },
+      {
+        "id": "section-8-third-party-links",
+        "heading": "Section 8 — Third-party links",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Certain content, products and services available via our Service may include materials from third-parties."
+          },
+          {
+            "type": "p",
+            "text": "Third-party links on this site may direct you to third-party websites that are not affiliated with us. We are not responsible for examining or evaluating the content or accuracy and we do not warrant and will not have any liability or responsibility for any third-party materials or websites, or for any other materials, products, or services of third-parties."
+          },
+          {
+            "type": "p",
+            "text": "We are not liable for any harm or damages related to the purchase or use of goods, services, resources, content, or any other transactions made in connection with any third-party websites. Please review carefully the third-party's policies and practices and make sure you understand them before you engage in any transaction. Complaints, claims, concerns, or questions regarding third-party products should be directed to the third-party."
+          }
+        ]
+      },
+      {
+        "id": "section-9-user-comments-feedback-and-other-submissions",
+        "heading": "Section 9 — User comments, feedback and other submissions",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "If, at our request, you send certain specific submissions (for example contest entries) or without a request from us you send creative ideas, suggestions, proposals, plans, or other materials, whether online, by email, by postal mail, or otherwise (collectively, 'comments'), you agree that we may, at any time, without restriction, edit, copy, publish, distribute, translate and otherwise use in any medium any comments that you forward to us. We are and shall be under no obligation (1) to maintain any comments in confidence; (2) to pay compensation for any comments; or (3) to respond to any comments."
+          },
+          {
+            "type": "p",
+            "text": "We may, but have no obligation to, monitor, edit or remove content that we determine in our sole discretion are unlawful, offensive, threatening, libelous, defamatory, pornographic, obscene or otherwise objectionable or violates any party’s intellectual property or these Terms of Service."
+          },
+          {
+            "type": "p",
+            "text": "You agree that your comments will not violate any right of any third-party, including copyright, trademark, privacy, personality or other personal or proprietary right. You further agree that your comments will not contain libelous or otherwise unlawful, abusive or obscene material, or contain any computer virus or other malware that could in any way affect the operation of the Service or any related website. You may not use a false e‑mail address, pretend to be someone other than yourself, or otherwise mislead us or third-parties as to the origin of any comments. You are solely responsible for any comments you make and their accuracy. We take no responsibility and assume no liability for any comments posted by you or any third-party."
+          }
+        ]
+      },
+      {
+        "id": "section-10-personal-information",
+        "heading": "Section 10 — Personal information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Your submission of personal information through the store is governed by our Privacy Policy. To view our Privacy Policy."
+          }
+        ]
+      },
+      {
+        "id": "section-11-errors-inaccuracies-and-omissions",
+        "heading": "Section 11 — Errors, inaccuracies and omissions",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Occasionally there may be information on our site or in the Service that contains typographical errors, inaccuracies or omissions that may relate to product descriptions, pricing, promotions, offers, product shipping charges, transit times and availability. We reserve the right to correct any errors, inaccuracies or omissions, and to change or update information or cancel orders if any information in the Service or on any related website is inaccurate at any time without prior notice (including after you have submitted your order)."
+          },
+          {
+            "type": "p",
+            "text": "We undertake no obligation to update, amend or clarify information in the Service or on any related website, including without limitation, pricing information, except as required by law. No specified update or refresh date applied in the Service or on any related website, should be taken to indicate that all information in the Service or on any related website has been modified or updated."
+          }
+        ]
+      },
+      {
+        "id": "section-12-prohibited-uses",
+        "heading": "Section 12 — Prohibited uses",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "In addition to other prohibitions as set forth in the Terms of Service, you are prohibited from using the site or its content: (a) for any unlawful purpose; (b) to solicit others to perform or participate in any unlawful acts; (c) to violate any international, federal, provincial or state regulations, rules, laws, or local ordinances; (d) to infringe upon or violate our intellectual property rights or the intellectual property rights of others; (e) to harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate based on gender, sexual orientation, religion, ethnicity, race, age, national origin, or disability; (f) to submit false or misleading information; (g) to upload or transmit viruses or any other type of malicious code that will or may be used in any way that will affect the functionality or operation of the Service or of any related website, other websites, or the Internet; (h) to collect or track the personal information of others; (i) to spam, phish, pharm, pretext, spider, crawl, or scrape; (j) for any obscene or immoral purpose; or (k) to interfere with or circumvent the security features of the Service or any related website, other websites, or the Internet. We reserve the right to terminate your use of the Service or any related website for violating any of the prohibited uses."
+          }
+        ]
+      },
+      {
+        "id": "section-13-disclaimer-of-warranties-limitation-of-liability",
+        "heading": "Section 13 — Disclaimer of warranties; limitation of liability",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We do not guarantee, represent or warrant that your use of our service will be uninterrupted, timely, secure or error-free."
+          },
+          {
+            "type": "p",
+            "text": "We do not warrant that the results that may be obtained from the use of the service will be accurate or reliable."
+          },
+          {
+            "type": "p",
+            "text": "You agree that from time to time we may remove the service for indefinite periods of time or cancel the service at any time, without notice to you."
+          },
+          {
+            "type": "p",
+            "text": "You expressly agree that your use of, or inability to use, the service is at your sole risk. The service and all products and services delivered to you through the service are (except as expressly stated by us) provided 'as is' and 'as available' for your use, without any representation, warranties or conditions of any kind, either express or implied, including all implied warranties or conditions of merchantability, merchantable quality, fitness for a particular purpose, durability, title, and non-infringement."
+          },
+          {
+            "type": "p",
+            "text": "In no case shall Photobooth City, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service, or for any other claim related in any way to your use of the service or any product, including, but not limited to, any errors or omissions in any content, or any loss or damage of any kind incurred as a result of the use of the service or any content (or product) posted, transmitted, or otherwise made available via the service, even if advised of their possibility. Because some states or jurisdictions do not allow the exclusion or the limitation of liability for consequential or incidental damages, in such states or jurisdictions, our liability shall be limited to the maximum extent permitted by law."
+          }
+        ]
+      },
+      {
+        "id": "section-14-indemnification",
+        "heading": "Section 14 — Indemnification",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You agree to indemnify, defend and hold harmless Photobooth City and our parent, subsidiaries, affiliates, partners, officers, directors, agents, contractors, licensors, service providers, subcontractors, suppliers, interns and employees, harmless from any claim or demand, including reasonable attorneys’ fees, made by any third-party due to or arising out of your breach of these Terms of Service or the documents they incorporate by reference, or your violation of any law or the rights of a third-party."
+          }
+        ]
+      },
+      {
+        "id": "section-15-severability",
+        "heading": "Section 15 — Severability",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "In the event that any provision of these Terms of Service is determined to be unlawful, void or unenforceable, such provision shall nonetheless be enforceable to the fullest extent permitted by applicable law, and the unenforceable portion shall be deemed to be severed from these Terms of Service, such determination shall not affect the validity and enforceability of any other remaining provisions."
+          }
+        ]
+      },
+      {
+        "id": "section-16-termination",
+        "heading": "Section 16 — Termination",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The obligations and liabilities of the parties incurred prior to the termination date shall survive the termination of this agreement for all purposes."
+          },
+          {
+            "type": "p",
+            "text": "These Terms of Service are effective unless and until terminated by either you or us. You may terminate these Terms of Service at any time by notifying us that you no longer wish to use our Services, or when you cease using our site."
+          },
+          {
+            "type": "p",
+            "text": "If in our sole judgment you fail, or we suspect that you have failed, to comply with any term or provision of these Terms of Service, we also may terminate this agreement at any time without notice and you will remain liable for all amounts due up to and including the date of termination; and/or accordingly may deny you access to our Services (or any part thereof)."
+          }
+        ]
+      },
+      {
+        "id": "section-17-entire-agreement",
+        "heading": "Section 17 — Entire agreement",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The failure of us to exercise or enforce any right or provision of these Terms of Service shall not constitute a waiver of such right or provision."
+          },
+          {
+            "type": "p",
+            "text": "These Terms of Service and any policies or operating rules posted by us on this site or in respect to The Service constitutes the entire agreement and understanding between you and us and govern your use of the Service, superseding any prior or contemporaneous agreements, communications and proposals, whether oral or written, between you and us (including, but not limited to, any prior versions of the Terms of Service)."
+          },
+          {
+            "type": "p",
+            "text": "Any ambiguities in the interpretation of these Terms of Service shall not be construed against the drafting party."
+          }
+        ]
+      },
+      {
+        "id": "section-18-governing-law",
+        "heading": "Section 18 — Governing law",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "These Terms of Service and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of United States."
+          }
+        ]
+      },
+      {
+        "id": "section-19-changes-to-terms-of-service",
+        "heading": "Section 19 — Changes to terms of service",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You can review the most current version of the Terms of Service at any time at this page."
+          },
+          {
+            "type": "p",
+            "text": "We reserve the right, at our sole discretion, to update, change or replace any part of these Terms of Service by posting updates and changes to our website. It is your responsibility to check our website periodically for changes. Your continued use of or access to our website or the Service following the posting of any changes to these Terms of Service constitutes acceptance of those changes."
+          }
+        ]
+      },
+      {
+        "id": "section-20-contact-information",
+        "heading": "Section 20 — Contact information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Questions about the Terms of Service should be sent to us at myphotoboothcity@gmail.com."
+          }
+        ]
+      },
+      {
+        "id": "messaging-terms",
+        "heading": "Messaging terms",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "In addition, you agree to our Messaging Terms (https://terms.pscr.pt/legal/shop/photobooth-city/terms_of_service) and Messaging Privacy Policy (https://terms.pscr.pt/legal/shop/photobooth-city/privacy_policy)."
+          }
+        ]
+      },
+      {
+        "id": "photo-booth-city-commercial-terms-and-liability-shield",
+        "heading": "Photo Booth City: Commercial Terms & Liability Shield",
+        "blocks": [
+          {
+            "type": "sub",
+            "text": "Professional Operator Acknowledgment"
+          },
+          {
+            "type": "li",
+            "text": "By purchasing equipment from photoboothcity.com, the Buyer acknowledges they are a Professional Operator. The Buyer represents that they possess the necessary technical knowledge to safely assemble, ballast (weight), and operate mechanical event equipment, including 360-degree rotating platforms and open-air kiosks."
+          },
+          {
+            "type": "sub",
+            "text": "Assumption of Risk (The \"360 Clause\")"
+          },
+          {
+            "type": "li",
+            "text": "The Buyer acknowledges that the 360 Platform contains motorized, rotating mechanical parts."
+          },
+          {
+            "type": "li",
+            "text": "Clearance Zone: The Buyer agrees to maintain a minimum \"Safety Clearance Zone\" of at least 6 feet around the rotating arm at all times."
+          },
+          {
+            "type": "li",
+            "text": "Supervision: The equipment must never be left unattended while powered on."
+          },
+          {
+            "type": "li",
+            "text": "Guest Safety: The Buyer assumes all responsibility for guest injuries resulting from trips, falls, or impact with the rotating arm."
+          },
+          {
+            "type": "sub",
+            "text": "Indemnification & Hold Harmless"
+          },
+          {
+            "type": "li",
+            "text": "To the fullest extent permitted by law, the Buyer agrees to indemnify, defend, and hold harmless Photo Booth City (and its officers, employees, and affiliates) from any and all claims, damages, or lawsuits (including attorney fees) arising from:"
+          },
+          {
+            "type": "li",
+            "text": "The setup, operation, or teardown of the equipment at any event."
+          },
+          {
+            "type": "li",
+            "text": "Any injuries to third parties (guests, clients, or staff) involving the equipment."
+          },
+          {
+            "type": "li",
+            "text": "Any modifications made to the equipment by the Buyer after delivery."
+          },
+          {
+            "type": "sub",
+            "text": "Shipping Inspection & Mechanical Integrity"
+          },
+          {
+            "type": "li",
+            "text": "Since Photo Booth City ships via Freight and UPS Ground, the Buyer is responsible for a \"Safety Integrity Check\" upon arrival."
+          },
+          {
+            "type": "li",
+            "text": "Reporting Period: Any structural damage (cracked welds, bent arms, loose motor mounts) must be reported to Photo Booth City within 48 hours of delivery."
+          },
+          {
+            "type": "li",
+            "text": "Waiver: Use of the equipment after delivery constitutes the Buyer’s agreement that the unit is mechanically sound and safe for public use. Photo Booth City is not liable for injuries caused by equipment that was damaged during transit but put into service anyway."
+          },
+          {
+            "type": "sub",
+            "text": "Mandatory Insurance Representation"
+          },
+          {
+            "type": "li",
+            "text": "The Buyer warrants that they maintain Commercial General Liability Insurance with limits appropriate for the event industry. The Buyer acknowledges that Photo Booth City’s pricing does not include liability insurance for the Buyer’s business operations."
+          }
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "key": "privacy",
+    "slug": "privacy-policy",
+    "label": "Privacy Policy",
+    "intro": "This Privacy Policy describes how photoboothcity.com (the “Site” or “we”) collects, uses, and discloses your Personal Information when you visit or make a purchase from the Site.",
+    "glance": [],
+    "contacts": [
+      {
+        "label": "Email",
+        "value": "info@photoboothcity.com",
+        "href": "mailto:info@photoboothcity.com"
+      },
+      {
+        "label": "Call",
+        "value": "1 (888) 312-4449",
+        "href": "tel:18883124449"
+      },
+      {
+        "label": "Mail",
+        "value": "3827 Wacker Dr., Mira Loma CA 91752, United States",
+        "href": null
+      }
+    ],
+    "sections": [
+      {
+        "id": "collecting-personal-information",
+        "heading": "Collecting Personal Information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "When you visit the Site, we collect certain information about your device, your interaction with the Site, and information necessary to process your purchases. We may also collect additional information if you contact us for customer support. In this Privacy Policy, we refer to any information that can uniquely identify an individual (including the information below) as “Personal Information”. See the list below for more information about what Personal Information we collect and why."
+          },
+          {
+            "type": "sub",
+            "text": "Device information"
+          },
+          {
+            "type": "li",
+            "text": "Examples of Personal Information collected: version of web browser, IP address, time zone, cookie information, what sites or products you view, search terms, and how you interact with the Site."
+          },
+          {
+            "type": "li",
+            "text": "Purpose of collection: to load the Site accurately for you, and to perform analytics on Site usage to optimize our Site."
+          },
+          {
+            "type": "note",
+            "text": "Source of collection: Collected automatically when you access our Site using cookies, log files, web beacons, tags, or pixels [ADD OR SUBTRACT ANY OTHER TRACKING TECHNOLOGIES USED]."
+          },
+          {
+            "type": "note",
+            "text": "Disclosure for a business purpose: shared with our processor Shopify [ADD ANY OTHER VENDORS WITH WHOM YOU SHARE THIS INFORMATION]."
+          },
+          {
+            "type": "sub",
+            "text": "Order information"
+          },
+          {
+            "type": "note",
+            "text": "Examples of Personal Information collected: name, billing address, shipping address, payment information (including credit card numbers [INSERT ANY OTHER PAYMENT TYPES ACCEPTED]), email address, and phone number."
+          },
+          {
+            "type": "li",
+            "text": "Purpose of collection: to provide products or services to you to fulfill our contract, to process your payment information, arrange for shipping, and provide you with invoices and/or order confirmations, communicate with you, screen our orders for potential risk or fraud, and when in line with the preferences you have shared with us, provide you with information or advertising relating to our products or services."
+          },
+          {
+            "type": "li",
+            "text": "Source of collection: collected from you."
+          },
+          {
+            "type": "note",
+            "text": "Disclosure for a business purpose: shared with our processor Shopify [ADD ANY OTHER VENDORS WITH WHOM YOU SHARE THIS INFORMATION. FOR EXAMPLE, SALES CHANNELS, PAYMENT GATEWAYS, SHIPPING AND FULFILLMENT APPS]."
+          },
+          {
+            "type": "sub",
+            "text": "Customer support information"
+          },
+          {
+            "type": "note",
+            "text": "Examples of Personal Information collected: [MODIFICATIONS TO THE INFORMATION LISTED ABOVE OR ADDITIONAL INFORMATION AS NEEDED]"
+          },
+          {
+            "type": "li",
+            "text": "Purpose of collection: to provide customer support."
+          },
+          {
+            "type": "li",
+            "text": "Source of collection: collected from you."
+          },
+          {
+            "type": "note",
+            "text": "Disclosure for a business purpose: [ADD ANY VENDORS USED TO PROVIDE CUSTOMER SUPPORT]"
+          },
+          {
+            "type": "note",
+            "text": "[INSERT ANY OTHER INFORMATION YOU COLLECT: OFFLINE DATA, PURCHASED MARKETING DATA/LISTS]"
+          },
+          {
+            "type": "note",
+            "text": "[INSERT FOLLOWING SECTION IF AGE RESTRICTION IS REQUIRED]"
+          },
+          {
+            "type": "sub",
+            "text": "Minors"
+          },
+          {
+            "type": "note",
+            "text": "The Site is not intended for individuals under the age of [INSERT AGE]. We do not intentionally collect Personal Information from children. If you are the parent or guardian and believe your child has provided us with Personal Information, please contact us at the address below to request deletion."
+          }
+        ]
+      },
+      {
+        "id": "sharing-personal-information",
+        "heading": "Sharing Personal Information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We share your Personal Information with service providers to help us provide our services and fulfill our contracts with you, as described above. For example:"
+          },
+          {
+            "type": "li",
+            "text": "We use Shopify to power our online store. You can read more about how Shopify uses your Personal Information here: https://www.shopify.com/legal/privacy."
+          },
+          {
+            "type": "li",
+            "text": "We may share your Personal Information to comply with applicable laws and regulations, to respond to a subpoena, search warrant or other lawful request for information we receive, or to otherwise protect our rights."
+          },
+          {
+            "type": "note",
+            "text": "[INSERT INFORMATION ABOUT OTHER SERVICE PROVIDERS]"
+          },
+          {
+            "type": "note",
+            "text": "[INCLUDE FOLLOWING SECTION IF USING REMARKETING OR TARGETED ADVERTISING]"
+          },
+          {
+            "type": "sub",
+            "text": "Behavioural Advertising"
+          },
+          {
+            "type": "p",
+            "text": "As described above, we use your Personal Information to provide you with targeted advertisements or marketing communications we believe may be of interest to you. For example:"
+          },
+          {
+            "type": "note",
+            "text": "[INSERT IF APPLICABLE] We use Google Analytics to help us understand how our customers use the Site. You can read more about how Google uses your Personal Information here: https://policies.google.com/privacy?hl=en.You can also opt-out of Google Analytics here: https://tools.google.com/dlpage/gaoptout."
+          },
+          {
+            "type": "note",
+            "text": "[INSERT IF YOU USE A THIRD PARTY MARKETING APP THAT COLLECTS INFORMATION ABOUT BUYER ACTIVITY ON YOUR SITE] We share information about your use of the Site, your purchases, and your interaction with our ads on other websites with our advertising partners. We collect and share some of this information directly with our advertising partners, and in some cases through the use of cookies or other similar technologies (which you may consent to, depending on your location)."
+          },
+          {
+            "type": "note",
+            "text": "[INSERT OTHER ADVERTISING SERVICES USED]"
+          },
+          {
+            "type": "p",
+            "text": "For more information about how targeted advertising works, you can visit the Network Advertising Initiative’s (“NAI”) educational page at http://www.networkadvertising.org/understanding-online-advertising/how-does-it-work."
+          },
+          {
+            "type": "p",
+            "text": "You can opt out of targeted advertising by:"
+          },
+          {
+            "type": "note",
+            "text": "[INCLUDE OPT-OUT LINKS FROM WHICHEVER SERVICES BEING USED. COMMON LINKS INCLUDE:"
+          },
+          {
+            "type": "li",
+            "text": "FACEBOOK - https://www.facebook.com/settings/?tab=ads"
+          },
+          {
+            "type": "li",
+            "text": "GOOGLE - https://www.google.com/settings/ads/anonymous"
+          },
+          {
+            "type": "li",
+            "text": "BING - https://advertise.bingads.microsoft.com/en-us/resources/policies/personalized-ads]"
+          },
+          {
+            "type": "p",
+            "text": "Additionally, you can opt out of some of these services by visiting the Digital Advertising Alliance’s opt-out portal at: http://optout.aboutads.info/."
+          }
+        ]
+      },
+      {
+        "id": "using-personal-information",
+        "heading": "Using Personal Information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We use your personal Information to provide our services to you, which includes: offering products for sale, processing payments, shipping and fulfillment of your order, and keeping you up to date on new products, services, and offers."
+          },
+          {
+            "type": "note",
+            "text": "[INCLUDE THE FOLLOWING SECTION IF YOUR STORE IS LOCATED IN OR IF YOU HAVE CUSTOMERS IN EUROPE]"
+          },
+          {
+            "type": "sub",
+            "text": "Lawful basis"
+          },
+          {
+            "type": "p",
+            "text": "Pursuant to the General Data Protection Regulation (“GDPR”), if you are a resident of the European Economic Area (“EEA”), we process your personal information under the following lawful bases:"
+          },
+          {
+            "type": "note",
+            "text": "[INCLUDE ALL THAT APPLY TO YOUR BUSINESS]"
+          },
+          {
+            "type": "li",
+            "text": "Your consent;"
+          },
+          {
+            "type": "li",
+            "text": "The performance of the contract between you and the Site;"
+          },
+          {
+            "type": "li",
+            "text": "Compliance with our legal obligations;"
+          },
+          {
+            "type": "li",
+            "text": "To protect your vital interests;"
+          },
+          {
+            "type": "li",
+            "text": "To perform a task carried out in the public interest;"
+          },
+          {
+            "type": "li",
+            "text": "For our legitimate interests, which do not override your fundamental rights and freedoms."
+          },
+          {
+            "type": "sub",
+            "text": "Retention"
+          },
+          {
+            "type": "p",
+            "text": "When you place an order through the Site, we will retain your Personal Information for our records unless and until you ask us to erase this information. For more information on your right of erasure, please see the ‘Your rights’ section below."
+          },
+          {
+            "type": "sub",
+            "text": "Automatic decision-making"
+          },
+          {
+            "type": "p",
+            "text": "If you are a resident of the EEA, you have the right to object to processing based solely on automated decision-making (which includes profiling), when that decision-making has a legal effect on you or otherwise significantly affects you."
+          },
+          {
+            "type": "note",
+            "text": "We [DO/DO NOT] engage in fully automated decision-making that has a legal or otherwise significant effect using customer data."
+          },
+          {
+            "type": "p",
+            "text": "Our processor Shopify uses limited automated decision-making to prevent fraud that does not have a legal or otherwise significant effect on you."
+          },
+          {
+            "type": "p",
+            "text": "Services that include elements of automated decision-making include:"
+          },
+          {
+            "type": "li",
+            "text": "Temporary denylist of IP addresses associated with repeated failed transactions. This denylist persists for a small number of hours."
+          },
+          {
+            "type": "li",
+            "text": "Temporary denylist of credit cards associated with denylisted IP addresses. This denylist persists for a small number of days."
+          },
+          {
+            "type": "note",
+            "text": "[INCLUDE THE FOLLOWING SECTION ONLY IF YOU SELL PERSONAL INFORMATION, AS DEFINED BY THE CALIFORNIA CONSUMER PRIVACY ACT]"
+          }
+        ]
+      },
+      {
+        "id": "selling-personal-information",
+        "heading": "Selling Personal Information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Our Site sells Personal Information, as defined by the California Consumer Privacy Act of 2018 (“CCPA”)."
+          },
+          {
+            "type": "note",
+            "text": "[INSERT:"
+          },
+          {
+            "type": "note",
+            "text": "CATEGORIES OF INFORMATION SOLD;"
+          },
+          {
+            "type": "note",
+            "text": "INSTRUCTIONS ON HOW TO OPT-OUT OF SALE;"
+          },
+          {
+            "type": "note",
+            "text": "WHETHER YOUR BUSINESS SELLS INFORMATION OF MINORS (UNDER 16) AND WHETHER YOU OBTAIN AFFIRMATIVE AUTHORIZATION;"
+          },
+          {
+            "type": "note",
+            "text": "IF YOU PROVIDE A FINANCIAL INCENTIVE TO NOT SELL INFORMATION, PROVIDE INFORMATION ABOUT WHAT THAT INCENTIVE IS.]"
+          }
+        ]
+      },
+      {
+        "id": "your-rights",
+        "heading": "Your rights",
+        "blocks": [
+          {
+            "type": "note",
+            "text": "[INCLUDE FOLLOWING SECTION IF YOUR STORE IS LOCATED IN OR IF YOU HAVE CUSTOMERS IN EUROPE]"
+          },
+          {
+            "type": "sub",
+            "text": "GDPR"
+          },
+          {
+            "type": "p",
+            "text": "If you are a resident of the EEA, you have the right to access the Personal Information we hold about you, to port it to a new service, and to ask that your Personal Information be corrected, updated, or erased. If you would like to exercise these rights, please contact us through the contact information below [OR INSERT ALTERNATIVE INSTRUCTIONS FOR SENDING ACCESS, ERASURE, CORRECTION, AND PORTABILITY REQUESTS]."
+          },
+          {
+            "type": "p",
+            "text": "Your Personal Information will be initially processed in Ireland and then will be transferred outside of Europe for storage and further processing, including to Canada and the United States. For more information on how data transfers comply with the GDPR, see Shopify’s GDPR Whitepaper: https://help.shopify.com/en/manual/your-account/privacy/GDPR."
+          },
+          {
+            "type": "note",
+            "text": "[INCLUDE FOLLOWING SECTION IF YOUR BUSINESS IS SUBJECT TO THE CALIFORNIA CONSUMER PRIVACY ACT]"
+          },
+          {
+            "type": "sub",
+            "text": "CCPA"
+          },
+          {
+            "type": "p",
+            "text": "If you are a resident of California, you have the right to access the Personal Information we hold about you (also known as the ‘Right to Know’), to port it to a new service, and to ask that your Personal Information be corrected, updated, or erased. If you would like to exercise these rights, please contact us through the contact information below [OR INSERT ALTERNATIVE INSTRUCTIONS FOR SENDING ACCESS, ERASURE, CORRECTION, AND PORTABILITY REQUESTS]."
+          },
+          {
+            "type": "p",
+            "text": "If you would like to designate an authorized agent to submit these requests on your behalf, please contact us at the address below."
+          }
+        ]
+      },
+      {
+        "id": "cookies",
+        "heading": "Cookies",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "A cookie is a small amount of information that’s downloaded to your computer or device when you visit our Site. We use a number of different cookies, including functional, performance, advertising, and social media or content cookies. Cookies make your browsing experience better by allowing the website to remember your actions and preferences (such as login and region selection). This means you don’t have to re-enter this information each time you return to the site or browse from one page to another. Cookies also provide information on how people use the website, for instance whether it’s their first time visiting or if they are a frequent visitor."
+          },
+          {
+            "type": "p",
+            "text": "We use the following cookies to optimize your experience on our Site and to provide our services."
+          },
+          {
+            "type": "sub",
+            "text": "Cookies Necessary for the Functioning of the Store"
+          },
+          {
+            "type": "kv",
+            "key": "_ab",
+            "text": "Used in connection with access to admin."
+          },
+          {
+            "type": "kv",
+            "key": "_secure_session_id",
+            "text": "Used in connection with navigation through a storefront."
+          },
+          {
+            "type": "kv",
+            "key": "cart",
+            "text": "Used in connection with shopping cart."
+          },
+          {
+            "type": "kv",
+            "key": "cart_sig",
+            "text": "Used in connection with checkout."
+          },
+          {
+            "type": "kv",
+            "key": "cart_ts",
+            "text": "Used in connection with checkout."
+          },
+          {
+            "type": "kv",
+            "key": "checkout_token",
+            "text": "Used in connection with checkout."
+          },
+          {
+            "type": "kv",
+            "key": "secret",
+            "text": "Used in connection with checkout."
+          },
+          {
+            "type": "kv",
+            "key": "secure_customer_sig",
+            "text": "Used in connection with customer login."
+          },
+          {
+            "type": "kv",
+            "key": "storefront_digest",
+            "text": "Used in connection with customer login."
+          },
+          {
+            "type": "kv",
+            "key": "_shopify_u",
+            "text": "Used to facilitate updating customer account information."
+          },
+          {
+            "type": "sub",
+            "text": "Reporting and Analytics"
+          },
+          {
+            "type": "kv",
+            "key": "_tracking_consent",
+            "text": "Tracking preferences."
+          },
+          {
+            "type": "kv",
+            "key": "_landing_page",
+            "text": "Track landing pages"
+          },
+          {
+            "type": "kv",
+            "key": "_orig_referrer",
+            "text": "Track landing pages"
+          },
+          {
+            "type": "kv",
+            "key": "_s",
+            "text": "Shopify analytics."
+          },
+          {
+            "type": "kv",
+            "key": "_shopify_s",
+            "text": "Shopify analytics."
+          },
+          {
+            "type": "kv",
+            "key": "_shopify_sa_p",
+            "text": "Shopify analytics relating to marketing & referrals."
+          },
+          {
+            "type": "kv",
+            "key": "_shopify_sa_t",
+            "text": "Shopify analytics relating to marketing & referrals."
+          },
+          {
+            "type": "kv",
+            "key": "_shopify_y",
+            "text": "Shopify analytics."
+          },
+          {
+            "type": "kv",
+            "key": "_y",
+            "text": "Shopify analytics."
+          },
+          {
+            "type": "note",
+            "text": "[INSERT OTHER COOKIES OR TRACKING TECHNOLOGIES THAT YOU USE]"
+          },
+          {
+            "type": "p",
+            "text": "The length of time that a cookie remains on your computer or mobile device depends on whether it is a “persistent” or “session” cookie. Session cookies last until you stop browsing and persistent cookies last until they expire or are deleted. Most of the cookies we use are persistent and will expire between 30 minutes and two years from the date they are downloaded to your device."
+          },
+          {
+            "type": "p",
+            "text": "You can control and manage cookies in various ways. Please keep in mind that removing or blocking cookies can negatively impact your user experience and parts of our website may no longer be fully accessible."
+          },
+          {
+            "type": "p",
+            "text": "Most browsers automatically accept cookies, but you can choose whether or not to accept cookies through your browser controls, often found in your browser’s “Tools” or “Preferences” menu. For more information on how to modify your browser settings or how to block, manage or filter cookies can be found in your browser’s help file or through such sites as www.allaboutcookies.org."
+          },
+          {
+            "type": "p",
+            "text": "Additionally, please note that blocking cookies may not completely prevent how we share information with third parties such as our advertising partners. To exercise your rights or opt-out of certain uses of your information by these parties, please follow the instructions in the “Behavioural Advertising” section above."
+          },
+          {
+            "type": "sub",
+            "text": "Do Not Track"
+          },
+          {
+            "type": "p",
+            "text": "Please note that because there is no consistent industry understanding of how to respond to “Do Not Track” signals, we do not alter our data collection and usage practices when we detect such a signal from your browser."
+          }
+        ]
+      },
+      {
+        "id": "changes",
+        "heading": "Changes",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We may update this Privacy Policy from time to time in order to reflect, for example, changes to our practices or for other operational, legal, or regulatory reasons."
+          }
+        ]
+      },
+      {
+        "id": "contact",
+        "heading": "Contact",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at [email address] or by mail using the details provided below:"
+          },
+          {
+            "type": "p",
+            "text": "3827 Wacker Dr., Mira Loma CA 91752, United States"
+          },
+          {
+            "type": "note",
+            "text": "[DATE]"
+          },
+          {
+            "type": "p",
+            "text": "If you are not satisfied with our response to your complaint, you have the right to lodge your complaint with the relevant data protection authority. You can contact your local data protection authority, or our supervisory authority here: [ADD CONTACT INFORMATION OR WEBSITE FOR THE DATA PROTECTION AUTHORITY IN YOUR JURISDICTION. FOR EXAMPLE: https://ico.org.uk/make-a-complaint/]"
+          }
+        ]
+      },
+      {
+        "id": "messaging-terms",
+        "heading": "Messaging Terms",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "In addition, you agree to our Messaging Terms (https://terms.pscr.pt/legal/shop/photobooth-city/terms_of_service) and Messaging Privacy Policy (https://terms.pscr.pt/legal/shop/photobooth-city/privacy_policy)."
+          }
+        ]
+      }
+    ]
+  }
+}

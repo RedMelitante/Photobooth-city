@@ -1,0 +1,70 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Breadcrumb from '@/components/content/Breadcrumb.astro';
+import StarRating from '@/components/content/StarRating.astro';
+import { REVIEWS, img } from '@/lib/content';
+import { BOARD_URLS } from '@/lib/routes';
+import { STORE } from '@/lib/commerce';
+
+const reviews = REVIEWS.reviews.map((r) => ({ ...r, first: r.name.split(' ')[0] }));
+---
+<Layout title="Google Reviews" description={`What booth owners say about Photobooth City — rated ${REVIEWS.rating} on Google from ${REVIEWS.reviewCount} reviews.`}>
+  <section aria-labelledby="rv-title" class="bg-canvas">
+    <div class="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-7 px-4 pt-5 pb-8 lg:gap-12 lg:px-10 lg:pt-10 lg:pb-16">
+      <div class="flex flex-[1_1_480px] flex-col gap-[18px]">
+        <Breadcrumb items={[{ label: 'Google Reviews' }]} class="" />
+        <h1 id="rv-title" class="m-0 font-display text-[38px] leading-none font-extrabold tracking-[-0.035em] lg:text-[60px]">What booth owners say about us</h1>
+        <div class="flex flex-wrap items-center gap-[18px]">
+          <span class="font-display text-[56px] leading-none font-extrabold tracking-[-0.04em] lg:text-[80px]">{REVIEWS.rating}</span>
+          <div class="flex flex-col gap-1.5">
+            <StarRating rating={REVIEWS.rating} filled={REVIEWS.starsFilled} total={REVIEWS.starsTotal} />
+            <span class="text-[15px] text-ink-700">{REVIEWS.ratingLine}</span>
+          </div>
+        </div>
+        <ul aria-label="What customers mention" class="m-0 flex list-none flex-wrap gap-2 p-0">
+          {REVIEWS.themes.map((t) => <li class="flex h-9 items-center rounded-full border border-line bg-surface px-3.5 text-sm font-bold">{t}</li>)}
+        </ul>
+      </div>
+      <div class="flex max-w-[460px] flex-[1_1_340px] flex-col gap-3 rounded-hero bg-ink-950 px-5 py-6 text-white lg:p-9">
+        <strong class="font-display text-[26px] leading-[30px]">Bought from Photobooth City?</strong>
+        <span class="text-[15px] leading-[23px] text-ink-200">Your review helps other new owners choose the right booth.</span>
+        <a href={REVIEWS.writeReviewUrl} target="_blank" rel="noopener" class="flex h-[52px] items-center justify-center rounded-lg bg-flash-400 font-extrabold text-ink-950 no-underline hover:bg-[#ffdb66] hover:text-ink-950">Leave a Review</a>
+        <a href={REVIEWS.allReviewsUrl} target="_blank" rel="noopener" class="flex h-12 items-center justify-center rounded-lg border-[1.5px] border-white/40 font-bold text-white no-underline hover:border-white hover:text-white">Read All Reviews on Google</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Reviews" class="mx-auto max-w-[1440px] px-4 pt-8 pb-6 lg:px-10 lg:pt-16 lg:pb-12">
+    <div class="columns-1 gap-5 md:columns-2 lg:columns-3">
+      {reviews.map((r) => (
+        <figure class="m-0 mb-5 flex break-inside-avoid flex-col gap-4 rounded-panel border border-line p-[26px]">
+          <figcaption class="flex items-center gap-3">
+            <img src={img(r.photo)} alt="" width="44" height="44" loading="lazy" class="size-11 flex-none rounded-full bg-brand-100 object-cover shadow-[0_0_0_2px_#fff,0_0_0_3px_var(--color-line)]" />
+            <span class="flex flex-1 flex-col gap-0.5">
+              <a href={r.profileUrl} target="_blank" rel="noopener" class="text-base font-extrabold text-ink-900 no-underline hover:underline">{r.name}</a>
+              <span class="text-[13px] text-ink-500">{r.when}</span>
+            </span>
+            <span class="rounded-sm bg-chip px-2 py-1 text-xs font-extrabold text-ink-500">Google</span>
+          </figcaption>
+          <blockquote class="m-0 text-[17px] leading-[27px] text-pretty">“{r.text}”</blockquote>
+          {r.tags.length > 0 && (
+            <ul class="m-0 flex list-none flex-wrap gap-1.5 p-0">
+              {r.tags.map((t) => <li class="rounded-full bg-canvas px-2.5 py-[3px] text-xs font-bold text-ink-700">{t}</li>)}
+            </ul>
+          )}
+          <a href={r.profileUrl} target="_blank" rel="noopener" class="text-sm font-bold text-brand-600">Read {r.first}’s review on Google →</a>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="rv-shop" class="mx-auto max-w-[1440px] px-4 pb-14 lg:px-10 lg:pb-24">
+    <div class="flex flex-wrap items-center justify-between gap-5 rounded-hero bg-flash-400 px-5 py-6 text-ink-950 lg:p-9">
+      <h2 id="rv-shop" class="m-0 font-display text-[32px] leading-none font-extrabold tracking-[-0.03em] lg:text-[48px]">Ready to start your Business?</h2>
+      <div class="flex flex-wrap gap-2.5">
+        <a href={BOARD_URLS.CollectionDesktop} class="flex h-[52px] items-center rounded-lg bg-ink-950 px-6 font-extrabold text-white no-underline hover:bg-ink-900 hover:text-white">Shop photo booths</a>
+        <a href={STORE.phoneHref} class="flex h-[52px] items-center rounded-lg border-2 border-ink-950 px-5 font-extrabold text-ink-950 no-underline hover:bg-ink-950/5 hover:text-ink-950">{STORE.phone}</a>
+      </div>
+    </div>
+  </section>
+</Layout>

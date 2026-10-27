@@ -1,0 +1,20 @@
+---
+import Icon from '@/components/Icon.astro';
+interface Props {
+  heading: string;
+  items: { q: string; a: string }[];
+}
+const { heading, items } = Astro.props;
+---
+<h2 id="faq" class="mt-12 mb-2 scroll-mt-6 font-display text-2xl leading-[1.15] font-bold tracking-[-0.02em] text-ink-900 lg:text-[30px]">{heading}</h2>
+<div class="border-t border-line">
+  {items.map((f, i) => (
+    <details name="article-faq" open={i === 0} class="group border-b border-line">
+      <summary class="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-3.5 py-3.5 [&::-webkit-details-marker]:hidden">
+        <h3 class="m-0 text-base leading-[22px] font-bold text-ink-900">{f.q}</h3>
+        <Icon name="chevron-down" size={18} stroke={2.6} class="transition-transform group-open:rotate-180" />
+      </summary>
+      <p class="m-0 pr-8 pb-[18px] text-[15px] leading-6 text-ink-700">{f.a}</p>
+    </details>
+  ))}
+</div>

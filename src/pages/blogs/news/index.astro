@@ -1,0 +1,51 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Icon from '@/components/Icon.astro';
+import Breadcrumb from '@/components/content/Breadcrumb.astro';
+import PostCard from '@/components/content/PostCard.astro';
+import NewsletterBand from '@/components/content/NewsletterBand.astro';
+import { BLOG, hrefForTitle, img } from '@/lib/content';
+import { PAGES } from '@/lib/routes';
+
+const f = BLOG.featured;
+const featHref = hrefForTitle(f.title);
+const FeatTag = featHref ? 'a' : 'div';
+const posts = BLOG.posts.map((p) => ({ ...p, href: hrefForTitle(p.title) }));
+---
+<Layout title="Blog" description={BLOG.lead}>
+  <div class="container-page pb-12 lg:pb-20">
+    <Breadcrumb items={[{ label: 'Blog' }]} class="pt-3.5 pb-4 lg:pt-6 lg:pb-7" />
+
+    <header class="mb-7 flex flex-wrap items-end justify-between gap-5 lg:mb-12">
+      <div class="flex max-w-[720px] flex-col gap-3">
+        <h1 class="m-0 font-display text-[44px] leading-none font-extrabold tracking-[-0.035em] lg:text-[72px]">{BLOG.title}</h1>
+        <p class="m-0 text-base leading-[1.6] text-ink-700 lg:text-lg">{BLOG.lead}</p>
+      </div>
+      <form role="search" action={PAGES.search} method="get" class="relative flex flex-[1_1_100%] sm:flex-[0_1_360px]">
+        <Icon name="search" size={18} stroke={2.2} class="pointer-events-none absolute top-[15px] left-4 text-ink-500" />
+        <input type="search" name="q" aria-label={BLOG.searchPlaceholder} placeholder={BLOG.searchPlaceholder} class="box-border h-12 w-full rounded-full border-[1.5px] border-line-strong bg-canvas pr-4 pl-11 text-base" />
+      </form>
+    </header>
+
+    <!-- FEATURED -->
+    <FeatTag href={featHref ?? undefined} class="mb-7 flex flex-wrap overflow-hidden rounded-hero bg-ink-950 text-white no-underline hover:text-white lg:mb-12">
+      <span class="relative min-h-[200px] flex-[1_1_520px] bg-[#1B2340] lg:min-h-[380px]">
+        <img src={img(f.image)} alt={f.alt} fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
+      </span>
+      <span class="flex flex-[1_1_440px] flex-col justify-center gap-4 px-5 py-6 lg:p-12">
+        <span class="self-start rounded-full bg-flash-400 px-2.5 py-1 text-xs font-extrabold text-ink-950">{f.tag}</span>
+        <span class="font-display text-[26px] leading-[1.08] font-bold tracking-[-0.025em] lg:text-[38px]">{f.title}</span>
+        <span class="text-base leading-[25px] text-ink-200">{f.excerpt}</span>
+        {featHref && <span class="text-[15px] font-extrabold text-flash-400">{f.cta}</span>}
+      </span>
+    </FeatTag>
+
+    <!-- GRID -->
+    <div class="grid grid-cols-1 gap-9 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-7 lg:gap-y-12">
+      {posts.map((p) => <PostCard title={p.title} tag={p.tag} excerpt={p.excerpt} image={img(p.image)} bg={p.bg} href={p.href} />)}
+    </div>
+
+
+    <div class="mt-12 lg:mt-20"><NewsletterBand /></div>
+  </div>
+</Layout>

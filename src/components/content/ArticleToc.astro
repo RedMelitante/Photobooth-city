@@ -1,0 +1,33 @@
+---
+import Icon from '@/components/Icon.astro';
+interface Props {
+  items: { id: string; label: string }[];
+}
+const { items } = Astro.props;
+---
+<nav aria-label="On this page" data-scrollspy data-article-toc class="flex-[1_1_100%] rounded-card bg-canvas px-5 py-[18px] lg:sticky lg:top-6 lg:flex lg:max-h-[calc(100dvh-48px)] lg:flex-[0_0_260px] lg:flex-col">
+  <button type="button" aria-expanded="false" aria-controls="article-toc-list" class="group flex min-h-11 w-full items-center justify-between border-0 bg-transparent p-0 text-sm font-extrabold text-ink-900 lg:hidden">
+    On this page
+    <Icon name="chevron-down" size={16} stroke={2.6} class="transition-transform group-aria-expanded:rotate-180" />
+  </button>
+  <span class="hidden min-h-8 items-center text-sm font-extrabold text-ink-900 lg:flex">On this page</span>
+  <ol id="article-toc-list" data-scrollspy-box class="m-0 mt-2.5 hidden min-h-0 list-none flex-col gap-0.5 overflow-y-auto p-0 data-[open]:flex lg:flex">
+    {items.map((t) => (
+      <li>
+        <a href={`#${t.id}`} class="block rounded-[8px] border-l-[3px] border-transparent px-2.5 py-[7px] text-sm leading-[19px] font-semibold text-ink-700 no-underline hover:text-ink-900 data-[active]:border-brand-600 data-[active]:bg-surface data-[active]:font-extrabold data-[active]:text-ink-900">{t.label}</a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script>
+  document.querySelectorAll<HTMLElement>('nav[data-article-toc]').forEach((nav) => {
+    const btn = nav.querySelector('button')!;
+    const list = nav.querySelector('ol')!;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      list.toggleAttribute('data-open', open);
+    });
+  });
+</script>

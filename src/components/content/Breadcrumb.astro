@@ -1,0 +1,29 @@
+---
+import { PAGES } from '@/lib/routes';
+
+interface Props {
+  items: { label: string; href?: string }[];
+  class?: string;
+}
+const { items, class: className = 'pt-3.5 pb-4 lg:pt-6 lg:pb-8' } = Astro.props;
+const all = [{ label: 'Home', href: PAGES.home }, ...items];
+---
+<nav aria-label="Breadcrumb" class={className}>
+  <ol class="m-0 flex list-none flex-wrap gap-2 p-0 text-sm text-ink-500">
+    {all.map((it, i) => {
+      const last = i === all.length - 1;
+      return (
+        <>
+          {i > 0 && <li aria-hidden="true">/</li>}
+          {last ? (
+            <li aria-current="page" class="font-bold text-ink-900">{it.label}</li>
+          ) : it.href ? (
+            <li><a href={it.href} class="text-ink-500 underline-offset-2 hover:text-ink-900">{it.label}</a></li>
+          ) : (
+            <li>{it.label}</li>
+          )}
+        </>
+      );
+    })}
+  </ol>
+</nav>

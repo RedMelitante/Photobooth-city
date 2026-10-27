@@ -1,0 +1,89 @@
+{
+  "rating": 4.5,
+  "starsFilled": 4,
+  "starsTotal": 5,
+  "ratingLine": "Google rating · 31 reviews",
+  "reviewCount": 31,
+  "writeReviewUrl": "https://search.google.com/local/writereview?placeid=ChIJFf6rI_kzw4ARBfAy9F5YL3I",
+  "allReviewsUrl": "https://www.google.com/maps/search/?api=1&query=Photobooth%20City&query_place_id=ChIJFf6rI_kzw4ARBfAy9F5YL3I",
+  "themes": [
+    "Fast shipping",
+    "Sturdy build quality",
+    "Easy setup",
+    "Responsive support"
+  ],
+  "reviews": [
+    {
+      "name": "Christina Luthy",
+      "profileUrl": "https://www.google.com/maps/contrib/105057239898745149249/reviews",
+      "photo": "4a1d5f1f70197153d73e16110446652a",
+      "when": "5 months ago",
+      "text": "I absolutely love my photobooth shell I purchased from photobooth city! I was skeptical at first because I knew nothing about the quality of products or customer service, but it has been phenomenal! I would purchase again from this company. All the electrical is working great, very sturdy and excellent quality.",
+      "tags": [
+        "Photo booth shell",
+        "Build quality"
+      ]
+    },
+    {
+      "name": "Reginald Lutes",
+      "profileUrl": "https://www.google.com/maps/contrib/102775173204515585737/reviews",
+      "photo": "de727f90aeb0122dcf523f2f1a1ffe4f",
+      "when": "A year ago",
+      "text": "I purchased an iPad Photo booth stand, quick shipping, very well built, I will definitely be using Photobooth City in the future, I highly recommend it to anyone, for your Photo booth needs.",
+      "tags": [
+        "iPad booth stand",
+        "Fast shipping"
+      ]
+    },
+    {
+      "name": "Cali Parmenter",
+      "profileUrl": "https://www.google.com/maps/contrib/116446595511945395827/reviews",
+      "photo": "a6592c79022dca943515782ea5364864",
+      "when": "A year ago",
+      "text": "The customer service was exceptional! We got our equipment super fast and everything looked great! Came with great instructions for putting everything together! Couldn’t be happier :)",
+      "tags": [
+        "Customer service",
+        "Setup instructions"
+      ]
+    },
+    {
+      "name": "Jason Nicholas",
+      "profileUrl": "https://www.google.com/maps/contrib/103265812325257298357/reviews",
+      "photo": "d3e2168e5bd27024560e96aa821014c1",
+      "when": "A year ago",
+      "text": "We bought this for our church and we use it all the time! Super easy set up and stores in a really nice case. It is very sturdy and is desined reall good! Wish we would have bought this a while ago. We use it for so many events, mothers day, fahters day, Christmas, Easter, student events and more.",
+      "tags": [
+        "Easy setup",
+        "Carry case"
+      ]
+    },
+    {
+      "name": "Hunter Eagle",
+      "profileUrl": "https://www.google.com/maps/contrib/106570429292510539095/reviews",
+      "photo": "27e3983417c1770e899e4311bf230388",
+      "when": "2 years ago",
+      "text": "Fast and easy shipping. Constant support throughput the process. So far 5/5. The product was incredibly easy to set up, however most of the zip ties broke during shipping, I'd recommend not cutting them until they're delivered to the customer. Will further review when the product is up and running.",
+      "tags": [
+        "Fast shipping",
+        "Ongoing support"
+      ]
+    }
+  ],
+  "aboutQuotes": [
+    {
+      "name": "Christina Luthy",
+      "when": "5 months ago",
+      "text": "I absolutely love my photobooth shell I purchased from photobooth city!"
+    },
+    {
+      "name": "Jason Nicholas",
+      "when": "A year ago",
+      "text": "We bought this for our church and we use it all the time!"
+    },
+    {
+      "name": "Cali Parmenter",
+      "when": "A year ago",
+      "text": "The customer service was exceptional! We got our equipment super fast and everything looked great!"
+    }
+  ]
+}

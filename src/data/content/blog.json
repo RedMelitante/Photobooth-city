@@ -1,0 +1,56 @@
+{
+  "title": "Blog",
+  "lead": "Guides for starting, equipping and growing a photo booth business.",
+  "searchPlaceholder": "Search articles",
+  "featured": {
+    "tag": "Latest · Equipment",
+    "title": "How a 12V Rechargeable Battery Pack Can Improve Your Photo Booth Setup",
+    "excerpt": "Running a photo booth at weddings, parties, corporate events, trade shows and brand activations — even where outlets are scarce.",
+    "cta": "Read article →",
+    "image": "a4832068cbe388d07363507aa2f5743f",
+    "alt": "Technician setting up an enclosed photo booth with a rechargeable battery pack"
+  },
+  "posts": [
+    {
+      "tag": "Starting a business",
+      "title": "How Much Does It Cost to Start a Photo Booth Business?",
+      "excerpt": "Most entrepreneurs should plan to invest approximately $3,500 to $10,000. Here’s where the money goes.",
+      "bg": "#FFF6D6",
+      "image": "ccc1b2fb9df3ff9df0bb24795c010b4d"
+    },
+    {
+      "tag": "Starting a business",
+      "title": "Are Photobooth City’s Photo Booths Suitable for Starting a Photo Booth Business?",
+      "excerpt": "Why thousands of entrepreneurs choose a photo booth business — and who books booths.",
+      "bg": "#EEF2FF",
+      "image": "448a4026d8fab481d7b1cf983bba656d"
+    },
+    {
+      "tag": "Marketing",
+      "title": "Photo Booth Marketing Ideas: How to Get More Bookings for Your Rental Business",
+      "excerpt": "Simply owning a great photo booth is no longer enough to guarantee bookings.",
+      "bg": "#EFEFEA",
+      "image": "38970cc10b1e52aa5d883dcb96cbfd32"
+    },
+    {
+      "tag": "Event ideas",
+      "title": "10 Photo Booth Ideas That Will Make Your Event Stand Out",
+      "excerpt": "Guests no longer want simple snapshots. Ten ways to make your booth the talk of the event.",
+      "bg": "#FDECEF",
+      "image": "0f98e77e1d4a7afa71bd4ee1ce8fbd23"
+    },
+    {
+      "tag": "Buying guide",
+      "title": "Portable Photo Booth vs Traditional Booth: Which One Is Best for Your Events?",
+      "excerpt": "Choosing between a portable photo booth and a traditional enclosed booth for your rental business.",
+      "bg": "#E7F6EE",
+      "image": "da0ac0053b2a34ba62d1180a31bc381b"
+    }
+  ],
+  "newsletter": {
+    "heading": "Get new guides by email",
+    "sub": "Plus flash sales and new booth launches. Unsubscribe anytime.",
+    "placeholder": "you@yourbusiness.com",
+    "button": "Subscribe"
+  }
+}

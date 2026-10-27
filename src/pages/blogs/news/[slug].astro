@@ -1,0 +1,97 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Breadcrumb from '@/components/content/Breadcrumb.astro';
+import ArticleToc from '@/components/content/ArticleToc.astro';
+import ArticleBody from '@/components/content/ArticleBody.astro';
+import ArticleFaq from '@/components/content/ArticleFaq.astro';
+import CommentForm from '@/components/content/CommentForm.astro';
+import PostCard from '@/components/content/PostCard.astro';
+import ScrollSpy from '@/components/content/ScrollSpy.astro';
+import { listArticles, articleUrl, hrefForTitle, img, type Article } from '@/lib/content';
+import { PAGES, collectionUrl } from '@/lib/routes';
+import { STORE } from '@/lib/commerce';
+
+export function getStaticPaths() {
+  return listArticles().map((a) => ({ params: { slug: a.slug }, props: { article: a } }));
+}
+interface Props {
+  article: Article;
+}
+const { article: a } = Astro.props;
+const cover = img(a.cover.image);
+const site = Astro.site ?? new URL('https://photoboothcity.com');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: a.title,
+    description: a.lead,
+    datePublished: a.dateISO,
+    image: new URL(cover, site).href,
+    author: { '@type': 'Organization', name: a.author },
+    publisher: { '@type': 'Organization', name: STORE.name, logo: { '@type': 'ImageObject', url: new URL('/images/logo.png', site).href } },
+    mainEntityOfPage: new URL(articleUrl(a.slug), site).href,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: a.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Layout title={a.title} description={a.lead.replace(/^Estimated startup cost:\s*/, '')} image={new URL(cover, site).href}>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={a.dateISO} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <div class="container-page pb-14 lg:pb-24">
+    <Breadcrumb items={[{ label: 'Blog', href: PAGES.blog }, { label: a.crumb }]} class="pt-3.5 pb-4 lg:pt-6 lg:pb-7" />
+
+    <header class="mb-7 flex max-w-[900px] flex-col gap-4">
+      <span class="text-eyebrow font-extrabold tracking-[0.1em] text-brand-600 uppercase">{a.category}</span>
+      <h1 class="m-0 font-display text-[34px] leading-[1.02] font-extrabold tracking-[-0.035em] text-balance lg:text-[60px]">{a.title}</h1>
+      <p class="m-0 flex flex-wrap gap-x-4 gap-y-2 text-sm text-ink-500">
+        <time datetime={a.dateISO}>{a.date}</time><span aria-hidden="true">·</span><span>{a.readTime}</span><span aria-hidden="true">·</span><span>{a.author}</span>
+      </p>
+    </header>
+    <img src={cover} alt={a.cover.alt} fetchpriority="high" class="mb-6 block h-auto w-full max-w-[900px] rounded-hero lg:mb-14" />
+
+    <div class="flex flex-wrap items-start gap-6 lg:gap-14">
+      <ArticleToc items={a.toc} />
+
+      <article class="min-w-0 max-w-[760px] flex-[999_1_560px] text-base leading-[1.7] text-[#262E42] lg:text-[17px]">
+        <p class="m-0 mb-5 text-lg leading-[1.6] font-medium text-ink-900 lg:text-xl">{a.lead}</p>
+        {a.intro.map((x) => <p class="m-0 mb-4">{x}</p>)}
+
+        <ArticleBody article={a} />
+
+        <section aria-labelledby="pkg" class="mt-12 flex scroll-mt-6 flex-col gap-3.5 rounded-[22px] bg-ink-950 px-5 py-6 text-white lg:p-8">
+          <h2 id="pkg" class="m-0 font-display text-2xl leading-[1.15] font-bold lg:text-[30px]">{a.package.heading}</h2>
+          <div class="flex flex-col gap-2 text-base leading-[25px] text-ink-200">
+            {a.package.blocks.map((b) => b.type === 'li'
+              ? <p class="relative m-0 pl-6 text-white"><span aria-hidden="true" class="absolute top-0 left-1.5 font-extrabold text-flash-400">•</span>{b.text}</p>
+              : <p class="m-0">{b.text}</p>)}
+          </div>
+          <div class="flex flex-wrap gap-2.5">
+            <a href={STORE.phoneHref} class="flex h-[52px] items-center rounded-lg bg-flash-400 px-[22px] font-extrabold text-ink-950 no-underline hover:bg-[#ffdb66] hover:text-ink-950">{a.package.ctas[0]}</a>
+            <a href={collectionUrl('system-packages')} class="flex h-[52px] items-center rounded-lg border-[1.5px] border-white/40 px-[22px] font-bold text-white no-underline hover:border-white hover:text-white">{a.package.ctas[1]}</a>
+          </div>
+        </section>
+
+        <ArticleFaq heading={a.faqHeading} items={a.faqs} />
+
+        <CommentForm slug={a.slug} {...a.comments} />
+      </article>
+    </div>
+
+    <!-- RELATED -->
+    <section aria-labelledby="rel" class="mt-14 lg:mt-24">
+      <h2 id="rel" class="m-0 mb-6 font-display text-2xl font-bold tracking-[-0.02em] lg:text-[30px]">{a.relatedHeading}</h2>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {a.related.map((p) => <PostCard size="sm" title={p.title} image={img(p.image)} bg={p.bg} href={hrefForTitle(p.title) ?? PAGES.blog} />)}
+      </div>
+    </section>
+  </div>
+  <ScrollSpy />
+</Layout>
