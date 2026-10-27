@@ -8,7 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "sync:catalog": "node scripts/sync-catalog.mjs"
+    "sync:catalog": "node scripts/sync-catalog.mjs",
+    "backend:install": "npm --prefix backend install",
+    "backend:migrate": "npm --prefix backend/apps/backend exec medusa db:migrate",
+    "backend:dev": "npm --prefix backend/apps/backend run dev"
   },
   "dependencies": {
     "@astrojs/react": "^7.1.0",

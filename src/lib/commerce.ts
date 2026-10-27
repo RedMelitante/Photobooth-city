@@ -1,7 +1,8 @@
 // Store rules copied from the Shopify store (see the design's admin boards):
 // FLASHSALE2026, Economy shipping tiers, California-only tax, US-only region.
-// With a Medusa backend these live in Promotions / Shipping Options / Tax
-// Regions; the storefront mirrors them so totals render before the API answers.
+// The Medusa backend holds the real rules (backend/apps/backend/src/lib/store-config.ts
+// seeds Promotions, Shipping Options and Tax Regions); this mirror lets totals
+// render before the API answers. Change both together.
 
 export const PROMO = {
   code: 'FLASHSALE2026',

@@ -5,6 +5,8 @@
 import { atom, computed, onMount } from 'nanostores';
 import type { CartLine } from './types';
 import { promoState } from './commerce';
+import { medusaEnabled } from './medusa';
+import { flushMedusaCart, forgetMedusaCart, syncMedusaCart } from './medusa-cart';
 
 const KEY = 'pbc.cart.v1';
 
@@ -57,13 +59,20 @@ export const $count = computed($cart, (s) => s.lines.reduce((a, l) => a + l.quan
 export const $subtotal = computed($cart, (s) => s.lines.reduce((a, l) => a + l.unitPrice * l.quantity, 0));
 export const $promo = computed([$subtotal, $cart], (sub, s) => promoState(sub, !!s.code));
 
-async function sync(_state: CartState): Promise<void> {
-  // Medusa: mirror lines + promo code to the backend cart here.
+function sync(state: CartState) {
+  if (medusaEnabled) void syncMedusaCart(state.lines, state.code);
+}
+
+/** Checkout: make sure the backend cart matches, then return its id. */
+export function backendCartId(): Promise<string> {
+  ensureLoaded();
+  const s = $cart.get();
+  return flushMedusaCart(s.lines, s.code);
 }
 
 function commit(next: CartState) {
   $cart.set(next);
-  void sync(next);
+  sync(next);
 }
 
 export function addLine(line: Omit<CartLine, 'quantity'>, quantity = 1, open = true) {
@@ -93,8 +102,14 @@ export function saveCode(code: string | null) {
   commit({ ...$cart.get(), code });
 }
 
-export function clearCart() {
+/** Empties the cart. After an order the backend cart is spent, so it is forgotten rather than emptied. */
+export function clearCart(opts: { orderPlaced?: boolean } = {}) {
   ensureLoaded();
+  if (opts.orderPlaced && medusaEnabled) {
+    forgetMedusaCart();
+    $cart.set({ lines: [], code: null });
+    return;
+  }
   commit({ lines: [], code: null });
 }
 

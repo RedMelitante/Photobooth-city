@@ -82,6 +82,10 @@ const collections = Object.entries(design.c).map(([handle, c]) => ({
   more: (c.more ?? []).map((b) => ({ type: b.li ? 'li' : 'p', text: b.x })),
 }));
 
-fs.writeFileSync(path.join(root, 'src/data/catalog.json'), JSON.stringify({ products, collections }, null, 1));
+const catalogJson = JSON.stringify({ products, collections }, null, 1);
+fs.writeFileSync(path.join(root, 'src/data/catalog.json'), catalogJson);
+// The Medusa seed (backend/apps/backend/src/migration-scripts/initial-data-seed.ts) reads its own copy.
+const backendCopy = path.join(root, 'backend/apps/backend/src/data/catalog.json');
+if (fs.existsSync(path.dirname(backendCopy))) fs.writeFileSync(backendCopy, catalogJson);
 fs.writeFileSync(path.join(root, 'src/data/blob-map.json'), JSON.stringify(blobMap, null, 1));
 console.log(`catalog: ${products.length} products, ${collections.length} collections, ${Object.keys(blobMap).length} images mapped`);

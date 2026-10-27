@@ -1,13 +1,16 @@
-// Catalog access. Pages call these at build time; the data comes from the
-// bundled snapshot (src/data/catalog.json). To move to a live Medusa v2
-// backend, swap the bodies for calls to /store/products and
-// /store/collections — the signatures are the contract the pages rely on.
+// Catalog access. Pages call these at build time (server only). With
+// PUBLIC_MEDUSA_BACKEND_URL set, products and collections come from the
+// Medusa Store API (product categories = collections); otherwise from the
+// bundled snapshot (src/data/catalog.json).
 import data from '@/data/catalog.json';
 import blobMap from '@/data/blob-map.json';
+import { medusaEnabled } from './medusa';
+import { loadMedusaCatalog } from './medusa-catalog';
 import type { Collection, Product } from './types';
 
-const products = data.products as Product[];
-const collections = data.collections as Collection[];
+const source = medusaEnabled ? await loadMedusaCatalog() : (data as { products: Product[]; collections: Collection[] });
+const products = source.products;
+const collections = source.collections;
 
 const byHandle = new Map(products.map((p) => [p.handle, p]));
 const colByHandle = new Map(collections.map((c) => [c.handle, c]));

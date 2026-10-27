@@ -1,8 +1,12 @@
-// Customer account adapter — MOCK.
+import * as M from './medusa-account';
+import { medusaEnabled } from './medusa';
+
+// Customer account adapter.
 //
-// There is no backend yet, so this module fakes customer auth with
-// localStorage. Every function is async and returns plain data so the pages
-// can switch to Medusa v2 customer auth by replacing the bodies only:
+// With Medusa configured (PUBLIC_MEDUSA_BACKEND_URL) every function delegates
+// to medusa-account.ts (emailpass auth + Store API). Without it, this module
+// fakes customer auth with localStorage so the static site still works. The
+// Medusa calls each function maps to:
 //
 //   login          -> sdk.auth.login('customer', 'emailpass', { email, password })
 //   register       -> sdk.auth.register('customer', 'emailpass', …) + sdk.store.customer.create(…)
@@ -125,6 +129,7 @@ export async function login(email: string, password: string): Promise<Result<Cus
   if (emailErr) return { ok: false, error: emailErr, field: 'email' };
   const pwErr = validatePassword(password);
   if (pwErr) return { ok: false, error: pwErr, field: 'password' };
+  if (medusaEnabled) return M.login(email, password);
   await delay();
   const profiles = read<Record<string, Customer>>(PROFILES_KEY, {});
   const customer: Customer = profiles[norm(email)] ?? {
@@ -148,6 +153,7 @@ export async function register(input: {
   if (emailErr) return { ok: false, error: emailErr, field: 'email' };
   const pwErr = validatePassword(input.password);
   if (pwErr) return { ok: false, error: pwErr, field: 'password' };
+  if (medusaEnabled) return M.register(input);
   await delay();
   const profiles = read<Record<string, Customer>>(PROFILES_KEY, {});
   if (profiles[norm(input.email)]) {
@@ -169,21 +175,31 @@ export async function register(input: {
 export async function reset(email: string): Promise<Result<null>> {
   const emailErr = validateEmail(email);
   if (emailErr) return { ok: false, error: emailErr, field: 'email' };
+  if (medusaEnabled) return M.reset(email);
   await delay();
   return { ok: true, data: null };
 }
 
 export async function logout(): Promise<void> {
+  if (medusaEnabled) return M.logout();
   write(SESSION_KEY, null);
 }
 
 /** The signed-in customer, or null. Client only. */
 export async function getCustomer(): Promise<Customer | null> {
   if (typeof window === 'undefined') return null;
+  if (medusaEnabled) return M.getCustomer();
   return read<Customer | null>(SESSION_KEY, null);
 }
 
 export async function updateCustomer(patch: Partial<Omit<Customer, 'email'>> & { email?: string }): Promise<Result<Customer>> {
+  if (medusaEnabled) {
+    if (patch.email !== undefined) {
+      const emailErr = validateEmail(patch.email);
+      if (emailErr) return { ok: false, error: emailErr, field: 'email' };
+    }
+    return M.updateCustomer(patch);
+  }
   const current = await getCustomer();
   if (!current) return { ok: false, error: 'Your session has ended. Log in again.' };
   if (patch.email !== undefined) {
@@ -269,6 +285,7 @@ const SAMPLE_ORDERS: Order[] = [
 ];
 
 export async function listOrders(): Promise<Order[]> {
+  if (medusaEnabled) return M.listOrders();
   const c = await getCustomer();
   return c ? SAMPLE_ORDERS : [];
 }
@@ -291,10 +308,12 @@ const SAMPLE_ADDRESS: Address = {
 };
 
 export async function listAddresses(): Promise<Address[]> {
+  if (medusaEnabled) return M.listAddresses();
   return read<Address[]>(ADDRESSES_KEY, [SAMPLE_ADDRESS]);
 }
 
 export async function saveAddress(addr: Omit<Address, 'id'> & { id?: string }): Promise<Address[]> {
+  if (medusaEnabled) return M.saveAddress(addr);
   await delay(200);
   let list = await listAddresses();
   const saved: Address = { ...addr, id: addr.id ?? `addr_${Date.now().toString(36)}` };
@@ -310,6 +329,7 @@ export async function saveAddress(addr: Omit<Address, 'id'> & { id?: string }): 
 }
 
 export async function deleteAddress(id: string): Promise<Address[]> {
+  if (medusaEnabled) return M.deleteAddress(id);
   let list = (await listAddresses()).filter((a) => a.id !== id);
   if (list.length && !list.some((a) => a.isDefault)) list = list.map((a, i) => ({ ...a, isDefault: i === 0 }));
   write(ADDRESSES_KEY, list);

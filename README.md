@@ -1,24 +1,42 @@
-# Photobooth City — Storefront
+# Photobooth City — Storefront + Medusa backend
 
-The redesigned photoboothcity.com storefront, built from the *Photobooth City — Storefront Redesign*
+The redesigned photoboothcity.com, built from the *Photobooth City — Storefront Redesign*
 design canvas.
 
-- **Astro 7** static site, **React 19** islands for anything interactive
-- **Tailwind CSS v4** with the design tokens as a CSS-first `@theme` (`src/styles/global.css`)
-- Manrope + Bricolage Grotesque, self-hosted via Fontsource
-- Runs on its own today, using a bundled catalog (76 products, 25 collections) taken from the live Shopify store. The data
-  and cart layers are shaped so a **Medusa v2** backend can replace them (see *Going live*)
+- **Storefront** (repo root): an **Astro 7** static site with **React 19** islands for anything interactive,
+  **Tailwind CSS v4** using the design tokens as a CSS-first `@theme` (`src/styles/global.css`),
+  and Manrope + Bricolage Grotesque self-hosted via Fontsource.
+- **Backend** (`backend/`): **Medusa v2.22**, seeded with the store as it is on Shopify (76 products, 25
+  categories, US region, Economy shipping tiers, California tax, FLASHSALE2026).
+
+The storefront runs in two modes:
+
+| Mode | When | Catalog | Cart, checkout, accounts |
+| --- | --- | --- | --- |
+| **Medusa** | `PUBLIC_MEDUSA_BACKEND_URL` + `PUBLIC_MEDUSA_PUBLISHABLE_KEY` set | Medusa Store API, read at build time | Real Medusa carts, orders and customer accounts |
+| **Standalone** | env unset | bundled `src/data/catalog.json` | Browser-only stand-ins (no orders are created) |
 
 ## Run it
 
+Needs Node 22+, PostgreSQL 15+ and Redis.
+
 ```bash
+# 1. Backend
+npm run backend:install
+cp backend/apps/backend/.env.template backend/apps/backend/.env   # set DATABASE_URL, secrets
+createdb medusa_pbc
+npm run backend:migrate        # migrations + the Photobooth City seed (prints the publishable key)
+npx --prefix backend/apps/backend medusa user -e you@photoboothcity.com -p <password>
+npm run backend:dev            # API http://localhost:9000, admin http://localhost:9000/app
+
+# 2. Storefront
 npm install
-npm run dev        # http://localhost:4321
-npm run build      # static output in dist/
-npm run preview
+cp .env.example .env           # paste the publishable key
+npm run dev                    # http://localhost:4321
+npm run build                  # static output in dist/ (re-run after catalog changes in Medusa)
 ```
 
-Node 22+.
+Without step 1 and with `.env` left empty, `npm run dev` runs the storefront standalone.
 
 ## What's in it
 
@@ -32,26 +50,67 @@ Node 22+.
 | Content | `/pages/about-us`, `/pages/contact`, `/pages/google-reviews`, `/blogs/news`, `/policies/*` | |
 | Account | `/account/login`, `/account/register`, `/account`, `/search`, 404 | |
 
-Store rules copied from Shopify live in `src/lib/commerce.ts`: the promo code, the Economy shipping tiers
-($20 / $50 / $100 / $200 by order value), California-only tax and the US-only region.
+## The backend (`backend/`)
+
+Medusa's DTC starter (a Turborepo workspace; the app is `backend/apps/backend`). Read
+`backend/AGENTS.md` before changing it.
+
+`src/migration-scripts/initial-data-seed.ts` runs once with `db:migrate` and sets up:
+
+- **Sales channel** "Online Store" plus a publishable API key
+- **Region** "United States" (US + Puerto Rico, USD). Payment providers: the system provider, and Stripe when `STRIPE_API_KEY` is set
+- **Tax** California only: 8.75% (the Mira Loma rate), with shipping excluded. Every other state is 0%
+- **Warehouse** Mira Loma, 3827 Wacker Dr.
+- **Shipping** Economy (5–8 business days) to the contiguous US, priced by order value: $20 up to $50, $50 to $499, $100 to $1,800, $200 above
+- **Categories** the 25 storefront collections; merchandised order is kept in `metadata.product_order`
+- **Products** all 76 products and 889 variants, with Shopify image URLs. Compare-at prices are the base price, and the "Storefront sale prices" price list (332 prices) holds what the item actually sells for
+- **Inventory** 25 units for each available variant and 0 for sold-out ones (Shopify doesn't track stock)
+- **Promotion** FLASHSALE2026: 7% off items when the item subtotal is $3,500 or more
+
+The rules live in `src/lib/store-config.ts`. The storefront mirrors them in `src/lib/commerce.ts`
+so it can show totals before the API answers, so change both together. The seed's catalog is
+`backend/apps/backend/src/data/catalog.json`; `node scripts/build-catalog.mjs` writes it alongside the
+storefront's copy.
+
+## How the storefront talks to Medusa
+
+| Concern | File | What it does |
+| --- | --- | --- |
+| Catalog | `src/lib/medusa-catalog.ts` | Build time: products, prices, inventory and categories from `/store/products` and `/store/product-categories` |
+| Cart | `src/lib/medusa-cart.ts` | Mirrors the local cart into a Medusa cart: line items, then FLASHSALE2026 once it qualifies; transfers a guest cart to the customer at login |
+| Checkout | `src/lib/medusa-checkout.ts` | Email + address → shipping method → payment session → `complete` → order `#PBC<display id>` |
+| Accounts | `src/lib/medusa-account.ts` | Emailpass register/login/reset, profile, orders, saved addresses |
+
+## Before launch
+
+| Item | Status | What's needed |
+| --- | --- | --- |
+| **Stripe** | The backend's Stripe provider turns on with `STRIPE_API_KEY`. The checkout's card fields are still a visual stand-in; with no Stripe key, Medusa's system provider authorizes every order (dev only). | Stripe keys. Then mount Stripe's Payment Element in `src/components/checkout/PaymentStep.tsx` with the session's `client_secret` and call `stripe.confirmPayment` before `completeOrder()`. Set the webhook to `/hooks/payment/stripe_stripe`. |
+| **PayPal** | Not available | Medusa has no first-party PayPal provider; a community plugin or a custom provider is needed. |
+| **Hawaii, Alaska, Puerto Rico shipping** | The "UPS + USPS" option exists but is hidden, so checkout asks these customers to call. | A carrier-rate fulfillment provider (ShipStation, EasyPost or Shippo); then enable the option. |
+| **Tax** | A flat 8.75% California rate | For destination rates, a tax provider such as Stripe Tax. |
+| **Order numbers** | Medusa counts from 1 (`#PBC1`) | To continue Shopify's numbering, restart Postgres's `order_display_id_seq` from the last Shopify number. |
+| **Emails** | Not configured | A notification provider (e.g. SendGrid) for order confirmation and password reset. |
+| **Contact, newsletter, blog comments** | Show success but send nothing | Wire `src/lib/content-forms.ts` to a form endpoint or helpdesk. |
+| **Copy** | Placeholders are marked `[in brackets]`, as in the design | Content from the client. |
 
 ## Project layout
 
 ```
-src/
+src/                     storefront
   styles/global.css      Tailwind v4 theme = the design tokens
   layouts/Layout.astro   head, header, mobile menu, footer, cart drawer
   components/            shared Astro components + react/ islands, one folder per page area
   lib/
-    catalog.ts           product + collection queries (the backend seam)
-    cart.ts              nanostores cart, persisted to localStorage, sync() hook for Medusa
-    commerce.ts          promo, shipping, tax, store details
-    routes.ts            URL helpers + menu structure
+    catalog.ts           product + collection queries (Medusa or bundled)
+    cart.ts              nanostores cart, persisted to localStorage, synced to Medusa
+    commerce.ts          promo, shipping, tax, store details (mirror of the backend rules)
+    medusa*.ts           Medusa client, catalog, cart, checkout, accounts
   data/catalog.json      generated, don't edit by hand
 scripts/
-  build-catalog.mjs      design snapshot + Shopify images -> src/data/catalog.json
+  build-catalog.mjs      design snapshot + Shopify images -> catalog.json (storefront + backend seed)
   sync-catalog.mjs       refresh the Shopify snapshot, then rebuild the catalog
-  data/                  snapshots the catalog is built from
+backend/                 Medusa v2 (apps/backend: config, seed, store-config)
 public/images/           logo + editorial images exported from the design
 ```
 
@@ -59,25 +118,10 @@ public/images/           logo + editorial images exported from the design
 
 `scripts/data/design-catalog.json` is the catalog as captured in the design: titles, prices,
 compare-at prices, options, variants, descriptions and FAQs. `scripts/data/shopify-products.json`
-adds Shopify ids, SKUs, weights and image URLs. Product photos load from Shopify's CDN.
+adds Shopify ids, SKUs, weights and image URLs. Product photos load from Shopify's CDN. Once Medusa
+holds the catalog, edit products in the Medusa admin and rebuild the storefront.
 
 ```bash
-npm run sync:catalog   # re-pull products.json from photoboothcity.com and rebuild
+npm run sync:catalog             # re-pull products.json from photoboothcity.com and rebuild
 node scripts/build-catalog.mjs   # rebuild offline from the snapshots
 ```
-
-## Going live
-
-These parts are deliberately stubbed. Each sits behind one function, so it can be swapped without touching the pages:
-
-| Concern | Stub today | Replace with |
-| --- | --- | --- |
-| Catalog | `src/lib/catalog.ts` reads `catalog.json` at build time | Medusa Store API `/store/products`, `/store/collections` |
-| Cart | `src/lib/cart.ts` → `sync()` is a no-op | Medusa carts (`/store/carts/:id/line-items`, promotions) |
-| Payments | `src/lib/checkout-payments.ts` simulates success/decline | Stripe Payment Element + PayPal through Medusa payment sessions |
-| Accounts | `src/lib/account.ts` (localStorage) | Medusa customer auth |
-| Contact form | client-side only | your form endpoint / helpdesk |
-
-Environment variables for the live setup are listed in `.env.example`.
-
-Things that need the client before launch are marked `[in brackets]` in the copy, as in the design.

@@ -7,7 +7,7 @@ import { PAGES } from '@/lib/routes';
 import { DeclinedAlert, Field, Spinner, linkBtn } from './ui';
 import * as V from './validate';
 
-export type Declined = { kind: 'paylater'; provider: string } | { kind: 'card' } | null;
+export type Declined = { kind: 'paylater'; provider: string } | { kind: 'card' } | { kind: 'error'; message: string } | null;
 
 interface Props {
   pay: PayMethod;
@@ -140,6 +140,7 @@ export default function PaymentStep(p: Props) {
             <strong>Your {p.declined.provider} application wasn’t completed.</strong> No payment was taken and your cart is saved. Choose another payment method, or try Pay later again.
           </DeclinedAlert>
         )}
+        {p.declined?.kind === 'error' && <DeclinedAlert>{p.declined.message}</DeclinedAlert>}
         {p.declined?.kind === 'card' && (
           <DeclinedAlert>
             <strong>Your card was declined.</strong> No payment was taken and your cart is saved. Try another card, or choose another payment method.

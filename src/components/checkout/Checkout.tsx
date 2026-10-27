@@ -3,6 +3,8 @@ import { useStore } from '@nanostores/react';
 import Icon from '@/components/react/Icon';
 import { $cart, $promo, $subtotal, clearCart } from '@/lib/cart';
 import { confirmPayment, type CardInput, type PayMethod } from '@/lib/checkout-payments';
+import { medusaEnabled } from '@/lib/medusa';
+import { completeOrder } from '@/lib/medusa-checkout';
 import {
   STEPS,
   formatAddress,
@@ -216,6 +218,34 @@ export default function Checkout() {
       return;
     }
     rememberInfo(p);
+    if (medusaEnabled) {
+      // Real order in Medusa; the confirmation shows Medusa's own totals.
+      try {
+        const a = p.address;
+        const placed = await completeOrder({
+          email: p.email.trim(),
+          address: { firstName: a.first, lastName: a.last, company: a.company, line1: a.line1, line2: a.line2, city: a.city, state: a.state, zip: a.zip, phone: a.phone },
+          shipping: sel.id,
+        });
+        const done: OrderSnapshot = {
+          ...snap,
+          ...placed,
+          paymentIntent: res.paymentIntent,
+          payment: res.status === 'redirect' ? 'Pay later · Affirm' : res.label,
+        };
+        saveOrder(done);
+        saveProgress(null);
+        clearCart({ orderPlaced: true });
+        setOrder(done);
+        setPaying(false);
+        window.history.replaceState(null, '', '?step=confirmed');
+      } catch (e) {
+        setPaying(false);
+        setDeclined({ kind: 'error', message: (e as Error).message });
+        requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>('[role="alert"]')?.scrollIntoView({ block: 'center' }));
+      }
+      return;
+    }
     if (res.status === 'redirect') {
       // Snapshot now; /checkout/return completes it and clears the cart.
       savePending({ ...snap, paymentIntent: res.paymentIntent, payment: 'Pay later · Affirm', provider: 'Affirm' });

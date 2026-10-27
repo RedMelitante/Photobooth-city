@@ -17,6 +17,7 @@ import {
   createShippingOptionsWorkflow,
   createStockLocationsWorkflow,
   createStoresWorkflow,
+  createTaxRatesWorkflow,
   createTaxRegionsWorkflow,
   linkSalesChannelsToApiKeyWorkflow,
   linkSalesChannelsToStockLocationWorkflow,
@@ -126,7 +127,9 @@ export default async function initialDataSeed({
     ],
   })
   const usTaxRegion = taxRegions.find((t) => t.country_code === "us")!
-  await createTaxRegionsWorkflow(container).run({
+  const {
+    result: [caTaxRegion],
+  } = await createTaxRegionsWorkflow(container).run({
     input: [
       {
         country_code: "us",
@@ -216,7 +219,9 @@ export default async function initialDataSeed({
     { attribute: "is_return", value: "false", operator: "eq" as const },
   ]
 
-  await createShippingOptionsWorkflow(container).run({
+  const { result: shippingOptions } = await createShippingOptionsWorkflow(
+    container
+  ).run({
     input: [
       {
         name: "Economy",
@@ -255,6 +260,22 @@ export default async function initialDataSeed({
         },
         prices: [{ currency_code: "usd", amount: 0 }],
         rules: storeRules(false),
+      },
+    ],
+  })
+
+  // California doesn't tax separately stated shipping: 0% on shipping options.
+  await createTaxRatesWorkflow(container).run({
+    input: [
+      {
+        tax_region_id: caTaxRegion.id,
+        name: "California shipping (not taxable)",
+        code: "CA-SHIPPING",
+        rate: 0,
+        rules: shippingOptions.map((o) => ({
+          reference: "shipping_option",
+          reference_id: o.id,
+        })),
       },
     ],
   })
