@@ -29,8 +29,8 @@ export const $cart = atom<CartState>({ lines: [], code: null });
 export const $cartOpen = atom(false);
 export const $hydrated = atom(false);
 
-// Load lazily: on the first subscription (after hydration, so server and
-// client markup agree) or on the first mutation, whichever comes first.
+// Load lazily on first use. Islands that render cart contents should gate on
+// useHydrated() (src/lib/useHydrated.ts) so their first client render matches SSR.
 let loaded = false;
 function ensureLoaded() {
   if (loaded || typeof window === 'undefined') return;

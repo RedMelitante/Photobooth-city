@@ -1,11 +1,12 @@
 import { useStore } from '@nanostores/react';
 import Icon from './Icon';
-import { $count, $hydrated, openCart } from '@/lib/cart';
+import { $count, openCart } from '@/lib/cart';
+import { useHydrated } from '@/lib/useHydrated';
 
 /** Header cart trigger; links to /cart without JS, opens the drawer with it. */
 export default function CartButton({ variant }: { variant: 'desktop' | 'mobile' }) {
   const count = useStore($count);
-  const hydrated = useStore($hydrated);
+  const hydrated = useHydrated();
   const n = hydrated ? count : 0;
   const label = `Cart, ${n} ${n === 1 ? 'item' : 'items'}`;
   const onClick = (e: React.MouseEvent) => {
