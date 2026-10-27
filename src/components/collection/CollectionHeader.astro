@@ -1,0 +1,99 @@
+---
+import type { Collection } from '@/lib/types';
+
+interface Chip {
+  t: string;
+  h: string;
+}
+
+interface Props {
+  collection: Collection;
+  parent?: Collection;
+  parentHref?: string;
+  chips: Chip[];
+  chipsLabel: string;
+  /** "ALL SALES ARE FINAL" pill (clearance) */
+  finalSale?: boolean;
+}
+
+const { collection: c, parent, parentHref, chips, chipsLabel, finalSale = false } = Astro.props;
+const crumbLink = 'text-ink-500 underline-offset-2 hover:text-ink-900';
+---
+
+<nav aria-label="Breadcrumb" class="pt-4 lg:pt-6">
+  <ol class="m-0 flex list-none flex-wrap items-center gap-1.5 p-0 text-[13px] text-ink-500 lg:gap-2 lg:text-sm">
+    <li><a href="/" class={crumbLink}>Home</a></li>
+    <li aria-hidden="true">/</li>
+    {parent && parentHref && (
+      <>
+        <li><a href={parentHref} class={crumbLink}>{parent.title}</a></li>
+        <li aria-hidden="true">/</li>
+      </>
+    )}
+    <li aria-current="page" class="font-bold text-ink-900">{c.title}</li>
+  </ol>
+</nav>
+
+<header class="flex flex-col gap-5 pt-3 pb-4 lg:flex-row lg:flex-wrap lg:items-end lg:justify-between lg:gap-6 lg:border-b lg:border-line lg:pt-7 lg:pb-8">
+  <div class="flex min-w-0 flex-col gap-2.5 lg:max-w-[720px] lg:flex-[1_1_520px] lg:gap-3.5">
+    {finalSale && (
+      <span class="self-start rounded-full bg-sale-50 px-2.5 py-1 text-xs font-extrabold tracking-[0.04em] text-sale-600">ALL SALES ARE FINAL</span>
+    )}
+    <h1 class="m-0 font-display text-[38px] leading-none font-extrabold tracking-[-0.035em] text-balance lg:text-[56px]">{c.title}</h1>
+    <p
+      id="cp-intro"
+      data-cp-intro
+      class="m-0 line-clamp-3 text-[15px] leading-[23px] text-pretty text-ink-700 lg:line-clamp-none lg:text-[17px] lg:leading-[27px]"
+    >
+      {c.intro}
+    </p>
+    <button
+      type="button"
+      data-cp-intro-toggle
+      hidden
+      aria-controls="cp-intro"
+      aria-expanded="false"
+      class="self-start border-0 bg-transparent py-1.5 text-sm font-bold text-brand-600 underline hover:text-brand-700 lg:hidden"
+    >
+      Read more
+    </button>
+  </div>
+
+  {chips.length > 0 && (
+    <ul
+      aria-label={chipsLabel}
+      class="-mx-4 flex list-none gap-2 overflow-x-auto px-4 pb-0.5 [scrollbar-width:none] lg:mx-0 lg:max-w-[520px] lg:flex-[0_1_auto] lg:flex-wrap lg:justify-end lg:overflow-visible lg:p-0 [&::-webkit-scrollbar]:hidden"
+    >
+      {chips.map((s) => (
+        <li class="flex-none">
+          <a
+            href={s.h}
+            class="flex h-10 items-center rounded-full border border-line-strong px-3.5 text-sm font-semibold whitespace-nowrap text-ink-900 no-underline transition-colors duration-150 hover:border-ink-900 hover:bg-canvas hover:text-ink-900 lg:px-4"
+          >
+            {s.t}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</header>
+
+<script>
+  // Mobile: intro clamps to 3 lines; "Read more" shows only when it overflows.
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-cp-intro-toggle]')) {
+    const p = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+    if (!p) continue;
+    const check = () => {
+      if (btn.getAttribute('aria-expanded') === 'true') return;
+      btn.hidden = p.scrollHeight <= p.clientHeight + 1;
+    };
+    check();
+    window.addEventListener('resize', check, { passive: true });
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      p.style.display = open ? 'block' : '';
+      btn.textContent = open ? 'Read less' : 'Read more';
+    });
+  }
+</script>

@@ -1,0 +1,109 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HelpBanner from '@/components/collection/HelpBanner.astro';
+import { collectionProducts, getCollection, listCollections } from '@/lib/catalog';
+import { sized } from '@/lib/product';
+import { collectionUrl } from '@/lib/routes';
+import type { Collection } from '@/lib/types';
+
+const all = listCollections();
+const GROUPS: { title: string; handles: string[] }[] = [
+  { title: 'Photo booths', handles: ['ipad-booths', 'dslr-booths', '360-booths', 'mirror-diy-shells', 'system-packages'] },
+  { title: 'Accessories & gear', handles: ['accessories', 'dj-gear', 'clearance-sale'] },
+  { title: 'Shop by price', handles: ['within-2000', '1000-1500', '1500-2500', 'above-2000'] },
+];
+// Anything top-level not placed above still gets listed.
+const placed = new Set(GROUPS.flatMap((g) => g.handles));
+const rest = all.filter((c) => !c.parent && !placed.has(c.handle)).map((c) => c.handle);
+if (rest.length) GROUPS[1].handles.push(...rest);
+
+const children = (c: Collection) => all.filter((x) => x.parent === c.handle);
+const cover = (c: Collection) => {
+  const own = collectionProducts(c.handle)[0];
+  const kid = children(c).map((k) => collectionProducts(k.handle)[0]).find(Boolean);
+  return (own ?? kid)?.images[0]?.url ?? '';
+};
+const count = (c: Collection) => c.products.length;
+
+const groups = GROUPS.map((g) => ({ title: g.title, items: g.handles.map((h) => getCollection(h)).filter((c): c is Collection => !!c) }));
+
+const site = Astro.site!;
+const ld = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  url: new URL('/collections', site).href,
+  name: 'All collections',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: all.length,
+    itemListElement: all.map((c, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(collectionUrl(c.handle), site).href, name: c.title })),
+  },
+}).replace(/</g, '\\u003c');
+---
+
+<Layout title="All collections" description="Browse every Photobooth City collection: iPad, DSLR and 360 photo booths, accessories, system packages and booths by price.">
+  <script slot="head" type="application/ld+json" set:html={ld} />
+  <div class="container-page">
+    <nav aria-label="Breadcrumb" class="pt-4 lg:pt-6">
+      <ol class="flex flex-wrap items-center gap-1.5 text-[13px] text-ink-500 lg:gap-2 lg:text-sm">
+        <li><a href="/" class="text-ink-500 underline-offset-2 hover:text-ink-900">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="font-bold text-ink-900">All collections</li>
+      </ol>
+    </nav>
+
+    <header class="flex flex-col gap-2.5 border-line pt-3 pb-6 lg:gap-3.5 lg:border-b lg:pt-7 lg:pb-8">
+      <h1 class="m-0 font-display text-[38px] leading-none font-extrabold tracking-[-0.035em] lg:text-[56px]">All collections</h1>
+      <p class="m-0 max-w-[720px] text-[15px] leading-[23px] text-ink-700 lg:text-[17px] lg:leading-[27px]">
+        Every category in the store, from iPad and DSLR photo booths to printers, backdrops and travel cases.
+      </p>
+    </header>
+
+    {groups.map((g, gi) => (
+      <section aria-labelledby={`ac-g${gi}`} class="border-t border-line pt-6 pb-10 first-of-type:border-t-0 lg:pt-8 lg:pb-14">
+        <h2 id={`ac-g${gi}`} class="m-0 mb-5 font-display text-2xl leading-[1.15] font-bold tracking-[-0.02em] lg:mb-6 lg:text-[30px]">{g.title}</h2>
+        <ul class="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] lg:gap-x-6 lg:gap-y-10">
+          {g.items.map((c) => {
+            const img = cover(c);
+            const kids = children(c);
+            return (
+              <li class="group/col flex min-w-0 flex-col gap-3">
+                <a
+                  href={collectionUrl(c.handle)}
+                  class="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-card bg-canvas transition-[background-color,box-shadow] duration-150 group-hover/col:bg-[#F1F1EC] group-hover/col:shadow-[inset_0_0_0_1px_var(--color-line-strong)]"
+                  aria-label={c.title}
+                >
+                  {img ? (
+                    <img src={sized(img, 600)} alt="" loading="lazy" decoding="async" width="600" height="450" class="product-shot absolute inset-0 size-full p-[8%] transition-transform duration-200 group-hover/col:scale-105" />
+                  ) : (
+                    <span class="text-sm font-bold text-ink-500">Nothing listed here right now</span>
+                  )}
+                  {c.handle === 'clearance-sale' && (
+                    <span class="absolute top-3 left-3 rounded-full bg-sale-600 px-2.5 py-1 text-xs font-extrabold tracking-[0.02em] text-white">Sale</span>
+                  )}
+                </a>
+                <div class="flex flex-col gap-1">
+                  <a href={collectionUrl(c.handle)} class="text-base leading-[22px] font-extrabold text-ink-900 no-underline group-hover/col:underline hover:text-ink-900 lg:text-[17px]">{c.title}</a>
+                  <span class="text-[13px] text-ink-500 lg:text-sm">{count(c)} {count(c) === 1 ? 'product' : 'products'}</span>
+                </div>
+                {kids.length > 0 && (
+                  <ul aria-label={`${c.title} collections`} class="flex flex-wrap gap-1.5">
+                    {kids.map((k) => (
+                      <li>
+                        <a href={collectionUrl(k.handle)} class="flex min-h-9 items-center rounded-full border border-line-strong px-3 py-1.5 text-[13px] leading-4 font-semibold text-ink-900 no-underline hover:border-ink-900 hover:bg-canvas hover:text-ink-900">
+                          {k.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
+
+    <HelpBanner />
+  </div>
+</Layout>

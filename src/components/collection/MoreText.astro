@@ -1,0 +1,49 @@
+---
+import { collectionUrl, PAGES } from '@/lib/routes';
+import type { Collection } from '@/lib/types';
+
+interface Props {
+  collection: Collection;
+}
+
+const { collection: c } = Astro.props;
+const heading = c.moreHeading || `About ${c.title}`;
+
+// Cross-links the design adds to the SEO copy (never to the current page).
+const LINKS: Record<string, string> = {
+  'iPad photo booths': collectionUrl('ipad-booths'),
+  'DSLR photo booths': collectionUrl('dslr-booths'),
+  'contact our team': PAGES.contact,
+  'ask our team': PAGES.contact,
+};
+const self = collectionUrl(c.handle);
+const phrases = Object.keys(LINKS).filter((k) => LINKS[k] !== self);
+const re = phrases.length ? new RegExp(`(${phrases.map((p) => p.replace(/[$()*+.?[\\\]^{|}]/g, '\\$&')).join('|')})`) : null;
+
+type Seg = { t: string; href?: string };
+const linkify = (text: string): Seg[] => (re ? text.split(re).filter(Boolean).map((t) => ({ t, href: phrases.includes(t) ? LINKS[t] : undefined })) : [{ t: text }]);
+
+const blocks = c.more.map((b) => {
+  // "Freestanding booths: Create a …" -> bold lead-in, as in the design.
+  const m = b.type === 'li' ? b.text.match(/^([^:.?!]{2,40}):\s+(.*)$/) : null;
+  return { li: b.type === 'li', lead: m ? `${m[1]}:` : '', segs: linkify(m ? m[2] : b.text) };
+});
+---
+
+{blocks.length > 0 && (
+  <section
+    aria-labelledby="cp-more"
+    class="mt-8 flex flex-col gap-3 rounded-panel bg-canvas px-5 py-6 lg:mt-24 lg:flex-row lg:flex-wrap lg:gap-12 lg:rounded-hero lg:p-14"
+  >
+    <h2 id="cp-more" class="m-0 font-display text-2xl leading-7 font-bold tracking-[-0.02em] text-ink-900 lg:flex-[1_1_300px] lg:text-[32px] lg:leading-9">{heading}</h2>
+    <div class="flex min-w-0 flex-col gap-3 text-[15px] leading-6 text-ink-700 lg:flex-[2_1_480px] lg:gap-4 lg:text-base lg:leading-[27px]">
+      {blocks.map((b) => (
+        <p class:list={['m-0', b.li && 'relative pl-[22px]']}>
+          {b.li && <span aria-hidden="true" class="absolute top-0 left-1.5 font-extrabold text-brand-600">•</span>}
+          {b.lead && <><strong class="text-ink-900">{b.lead}</strong>{' '}</>}
+          {b.segs.map((s) => (s.href ? <a href={s.href} class="font-bold">{s.t}</a> : s.t))}
+        </p>
+      ))}
+    </div>
+  </section>
+)}

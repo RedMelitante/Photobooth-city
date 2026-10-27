@@ -1,0 +1,19 @@
+---
+import { STORE } from '@/lib/commerce';
+---
+
+<section
+  aria-label="Help"
+  class="my-12 flex flex-wrap items-center justify-between gap-5 rounded-hero bg-ink-950 px-5 py-6 text-white lg:my-[88px] lg:px-12 lg:py-10"
+>
+  <div class="flex max-w-[620px] flex-col gap-2">
+    <h2 class="m-0 font-display text-2xl leading-[1.15] font-bold tracking-[-0.02em] lg:text-[30px]">Building a full setup?</h2>
+    <p class="m-0 text-[15px] leading-[23px] text-ink-200">An expert can match booths, printers and accessories to your events and budget.</p>
+  </div>
+  <a
+    href={STORE.phoneHref}
+    class="flex h-13 items-center rounded-lg bg-flash-400 px-[22px] text-[15px] font-extrabold text-ink-950 no-underline transition-colors duration-150 hover:bg-[#FFDB66] hover:text-ink-950"
+  >
+    Call {STORE.phone}
+  </a>
+</section>

@@ -1,0 +1,86 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CollectionHeader from '@/components/collection/CollectionHeader.astro';
+import CollectionBrowser from '@/components/collection/CollectionBrowser';
+import MoreText from '@/components/collection/MoreText.astro';
+import HelpBanner from '@/components/collection/HelpBanner.astro';
+import { collectionProducts, getCollection, listCollections } from '@/lib/catalog';
+import { PAGE_SIZE, toCardProduct } from '@/lib/collection';
+import { collectionUrl, menuHref, productUrl } from '@/lib/routes';
+
+export function getStaticPaths() {
+  return listCollections().map((c) => ({ params: { handle: c.handle } }));
+}
+
+const { handle } = Astro.params as { handle: string };
+const c = getCollection(handle)!;
+const parent = c.parent ? getCollection(c.parent) : undefined;
+const products = collectionProducts(handle);
+const cards = products.map((p, i) => toCardProduct(p, i));
+
+// iPad Photo Booths uses the hand-picked "Popular in this collection" links from
+// the CollectionDesktop board; every other collection shows its related chips.
+const POPULAR: Record<string, string[]> = {
+  'ipad-booths': ['Ring Roamer', 'Helio Sport', 'Eclipse', 'Wall Mount', 'Mini Ring Roamer'],
+};
+const popular = POPULAR[handle];
+const chips = popular
+  ? popular.map((t) => ({ t, h: menuHref(t) })).filter((x) => x.h)
+  : c.related.map((k) => getCollection(k)).filter((x) => !!x).map((x) => ({ t: x!.title, h: collectionUrl(x!.handle) }));
+
+const site = Astro.site!;
+const abs = (path: string) => new URL(path, site).href;
+const url = abs(collectionUrl(handle));
+const description = c.intro.length > 160 ? c.intro.slice(0, 157).replace(/\s+\S*$/, '') + '…' : c.intro;
+
+const crumbs = [{ name: 'Home', item: abs('/') }, ...(parent ? [{ name: parent.title, item: abs(collectionUrl(parent.handle)) }] : []), { name: c.title, item: url }];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${url}#webpage`,
+      url,
+      name: c.title,
+      description: c.intro,
+      isPartOf: { '@type': 'WebSite', name: 'Photobooth City', url: abs('/') },
+      breadcrumb: { '@id': `${url}#breadcrumb` },
+      ...(products[0]?.images[0] ? { primaryImageOfPage: { '@type': 'ImageObject', url: products[0].images[0].url } } : {}),
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: products.length,
+        itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: abs(productUrl(p.handle)), name: p.title })),
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${url}#breadcrumb`,
+      itemListElement: crumbs.map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.name, item: x.item })),
+    },
+  ],
+};
+const ld = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
+---
+
+<Layout title={c.title} description={description} image={products[0]?.images[0]?.url}>
+  <Fragment slot="head">
+    {products.length > PAGE_SIZE && <link rel="next" href={`${url}?page=2`} />}
+    <script type="application/ld+json" set:html={ld} />
+  </Fragment>
+
+  <div class="container-page">
+    <CollectionHeader
+      collection={c}
+      parent={parent}
+      parentHref={parent ? collectionUrl(parent.handle) : undefined}
+      chips={chips}
+      chipsLabel={popular ? 'Popular in this collection' : 'Related collections'}
+      finalSale={handle === 'clearance-sale'}
+    />
+
+    <CollectionBrowser client:load products={cards} />
+
+    <MoreText collection={c} />
+    <HelpBanner />
+  </div>
+</Layout>
