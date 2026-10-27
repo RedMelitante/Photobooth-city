@@ -1,0 +1,15 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "RAILPACK",
+    "buildCommand": "npm run build --workspace=@dtc/backend",
+    "watchPatterns": ["/backend/**"]
+  },
+  "deploy": {
+    "preDeployCommand": ["cd apps/backend/.medusa/server && npx medusa db:migrate"],
+    "startCommand": "cd apps/backend/.medusa/server && npx medusa start",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
