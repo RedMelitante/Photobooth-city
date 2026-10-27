@@ -1,0 +1,21 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import AccountApp from '@/components/account/AccountApp';
+import { getProduct } from '@/lib/catalog';
+import { toCartLine } from '@/lib/product';
+import type { CartLine } from '@/lib/types';
+
+// "Buy again" needs catalog cart lines. Resolve every variant once at build
+// time for the products the sample orders reference (see SAMPLE_ORDERS in
+// src/lib/account.ts); with Medusa, reorder would use the order's own line items.
+const reorder: Record<string, Omit<CartLine, 'quantity'>> = {};
+for (const handle of ['ring-roamer-10-5-v2-app-controlled', 'roamer-stand', '12v-rechargeable-battery-pack', 'camera-hot-shoe-1']) {
+  const p = getProduct(handle);
+  if (!p) continue;
+  for (const v of p.variants) if (v.available) reorder[v.id] = toCartLine(p, v);
+}
+---
+
+<Layout title="My account" description="Your Photobooth City orders, addresses and account details." noindex>
+  <AccountApp client:load reorder={reorder} />
+</Layout>

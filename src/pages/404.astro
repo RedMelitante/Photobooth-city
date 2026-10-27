@@ -1,0 +1,65 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { STORE } from '@/lib/commerce';
+import { collectionUrl, PAGES } from '@/lib/routes';
+
+const cats = [
+  ['iPad Photo Booths', collectionUrl('ipad-booths')],
+  ['360 Photo Booths', collectionUrl('360-booths')],
+  ['DSLR Photo Booths', collectionUrl('dslr-booths')],
+  ['Accessories', collectionUrl('accessories')],
+];
+const corner = 'absolute size-[22px] border-white';
+---
+
+<Layout title="Page not found" description="The link may be broken, or the page may have moved." noindex>
+  <div class="mx-auto flex max-w-[1100px] flex-col items-center gap-[22px] px-4 pt-10 pb-16 text-center lg:px-10 lg:pt-20 lg:pb-28">
+    <div aria-hidden="true" class="relative flex size-[200px] items-center justify-center rounded-[28px] bg-ink-950 lg:size-[260px]">
+      <span class="font-display text-[76px] leading-none font-extrabold tracking-[-0.05em] text-flash-400 lg:text-[100px]">404</span>
+      <span class:list={[corner, 'top-3.5 left-3.5 border-t-[3px] border-l-[3px]']}></span>
+      <span class:list={[corner, 'top-3.5 right-3.5 border-t-[3px] border-r-[3px]']}></span>
+      <span class:list={[corner, 'bottom-3.5 left-3.5 border-b-[3px] border-l-[3px]']}></span>
+      <span class:list={[corner, 'right-3.5 bottom-3.5 border-r-[3px] border-b-[3px]']}></span>
+    </div>
+    <h1 class="m-0 font-display text-[32px] leading-[1.05] font-extrabold tracking-[-0.03em] text-balance lg:text-5xl">This page didn’t make it into the shot</h1>
+    <p class="m-0 max-w-[560px] text-[17px] leading-[26px] text-ink-700">The link may be broken, or the page may have moved. Try a search or jump to one of our booth categories.</p>
+
+    <form role="search" action={PAGES.search} method="get" class="relative flex w-full max-w-[560px]">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="pointer-events-none absolute top-[17px] left-[18px] text-ink-500" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="M20 20l-3.5-3.5"></path>
+      </svg>
+      <input
+        type="search"
+        name="q"
+        aria-label="Search products"
+        enterkeyhint="search"
+        placeholder="Search booths, printers, backdrops…"
+        class="box-border h-[54px] w-full rounded-full border-[1.5px] border-line-strong bg-canvas pr-4 pl-12 text-base text-ink-900 placeholder:text-ink-500"
+      />
+    </form>
+
+    <ul class="mt-2 grid w-full list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        cats.map(([label, href]) => (
+          <li>
+            <a
+              href={href}
+              class="flex min-h-16 items-center justify-between gap-2.5 rounded-card border border-line px-[18px] text-[15px] font-extrabold text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900"
+            >
+              {label}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-2 flex flex-wrap justify-center gap-2.5">
+      <a href={PAGES.home} class="flex h-[52px] items-center rounded-lg bg-brand-600 px-6 font-extrabold text-white no-underline transition-colors hover:bg-brand-700 hover:text-white">Back to homepage</a>
+      <a href={STORE.phoneHref} class="flex h-[52px] items-center rounded-lg border-[1.5px] border-ink-900 px-5 font-extrabold text-ink-900 no-underline transition-colors hover:bg-ink-900 hover:text-white">Call {STORE.phone}</a>
+    </div>
+  </div>
+</Layout>

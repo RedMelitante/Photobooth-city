@@ -1,0 +1,50 @@
+---
+// Shared body for /account/login and /account/register: the auth island on
+// the left, the dark "benefits" panel on the right (stacks on mobile).
+import AuthForm, { type AuthMode } from './AuthForm';
+import { STORE } from '@/lib/commerce';
+
+interface Props {
+  mode: AuthMode;
+}
+const { mode } = Astro.props;
+
+const perks = [
+  { t: 'Track every order', d: 'See order status, lead times and tracking in one place.', icon: 'M3 6h11v10H3zM14 10h4l3 3v3h-7M7 18a2 2 0 1 0 0 .01M17 18a2 2 0 1 0 0 .01' },
+  { t: 'Faster checkout', d: 'Saved addresses and contact details for your next booth or accessory.', icon: 'M5 11h14v10H5zM8 11V8a4 4 0 0 1 8 0v3' },
+  { t: 'Easy reorders and support', d: 'Order history at hand for media refills, spare parts and warranty questions.', icon: 'M4 10h11a5 5 0 0 1 0 10H9M8 6l-4 4 4 4' },
+];
+---
+
+<div class="mx-auto flex max-w-[1200px] flex-wrap items-stretch gap-7 px-4 pt-6 pb-14 lg:gap-16 lg:px-10 lg:pt-[72px] lg:pb-24">
+  <section aria-labelledby="acct-title" class="min-w-0 flex-[1_1_440px]">
+    <AuthForm client:load initialMode={mode} />
+  </section>
+
+  <aside aria-label="Account benefits" class="flex flex-[1_1_380px] flex-col justify-center gap-[22px] rounded-hero bg-ink-950 px-5 py-6 text-white lg:p-12">
+    <h2 class="m-0 font-display text-[26px] leading-[1.1] font-bold lg:text-[34px]">Your booth business, organized</h2>
+    <ul class="m-0 flex list-none flex-col gap-4 p-0">
+      {
+        perks.map((p) => (
+          <li class="flex gap-3.5">
+            <span class="flex size-10 flex-none items-center justify-center rounded-lg bg-flash-400/16 text-flash-400">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d={p.icon} />
+              </svg>
+            </span>
+            <span class="flex flex-col gap-0.5">
+              <strong class="text-base">{p.t}</strong>
+              <span class="text-sm leading-[21px] text-ink-200">{p.d}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+    <a
+      href={STORE.phoneHref}
+      class="flex h-12 items-center self-start rounded-lg border-[1.5px] border-white/35 px-[18px] font-bold text-white no-underline transition-colors hover:border-white hover:text-white"
+    >
+      Need help? {STORE.phone}
+    </a>
+  </aside>
+</div>

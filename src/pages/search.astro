@@ -1,0 +1,28 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SearchApp, { type ProductExtras } from '@/components/account/SearchApp';
+import { designImage, listProducts } from '@/lib/catalog';
+import { toCartLine } from '@/lib/product';
+import { PAGES } from '@/lib/routes';
+import { POPULAR_SEARCHES, SEARCH_FALLBACK, SITE_ARTICLES, SITE_PAGES } from '@/lib/account-search';
+
+// The one blog article with its own page (src/pages/blogs/news/[slug].astro);
+// the other design articles link to the blog index.
+const articleHref = `${PAGES.blog}/how-much-does-it-cost-to-start-a-photo-booth-business`;
+
+const articles = SITE_ARTICLES.map((a) => ({ t: a.t, img: designImage(a.img), h: a.article ? articleHref : PAGES.blog }));
+
+// The slim client search index has no hover image or variants; ship just
+// those extras so result cards match ProductCard (hover swap, Quick add).
+const extras: Record<string, ProductExtras> = {};
+for (const p of listProducts()) {
+  const e: ProductExtras = {};
+  if (p.images[1]) e.image2 = p.images[1].url;
+  if (p.variants.length === 1) e.line = toCartLine(p, p.variants[0]);
+  if (e.image2 || e.line) extras[p.handle] = e;
+}
+---
+
+<Layout title="Search" description="Search Photobooth City for photo booths, printers, backdrops and accessories." noindex>
+  <SearchApp client:load articles={articles} pages={SITE_PAGES} extras={extras} popular={POPULAR_SEARCHES} fallback={SEARCH_FALLBACK} />
+</Layout>
