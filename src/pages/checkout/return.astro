@@ -1,0 +1,14 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CheckoutHeader from '@/components/checkout/CheckoutHeader.astro';
+import CheckoutReturn from '@/components/checkout/CheckoutReturn';
+---
+
+<Layout title="Finishing your order" chrome={false} noindex>
+  <div class="flex min-h-dvh flex-col">
+    <CheckoutHeader minimal />
+    <div class="flex flex-1 items-start justify-center px-4 pt-12 pb-10 lg:px-10 lg:pt-[120px] lg:pb-20">
+      <CheckoutReturn client:load />
+    </div>
+  </div>
+</Layout>

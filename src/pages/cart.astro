@@ -1,0 +1,30 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import CartPage from '@/components/checkout/CartPage';
+import { getProduct } from '@/lib/catalog';
+import { cartUpsells } from '@/lib/upsells';
+import type { Product } from '@/lib/types';
+
+// "Complete your setup" picks from the design (CartPage board).
+const UPSELL = [
+  'ring-roamer-wall-mount-bracket',
+  'camera-hot-shoe-1',
+  'abrl160-stand-mount-flash-with-led-modeling-light',
+  '360-photobooth-27-32-39-inch-motorized-4-led-panel-bundle-package',
+];
+const upsell = UPSELL.map((h) => getProduct(h)).filter((p): p is Product => !!p);
+---
+
+<Layout title="Your cart" noindex>
+  <div class="mx-auto w-full max-w-[1440px] lg:px-10 lg:pt-12">
+    <CartPage client:load upsells={cartUpsells()} />
+
+    <section aria-labelledby="up-title" class="px-4 pt-12 pb-16 lg:px-0 lg:pt-20 lg:pb-24">
+      <h2 id="up-title" class="m-0 mb-5 font-display text-[26px] leading-[1.1] font-bold tracking-[-0.02em] lg:mb-7 lg:text-[32px] lg:leading-9">Complete your setup</h2>
+      <div class="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+        {upsell.map((p) => <ProductCard product={p} />)}
+      </div>
+    </section>
+  </div>
+</Layout>

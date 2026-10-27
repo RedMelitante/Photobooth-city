@@ -1,0 +1,12 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CheckoutHeader from '@/components/checkout/CheckoutHeader.astro';
+import Checkout from '@/components/checkout/Checkout';
+---
+
+<Layout title="Checkout" chrome={false} noindex>
+  <div class="flex min-h-dvh flex-col">
+    <CheckoutHeader />
+    <Checkout client:load />
+  </div>
+</Layout>
