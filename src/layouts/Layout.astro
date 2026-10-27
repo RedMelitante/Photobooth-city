@@ -1,0 +1,51 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import MobileMenu from '@/components/MobileMenu.astro';
+import CartDrawer from '@/components/react/CartDrawer';
+import { cartUpsells } from '@/lib/upsells';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** hide header/footer chrome (checkout uses its own minimal header) */
+  chrome?: boolean;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description = 'Professional photo booths for entrepreneurs, DJs, photographers, event planners and rental companies. Ships across the US.', chrome = true, image, noindex = false } = Astro.props;
+const fullTitle = title.includes('Photobooth City') ? title : `${title} | Photobooth City`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/images/logo.png" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    {image && <meta property="og:image" content={image} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#0B1020" />
+    <slot name="head" />
+  </head>
+  <body class="min-h-dvh bg-surface font-sans text-ink-900">
+    <a href="#main" class="sr-only z-[100] rounded-lg bg-ink-900 px-4 py-3 font-bold text-white focus:not-sr-only focus:fixed focus:top-2 focus:left-2">Skip to content</a>
+    {chrome && <Header />}
+    {chrome && <MobileMenu />}
+    <main id="main">
+      <slot />
+    </main>
+    {chrome && <Footer />}
+    {chrome && <CartDrawer client:idle upsells={cartUpsells()} />}
+  </body>
+</html>

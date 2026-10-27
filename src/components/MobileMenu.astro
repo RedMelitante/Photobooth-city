@@ -1,0 +1,89 @@
+---
+import Icon from './Icon.astro';
+import { MOBILE_GROUPS, menuHref, PAGES } from '@/lib/routes';
+import { STORE } from '@/lib/commerce';
+---
+
+<!-- Full-screen accordion menu (mobile). Native <dialog> + exclusive <details>: no framework JS. -->
+<dialog
+  id="mobile-menu"
+  aria-label="Main menu"
+  class="m-0 h-dvh max-h-none w-full max-w-none bg-surface p-0 text-ink-900 backdrop:bg-ink-950/50 open:flex open:flex-col lg:hidden"
+>
+  <div class="flex h-16 flex-none items-center gap-1 border-b border-line px-2">
+    <button type="button" aria-label="Close menu" data-mobile-menu-close class="flex size-11 items-center justify-center rounded-full bg-chip text-ink-900">
+      <Icon name="close" size={22} stroke={2.4} />
+    </button>
+    <a href="/" class="flex flex-1 pl-2"><img src="/images/logo.png" alt="Photobooth City home" class="block h-[50px] w-auto" /></a>
+  </div>
+
+  <div class="flex-1 overflow-y-auto">
+    <form role="search" action="/search" class="relative flex p-4">
+      <Icon name="search" size={18} stroke={2.2} class="pointer-events-none absolute top-[31px] left-8 text-ink-500" />
+      <input type="search" name="q" aria-label="Search products" placeholder="Search booths, printers, backdrops…" class="h-12 w-full rounded-full border-[1.5px] border-line-strong bg-canvas pr-4 pl-11 text-base text-ink-900" />
+    </form>
+
+    <ul class="px-4">
+      {MOBILE_GROUPS.map((g, i) => {
+        const h = menuHref(g.title);
+        return (
+          <li class="border-b border-line">
+            {g.items.length ? (
+              <details name="mobile-menu" open={i === 0} class="group">
+                <summary class="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-3 text-[17px] font-extrabold [&::-webkit-details-marker]:hidden">
+                  {g.title}
+                  <span class="flex size-8 flex-none items-center justify-center rounded-full bg-chip text-ink-900 group-open:bg-ink-900 group-open:text-white">
+                    <Icon name="chevron-down" size={16} stroke={2.6} class="transition-transform duration-150 group-open:rotate-180" />
+                  </span>
+                </summary>
+                <ul class="grid grid-cols-2 gap-x-3 gap-y-1 pb-3.5">
+                  {g.items.map((t) => (
+                    <li><a href={menuHref(t)} class="flex min-h-11 items-center text-[15px] font-semibold text-ink-700 no-underline">{t}</a></li>
+                  ))}
+                  {h && (
+                    <li class="col-span-full"><a href={h} class="flex min-h-11 items-center text-sm font-extrabold">Shop all {g.title} →</a></li>
+                  )}
+                </ul>
+              </details>
+            ) : (
+              <a href={h} class:list={['flex min-h-[60px] items-center justify-between text-[17px] font-extrabold no-underline', g.hot ? 'text-sale-600 hover:text-sale-600' : 'text-ink-900 hover:text-ink-900']}>
+                <span class="flex items-center gap-2.5">
+                  {g.hot && <span class="size-2 rounded-full bg-sale-600"></span>}
+                  {g.title}
+                </span>
+                <Icon name="chevron-right" size={16} stroke={2.6} />
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+
+    <div class="mt-6 flex flex-col gap-3 bg-canvas px-4 pt-6 pb-8">
+      <a href={STORE.phoneHref} class="flex h-[52px] items-center justify-center gap-2.5 rounded-lg bg-ink-950 text-base font-extrabold text-white no-underline hover:text-white">
+        <Icon name="phone" size={18} stroke={2.2} class="text-flash-400" />Talk to an expert · {STORE.phone}
+      </a>
+      <div class="grid grid-cols-2 gap-2.5">
+        <a href={PAGES.login} class="flex h-12 items-center justify-center rounded-lg border-[1.5px] border-ink-900 text-[15px] font-bold text-ink-900 no-underline hover:text-ink-900">Log in</a>
+        <a href={PAGES.register} class="flex h-12 items-center justify-center rounded-lg border-[1.5px] border-line-strong text-[15px] font-bold text-ink-900 no-underline hover:text-ink-900">Create account</a>
+      </div>
+      <a href={`mailto:${STORE.email}`} class="self-center p-2 text-sm font-semibold text-ink-700">{STORE.email}</a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dlg = document.getElementById('mobile-menu') as HTMLDialogElement | null;
+  if (dlg) {
+    document.querySelectorAll('[data-mobile-menu-open]').forEach((b) =>
+      b.addEventListener('click', () => {
+        dlg.showModal();
+        document.documentElement.style.overflow = 'hidden';
+      }),
+    );
+    dlg.querySelector('[data-mobile-menu-close]')?.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('close', () => (document.documentElement.style.overflow = ''));
+    // close if the viewport grows past the mobile breakpoint
+    matchMedia('(min-width: 64rem)').addEventListener('change', (e) => e.matches && dlg.open && dlg.close());
+  }
+</script>

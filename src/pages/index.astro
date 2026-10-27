@@ -1,0 +1,11 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import { collectionProducts } from '@/lib/catalog';
+const items = collectionProducts('ipad-booths').slice(0, 8);
+---
+<Layout title="Photo Booths for Sale">
+  <div class="container-page grid grid-cols-2 gap-6 py-12 lg:grid-cols-4">
+    {items.map((p) => <ProductCard product={p} />)}
+  </div>
+</Layout>

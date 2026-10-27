@@ -1,0 +1,58 @@
+---
+import Icon from './Icon.astro';
+import { FOOTER_COLUMNS } from '@/lib/routes';
+import { STORE } from '@/lib/commerce';
+
+const socials = [
+  ['Facebook', 'https://www.facebook.com/photoboothcity'],
+  ['Instagram', 'https://www.instagram.com/myphotoboothcity/'],
+  ['YouTube', 'https://www.youtube.com/channel/UCS1p7x2qLRKwtKgI8URavcQ'],
+];
+const payments = ['Affirm', 'Amex', 'Apple Pay', 'Diners', 'Discover', 'Google Pay', 'Klarna', 'Mastercard', 'PayPal', 'Visa'];
+---
+
+<footer class="w-full bg-ink-950 text-white">
+  <div class="container-page flex flex-col gap-14 pt-[72px] pb-10 max-lg:px-5">
+    <div class="flex flex-wrap gap-12">
+      <div class="flex max-w-[400px] flex-[1_1_300px] flex-col gap-5">
+        <a href="/" aria-label="Photobooth City home" class="flex self-start rounded-card bg-white px-3.5 py-2">
+          <img src="/images/logo.png" alt="Photobooth City" class="block h-16 w-auto" loading="lazy" />
+        </a>
+        <p class="text-[15px] leading-[23px] text-ink-200">Professional photo booths for entrepreneurs, DJs, photographers, event planners and rental companies.</p>
+        <div class="flex flex-col gap-2.5">
+          <a href={STORE.phoneHref} class="flex items-center gap-2.5 text-lg font-extrabold text-white no-underline hover:text-white">
+            <Icon name="phone" size={18} class="text-flash-400" />{STORE.phone}
+          </a>
+          <a href={`mailto:${STORE.email}`} class="flex items-center gap-2.5 text-[15px] font-semibold text-white no-underline hover:text-white">
+            <Icon name="mail" size={18} class="text-flash-400" />{STORE.email}
+          </a>
+        </div>
+        <ul aria-label="Social media" class="flex flex-wrap gap-2">
+          {socials.map(([t, h]) => (
+            <li><a href={h} target="_blank" rel="noopener" class="flex h-10 items-center rounded-full border border-white/20 px-3.5 text-[13px] font-bold text-white no-underline hover:border-white/50 hover:text-white">{t}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="grid min-w-0 flex-[999_1_560px] grid-cols-[repeat(auto-fit,minmax(min(150px,100%),1fr))] gap-8">
+        {FOOTER_COLUMNS.map((c) => (
+          <nav aria-label={c.title} class="flex flex-col gap-3.5">
+            <span class="text-xs font-extrabold tracking-[0.1em] text-ink-300 uppercase">{c.title}</span>
+            <ul class="flex flex-col gap-1">
+              {c.links.map(([t, h]) => (
+                <li><a href={h} class="block py-1.5 text-[15px] text-white no-underline hover:text-white hover:underline">{t}</a></li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-5 border-t border-white/15 pt-7">
+      <p class="text-[13px] text-ink-300">© {new Date().getFullYear()} Photobooth City. All rights reserved.</p>
+      <ul aria-label="Accepted payment methods" class="flex flex-wrap gap-1.5">
+        {payments.map((p) => (
+          <li class="flex h-7 items-center rounded-sm bg-white px-2.5 text-[11px] font-extrabold whitespace-nowrap text-ink-900">{p}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</footer>
