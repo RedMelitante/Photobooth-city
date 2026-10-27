@@ -2,7 +2,7 @@
 // own; every mutation goes through `sync()`, the single place a Medusa
 // backend plugs in (POST /store/carts/:id/line-items etc.). Updates are
 // optimistic: UI state changes first, the backend reconciles after.
-import { atom, computed } from 'nanostores';
+import { atom, computed, onMount } from 'nanostores';
 import type { CartLine } from './types';
 import { promoState } from './commerce';
 
@@ -29,7 +29,12 @@ export const $cart = atom<CartState>({ lines: [], code: null });
 export const $cartOpen = atom(false);
 export const $hydrated = atom(false);
 
-if (typeof window !== 'undefined') {
+// Load lazily: on the first subscription (after hydration, so server and
+// client markup agree) or on the first mutation, whichever comes first.
+let loaded = false;
+function ensureLoaded() {
+  if (loaded || typeof window === 'undefined') return;
+  loaded = true;
   $cart.set(load());
   $hydrated.set(true);
   $cart.listen((s) => {
@@ -44,6 +49,9 @@ if (typeof window !== 'undefined') {
     if (e.key === KEY) $cart.set(load());
   });
 }
+onMount($cart, () => {
+  ensureLoaded();
+});
 
 export const $count = computed($cart, (s) => s.lines.reduce((a, l) => a + l.quantity, 0));
 export const $subtotal = computed($cart, (s) => s.lines.reduce((a, l) => a + l.unitPrice * l.quantity, 0));
@@ -59,6 +67,7 @@ function commit(next: CartState) {
 }
 
 export function addLine(line: Omit<CartLine, 'quantity'>, quantity = 1, open = true) {
+  ensureLoaded();
   const s = $cart.get();
   const existing = s.lines.find((l) => l.id === line.id);
   const lines = existing
@@ -69,6 +78,7 @@ export function addLine(line: Omit<CartLine, 'quantity'>, quantity = 1, open = t
 }
 
 export function setQuantity(id: string, quantity: number) {
+  ensureLoaded();
   const s = $cart.get();
   const q = Math.max(0, Math.min(20, quantity));
   commit({ ...s, lines: q === 0 ? s.lines.filter((l) => l.id !== id) : s.lines.map((l) => (l.id === id ? { ...l, quantity: q } : l)) });
@@ -79,10 +89,12 @@ export function removeLine(id: string) {
 }
 
 export function saveCode(code: string | null) {
+  ensureLoaded();
   commit({ ...$cart.get(), code });
 }
 
 export function clearCart() {
+  ensureLoaded();
   commit({ lines: [], code: null });
 }
 
