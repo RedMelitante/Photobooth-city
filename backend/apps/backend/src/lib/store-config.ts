@@ -69,3 +69,6 @@ export const CONTIGUOUS_STATES = [
 
 /** Starting stock for each available variant (Shopify doesn't track these). */
 export const STOCK_PER_AVAILABLE_VARIANT = 25
+
+/** Last order number on Shopify (#PBC2211, Oct 27, 2026). Medusa continues from here. */
+export const SHOPIFY_LAST_ORDER_NUMBER = 2211
