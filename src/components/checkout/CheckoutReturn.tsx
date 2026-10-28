@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import Icon from '@/components/react/Icon';
 import { clearCart } from '@/lib/cart';
-import { retrievePaymentIntent } from '@/lib/checkout-payments';
+import { retrievePaymentIntent, type IntentStatus } from '@/lib/checkout-payments';
+import { completeCart } from '@/lib/medusa-checkout';
+import { getStripe, stripeEnabled } from '@/lib/stripe';
 import { loadOrder, loadPending, newOrderNumber, saveOrder, savePending, saveProgress, shortTitle, type OrderSnapshot, type PendingOrder } from '@/lib/checkout-session';
 import { STORE } from '@/lib/commerce';
 import { formatMoney } from '@/lib/money';
@@ -37,8 +39,50 @@ export default function CheckoutReturn() {
     let live = true;
     const slowTimer = window.setTimeout(() => live && setSlow(true), SLOW_MS);
 
-    retrievePaymentIntent(intent, status).then((s) => {
+    // Stripe: ask Stripe for the real PaymentIntent status, then complete the
+    // Medusa cart (idempotent: a refresh returns the same order).
+    const readStatus = async (): Promise<IntentStatus> => {
+      if (!stripeEnabled) return retrievePaymentIntent(intent, status);
+      const secret = q.get('payment_intent_client_secret');
+      const stripe = await getStripe();
+      if (!stripe || !secret) return 'requires_payment_method';
+      const { paymentIntent } = await stripe.retrievePaymentIntent(secret);
+      return (paymentIntent?.status as IntentStatus) ?? 'requires_payment_method';
+    };
+
+    const waitForIntent = async (): Promise<IntentStatus> => {
+      for (;;) {
+        const s = await readStatus();
+        if (s !== 'processing' || !stripeEnabled || !live) return s;
+        await new Promise((r) => setTimeout(r, 2000));
+      }
+    };
+
+    waitForIntent().then(async (s) => {
       if (!live) return;
+      if ((s === 'succeeded' || s === 'requires_capture') && stripeEnabled) {
+        const already = existing && existing.paymentIntent === intent;
+        if (!already) {
+          try {
+            const placed = await completeCart();
+            if (pending) {
+              const { provider: p, ...rest } = pending;
+              saveOrder({ ...rest, ...placed, paymentIntent: intent, payment: `${p}` });
+            }
+            savePending(null);
+            saveProgress(null);
+            clearCart({ orderPlaced: true });
+          } catch {
+            // Payment went through but the order didn't: the Stripe webhook
+            // completes it on the backend; show the slow-path help.
+            setSlow(true);
+            return;
+          }
+        }
+        setPhase('approved');
+        window.setTimeout(() => live && window.location.replace(CONFIRM_HREF), 1000);
+        return;
+      }
       if (s === 'succeeded' || s === 'requires_capture') {
         // Never complete twice: a refresh after success reuses the stored order.
         // Medusa: POST /store/carts/:id/complete is idempotent server-side too.
@@ -84,7 +128,7 @@ export default function CheckoutReturn() {
             <Icon name="check" size={36} stroke={3} />
           </span>
           <h1 id="ret-title" className="m-0 font-display text-[30px] leading-[1.05] font-extrabold tracking-[-0.03em] lg:text-[40px]">Payment approved</h1>
-          <p className="m-0 text-[15px] leading-[1.55] text-ink-700 lg:text-[17px]">{provider} approved your plan. Taking you to your order confirmation…</p>
+          <p className="m-0 text-[15px] leading-[1.55] text-ink-700 lg:text-[17px]">{provider === 'Affirm' || provider === 'Klarna' ? `${provider} approved your plan.` : 'Your bank approved the payment.'} Taking you to your order confirmation…</p>
           <a href={CONFIRM_HREF} className="flex h-[52px] items-center justify-center rounded-lg bg-brand-600 px-6 text-[15px] font-extrabold text-white no-underline hover:bg-brand-700 hover:text-white">
             View order confirmation
           </a>
@@ -101,7 +145,7 @@ export default function CheckoutReturn() {
           </div>
           <div className="flex justify-between gap-3">
             <dt className="text-ink-700">Payment</dt>
-            <dd className="m-0 font-bold">Pay later · {provider}</dd>
+            <dd className="m-0 font-bold">{provider === 'Affirm' || provider === 'Klarna' ? `Pay later · ${provider}` : provider}</dd>
           </div>
           <div className="flex justify-between gap-3 border-t border-line-strong pt-2.5">
             <dt className="font-extrabold">Total</dt>

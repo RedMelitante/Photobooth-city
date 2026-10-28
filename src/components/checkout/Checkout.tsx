@@ -4,7 +4,9 @@ import Icon from '@/components/react/Icon';
 import { $cart, $promo, $subtotal, clearCart } from '@/lib/cart';
 import { confirmPayment, type CardInput, type PayMethod } from '@/lib/checkout-payments';
 import { medusaEnabled } from '@/lib/medusa';
-import { completeOrder } from '@/lib/medusa-checkout';
+import { completeCart, completeOrder, prepareCheckout, type PlacedOrder, type PreparedCheckout } from '@/lib/medusa-checkout';
+import { stripeEnabled } from '@/lib/stripe';
+import StripePayment, { type StripeResult } from './StripePayment';
 import {
   STEPS,
   formatAddress,
@@ -27,7 +29,7 @@ import { PAGES, collectionUrl } from '@/lib/routes';
 import Confirmed from './Confirmed';
 import { SummaryAside, SummaryBar, type SummaryData } from './OrderSummary';
 import PaymentStep, { type Declined } from './PaymentStep';
-import { Checkbox, Field, Optional, linkBtn, primaryBtn } from './ui';
+import { Checkbox, DeclinedAlert, Field, Optional, Spinner, linkBtn, primaryBtn } from './ui';
 import * as V from './validate';
 
 type FormStep = Exclude<StepId, 'confirmed'>;
@@ -92,6 +94,8 @@ export default function Checkout() {
   const [declined, setDeclined] = useState<Declined>(null);
   const [paying, setPaying] = useState(false);
   const [express, setExpress] = useState<string | null>(null);
+  // Stripe: the backend cart is prepared (address, shipping, PaymentIntent) when the payment step opens.
+  const [prepared, setPrepared] = useState<(PreparedCheckout & { key: string }) | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
@@ -140,6 +144,24 @@ export default function Checkout() {
   const state = p?.address.state ?? '';
   const options = useMemo(() => shippingOptions(sub, state), [sub, state]);
   const sel = options.find((o) => o.id === p?.ship) ?? options[0];
+
+  const prepKey = p ? JSON.stringify([p.email.trim(), p.address, sel?.id]) : '';
+  useEffect(() => {
+    if (!stripeEnabled || !p || order || p.step !== 'payment' || prepared?.key === prepKey) return;
+    let live = true;
+    setPrepared(null);
+    const a = p.address;
+    prepareCheckout({
+      email: p.email.trim(),
+      address: { firstName: a.first, lastName: a.last, company: a.company, line1: a.line1, line2: a.line2, city: a.city, state: a.state, zip: a.zip, phone: a.phone },
+      shipping: sel.id,
+    })
+      .then((r) => live && setPrepared({ ...r, key: prepKey }))
+      .catch((e: Error) => live && setDeclined({ kind: 'error', message: e.message }));
+    return () => {
+      live = false;
+    };
+  }, [p?.step, prepKey, order]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!p) return <Skeleton />;
   if (!order && cart.lines.length === 0) return <EmptyCart />;
@@ -192,6 +214,46 @@ export default function Checkout() {
       };
 
   // ── Pay ─────────────────────────────────────────────────
+  const baseSnapshot = () => ({
+    paymentIntent: '',
+    lines: cart.lines,
+    subtotal: sub,
+    discount,
+    shipping: sel.amount,
+    tax,
+    total,
+    shipName: sel.name,
+    email: p.email.trim(),
+    address: p.address,
+    payment: '',
+    createdAt: new Date().toISOString(),
+  });
+
+  const confirmPlaced = (placed: PlacedOrder, paymentIntent: string, payment: string) => {
+    const done: OrderSnapshot = { ...baseSnapshot(), ...placed, paymentIntent, payment };
+    saveOrder(done);
+    saveProgress(null);
+    clearCart({ orderPlaced: true });
+    setOrder(done);
+    setPaying(false);
+    window.history.replaceState(null, '', '?step=confirmed');
+  };
+
+  const onStripeResult = async (r: StripeResult) => {
+    if (r.status === 'failed') {
+      setPaying(false);
+      setDeclined({ kind: 'error', message: `${r.message} No payment was taken and your cart is saved.` });
+      return;
+    }
+    try {
+      confirmPlaced(await completeCart(prepared ?? undefined), r.paymentIntent, r.label);
+      savePending(null);
+    } catch (e) {
+      setPaying(false);
+      setDeclined({ kind: 'error', message: (e as Error).message });
+    }
+  };
+
   const pay = async (card?: CardInput) => {
     const method = p.pay as PayMethod;
     setPaying(true);
@@ -530,7 +592,45 @@ export default function Checkout() {
           {step === 'address' && addressStep}
           {(step === 'shipping' || step === 'payment') && review}
           {step === 'shipping' && shippingStep}
-          {step === 'payment' && (
+          {step === 'payment' && stripeEnabled && (
+            prepared?.clientSecret ? (
+              <StripePayment
+                headingRef={heading}
+                clientSecret={prepared.clientSecret}
+                email={p.email.trim()}
+                beforeRedirect={(provider) => {
+                  rememberInfo(p);
+                  savePending({ ...baseSnapshot(), payment: provider, provider });
+                }}
+                onResult={onStripeResult}
+                declined={declined}
+                paying={paying}
+                setPaying={setPaying}
+                onBack={() => goTo('shipping')}
+              />
+            ) : declined ? (
+              <div className="flex flex-col gap-4">
+                <DeclinedAlert>{declined.kind === 'error' ? declined.message : 'Your payment wasn’t completed.'}</DeclinedAlert>
+                <button
+                  type="button"
+                  className={primaryBtn}
+                  onClick={() => {
+                    setDeclined(null);
+                    setPrepared(null);
+                    update({ step: 'shipping' });
+                    requestAnimationFrame(() => update({ step: 'payment' }));
+                  }}
+                >
+                  Try again
+                </button>
+              </div>
+            ) : (
+              <div className="flex h-40 items-center justify-center" role="status" aria-label="Preparing secure payment">
+                <Spinner />
+              </div>
+            )
+          )}
+          {step === 'payment' && !stripeEnabled && (
             <PaymentStep
               headingRef={heading}
               pay={p.pay as PayMethod}
