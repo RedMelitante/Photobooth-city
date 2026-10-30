@@ -147,7 +147,7 @@ export async function listOrders(): Promise<Order[]> {
       },
     });
     return orders.map((o) => {
-      const [status, statusLabel, step] = STATUS[o.fulfillment_status] ?? ['processing', 'Processing · ships in 3–5 days', 1];
+      const [status, statusLabel, step] = STATUS[o.fulfillment_status] ?? ['processing', 'Processing', 1];
       const label = (o.fulfillments ?? []).flatMap((f: any) => f.labels ?? []).find((l: any) => l.tracking_url);
       return {
         id: o.id,

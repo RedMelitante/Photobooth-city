@@ -25,6 +25,8 @@ export interface ProductVariant {
   compareAtPrice: number | null;
   available: boolean;
   weightGrams: number | null;
+  /** most a customer can order; null = not limited (untracked or backorders allowed) */
+  maxQuantity?: number | null;
 }
 
 export interface RichBlock {
@@ -79,4 +81,8 @@ export interface CartLine {
   unitPrice: number;
   compareAtPrice: number | null;
   quantity: number;
+  /** stock cap when the line was added; null/undefined = not limited */
+  maxQuantity?: number | null;
+  /** e.g. "ships within 3–5 days" (empty when the product has none) */
+  leadTime?: string;
 }

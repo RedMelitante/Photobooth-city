@@ -7,6 +7,15 @@ import type { CartLine } from './types';
 
 const CART_ID_KEY = 'pbc.medusa.cart';
 
+type ConflictHandler = (variantId: string, acceptedQuantity: number) => void;
+let conflictHandler: ConflictHandler = () => {};
+/** cart.ts registers here to hear about quantities the backend refused. */
+export function onStockConflict(fn: ConflictHandler) {
+  conflictHandler = fn;
+}
+
+const isStockError = (e: unknown) => e instanceof MedusaError && /inventory|stock|quantity/i.test(e.message);
+
 interface MCart {
   id: string;
   completed_at: string | null;
@@ -63,13 +72,28 @@ async function reconcile(lines: CartLine[], code: string | null): Promise<string
     if (qty === undefined) {
       await medusa(`${path}/line-items/${item.id}`, { method: 'DELETE' });
     } else if (qty !== item.quantity) {
-      ({ cart } = await medusa<{ cart: MCart }>(`${path}/line-items/${item.id}`, { body: { quantity: qty }, query: q }));
+      try {
+        ({ cart } = await medusa<{ cart: MCart }>(`${path}/line-items/${item.id}`, { body: { quantity: qty }, query: q }));
+      } catch (e) {
+        if (!isStockError(e)) throw e;
+        conflictHandler(item.variant_id, item.quantity);
+      }
     }
   }
   const have = new Set(cart.items.map((i) => i.variant_id));
   for (const l of lines) {
     if (!have.has(l.id)) {
-      ({ cart } = await medusa<{ cart: MCart }>(`${path}/line-items`, { body: { variant_id: l.id, quantity: l.quantity }, query: q }));
+      // Largest quantity the backend accepts, down from what was asked.
+      let accepted = 0;
+      for (let n = l.quantity; n >= 1 && !accepted; n--) {
+        try {
+          ({ cart } = await medusa<{ cart: MCart }>(`${path}/line-items`, { body: { variant_id: l.id, quantity: n }, query: q }));
+          accepted = n;
+        } catch (e) {
+          if (!isStockError(e)) throw e;
+        }
+      }
+      if (accepted !== l.quantity) conflictHandler(l.id, accepted);
     }
   }
   ({ cart } = await medusa<{ cart: MCart }>(path, { query: q }));

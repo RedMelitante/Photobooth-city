@@ -102,7 +102,7 @@ export const TRUST = [
 export const FAQS: { q: string; a: string; extra?: string }[] = [
   { q: 'What types of photo booths does Photobooth City offer?', a: 'Photobooth City offers a wide range of professional photo booths, including iPad photo booths, DSLR photo booths, 360 photo booths, mirror booths and vintage enclosed booths, plus printers, backdrops, travel cases and accessories.' },
   { q: 'Are your photo booths suitable for starting a photo booth business?', a: 'Yes. Our photo booths are designed for entrepreneurs, DJs, photographers, event planners, and rental companies, and our team can help you choose a setup that fits your events and budget.' },
-  { q: 'Where do you ship?', a: 'We ship within the United States only — all 50 states and Puerto Rico. Economy shipping starts at $20, and UPS options are shown at checkout.' },
+  { q: 'Where do you ship?', a: 'We ship within the United States only — all 50 states and Puerto Rico. Economy shipping starts at $20 in the lower 48; for Hawaii, Alaska and Puerto Rico we quote shipping by phone.' },
   { q: 'Which photo booth is best for beginners?', a: 'For most new businesses, an iPad photo booth is an excellent starting point because it is portable, easy to operate and quick to set up at events.', extra: 'Call us and we will help you compare options.' },
   { q: 'Can I customize my photo booth with my company branding?', a: 'Yes. Many of our photo booths can be customized with your business logo, branded graphics, color options, and accessories.' },
 ];

@@ -7,7 +7,7 @@ import { primaryBtn } from './ui';
 
 const STATUS = [
   ['Confirmed', 'Today'],
-  ['Shipped', 'Within 3–5 days'],
+  ['Shipped', 'Per item lead time'],
   ['Delivered', 'Tracking by email'],
 ] as const;
 

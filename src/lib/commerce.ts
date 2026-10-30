@@ -39,7 +39,12 @@ export function promoState(subtotal: number, codeSaved: boolean): PromoState {
   };
 }
 
-/** Economy · 5–8 business days, contiguous US, priced by order value. */
+/**
+ * Economy · 5–8 business days, contiguous US, priced on the item subtotal
+ * before tax: $0–50 $20 · $51–499 $50 · $500–1,800 $100 · $1,800+ $200
+ * ($50.01–$50.99, a gap in Shopify's tiers, gets $50). Same rule as the
+ * backend's economy provider (backend/apps/backend/src/lib/store-config.ts).
+ */
 export function economyRate(subtotal: number): number {
   const dollars = subtotal / 100;
   if (dollars <= 50) return 2_000;
@@ -49,23 +54,24 @@ export function economyRate(subtotal: number): number {
 }
 
 export interface ShippingOption {
-  id: 'economy' | 'ups';
+  id: 'economy';
   name: string;
   detail: string;
-  /** cents, null = live carrier rate */
+  /** cents; null only for the "quote by phone" placeholder */
   amount: number | null;
 }
 
+/** States whose shipping Shopify quotes with live UPS / USPS rates. */
+export const QUOTE_STATES = ['HI', 'AK', 'PR'];
+
+/**
+ * Priced options only. Live carrier rates (UPS for the lower 48, UPS + USPS
+ * for Hawaii, Alaska and Puerto Rico) aren't connected yet, so they aren't
+ * offered; those three states get a phone quote instead (empty list).
+ */
 export function shippingOptions(subtotal: number, state: string): ShippingOption[] {
-  const remote = ['HI', 'AK', 'PR'].includes(state);
-  const ups: ShippingOption = {
-    id: 'ups',
-    name: remote ? 'UPS + USPS' : 'UPS',
-    detail: 'Live UPS rates for your address, including faster services',
-    amount: null,
-  };
-  if (remote) return [ups];
-  return [{ id: 'economy', name: 'Economy', detail: '5–8 business days', amount: economyRate(subtotal) }, ups];
+  if (QUOTE_STATES.includes(state)) return [];
+  return [{ id: 'economy', name: 'Economy', detail: '5–8 business days', amount: economyRate(subtotal) }];
 }
 
 /**

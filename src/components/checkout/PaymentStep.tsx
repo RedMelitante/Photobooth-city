@@ -135,6 +135,9 @@ export default function PaymentStep(p: Props) {
       </div>
 
       <div className="flex flex-col gap-3.5 rounded-[14px] border border-line p-4 lg:gap-4 lg:p-5">
+        <p role="note" className="m-0 rounded-lg border-[1.5px] border-flash-400 bg-flash-100 px-4 py-3 text-sm leading-5 text-ink-950">
+          <strong>Test checkout.</strong> Payments aren't connected yet, so no card is charged. Use any card number; 4000 0000 0000 0002 shows a decline.
+        </p>
         {p.declined?.kind === 'paylater' && (
           <DeclinedAlert>
             <strong>Your {p.declined.provider} application wasn’t completed.</strong> No payment was taken and your cart is saved. Choose another payment method, or try Pay later again.
@@ -147,7 +150,7 @@ export default function PaymentStep(p: Props) {
           </DeclinedAlert>
         )}
 
-        <div role="tablist" aria-label="Payment method" className="-mx-1 flex gap-2 overflow-x-auto px-1 py-0.5 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-2.5 lg:overflow-visible lg:p-0">
+        <div role="tablist" aria-label="Payment method" hidden={PAY_METHODS.length < 2} className="-mx-1 flex gap-2 overflow-x-auto px-1 py-0.5 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-2.5 lg:overflow-visible lg:p-0">
           {PAY_METHODS.map((m) => {
             const on = p.pay === m;
             return (

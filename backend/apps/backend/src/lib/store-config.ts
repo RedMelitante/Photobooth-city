@@ -21,36 +21,18 @@ export const FLASH_SALE = {
   minSubtotal: 3500,
 }
 
-type Rule = { attribute: string; operator: "gt" | "gte" | "lt" | "lte" | "eq"; value: number }
-
 /**
- * Economy · 5–8 business days, contiguous US:
- * $0–50 $20 · $51–499 $50 · $500–1,800 $100 · $1,800+ $200
+ * Economy · 5–8 business days, contiguous US, priced on the item subtotal
+ * before tax (as Shopify's price-based rates): $0–50 $20 · $51–499 $50 ·
+ * $500–1,800 $100 · $1,800+ $200. Shopify's tiers skip $50.01–$50.99; those
+ * totals get the $50 rate here, so every order has an Economy price.
  */
-export const ECONOMY_TIERS: { amount: number; rules?: Rule[] }[] = [
-  { amount: 20 },
-  {
-    amount: 50,
-    rules: [
-      { attribute: "item_total", operator: "gt", value: 50 },
-      { attribute: "item_total", operator: "lt", value: 500 },
-    ],
-  },
-  {
-    amount: 100,
-    rules: [
-      { attribute: "item_total", operator: "gte", value: 500 },
-      { attribute: "item_total", operator: "lte", value: 1800 },
-    ],
-  },
-  {
-    amount: 200,
-    rules: [
-      { attribute: "item_total", operator: "gt", value: 1800 },
-      { attribute: "item_total", operator: "lt", value: 100000000 },
-    ],
-  },
-]
+export function economyRate(itemSubtotal: number): number {
+  if (itemSubtotal <= 50) return 20
+  if (itemSubtotal < 500) return 50
+  if (itemSubtotal <= 1800) return 100
+  return 200
+}
 
 /**
  * California sales tax. Shopify collects tax in California only. This is

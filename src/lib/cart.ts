@@ -6,7 +6,8 @@ import { atom, computed, onMount } from 'nanostores';
 import type { CartLine } from './types';
 import { promoState } from './commerce';
 import { medusaEnabled } from './medusa';
-import { flushMedusaCart, forgetMedusaCart, syncMedusaCart } from './medusa-cart';
+import { flushMedusaCart, forgetMedusaCart, onStockConflict, syncMedusaCart } from './medusa-cart';
+import { lineCap } from './product';
 
 const KEY = 'pbc.cart.v1';
 
@@ -30,6 +31,30 @@ function load(): CartState {
 export const $cart = atom<CartState>({ lines: [], code: null });
 export const $cartOpen = atom(false);
 export const $hydrated = atom(false);
+/** Per-line stock messages ("Only 3 available"), keyed by variant id. */
+export const $cartNotices = atom<Record<string, string>>({});
+
+function notice(id: string, message: string | null) {
+  const next = { ...$cartNotices.get() };
+  if (message) next[id] = message;
+  else delete next[id];
+  $cartNotices.set(next);
+}
+
+const onlyLeft = (n: number) => (n <= 0 ? 'This item just sold out.' : `Only ${n} available.`);
+
+// The backend refused a quantity (stock changed since the site was built):
+// take the quantity it accepted and say so.
+onStockConflict((variantId, accepted) => {
+  const s = $cart.get();
+  $cart.set({
+    ...s,
+    lines: accepted === 0
+      ? s.lines.filter((l) => l.id !== variantId)
+      : s.lines.map((l) => (l.id === variantId ? { ...l, quantity: accepted, maxQuantity: accepted } : l)),
+  });
+  notice(variantId, onlyLeft(accepted));
+});
 
 // Load lazily on first use. Islands that render cart contents should gate on
 // useHydrated() (src/lib/useHydrated.ts) so their first client render matches SSR.
@@ -79,9 +104,15 @@ export function addLine(line: Omit<CartLine, 'quantity'>, quantity = 1, open = t
   ensureLoaded();
   const s = $cart.get();
   const existing = s.lines.find((l) => l.id === line.id);
-  const lines = existing
-    ? s.lines.map((l) => (l.id === line.id ? { ...l, quantity: Math.min(20, l.quantity + quantity) } : l))
-    : [...s.lines, { ...line, quantity }];
+  const cap = lineCap(line.maxQuantity);
+  const wanted = (existing?.quantity ?? 0) + quantity;
+  const q = Math.min(cap, wanted);
+  notice(line.id, wanted > cap && line.maxQuantity != null ? onlyLeft(line.maxQuantity) : null);
+  if (q <= 0) {
+    if (open) $cartOpen.set(true);
+    return;
+  }
+  const lines = existing ? s.lines.map((l) => (l.id === line.id ? { ...l, ...line, quantity: q } : l)) : [...s.lines, { ...line, quantity: q }];
   commit({ ...s, lines });
   if (open) $cartOpen.set(true);
 }
@@ -89,7 +120,10 @@ export function addLine(line: Omit<CartLine, 'quantity'>, quantity = 1, open = t
 export function setQuantity(id: string, quantity: number) {
   ensureLoaded();
   const s = $cart.get();
-  const q = Math.max(0, Math.min(20, quantity));
+  const line = s.lines.find((l) => l.id === id);
+  const cap = lineCap(line?.maxQuantity);
+  const q = Math.max(0, Math.min(cap, quantity));
+  notice(id, quantity > cap && line?.maxQuantity != null ? onlyLeft(line.maxQuantity) : null);
   commit({ ...s, lines: q === 0 ? s.lines.filter((l) => l.id !== id) : s.lines.map((l) => (l.id === id ? { ...l, quantity: q } : l)) });
 }
 

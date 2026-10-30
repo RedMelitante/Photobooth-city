@@ -34,6 +34,16 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      resolve: "@medusajs/medusa/fulfillment",
+      options: {
+        providers: [
+          { resolve: "@medusajs/medusa/fulfillment-manual", id: "manual" },
+          // Economy rates on the pre-tax subtotal (src/modules/economy-shipping)
+          { resolve: "./src/modules/economy-shipping", id: "economy" },
+        ],
+      },
+    },
+    {
       resolve: "@medusajs/medusa/payment",
       options: { providers: paymentProviders },
     },

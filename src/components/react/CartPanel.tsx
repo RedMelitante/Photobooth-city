@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useStore } from '@nanostores/react';
 import Icon from './Icon';
-import { $cart, $promo, $subtotal, addLine, closeCart, removeLine, saveCode, setQuantity } from '@/lib/cart';
+import { $cart, $cartNotices, $promo, $subtotal, addLine, closeCart, removeLine, saveCode, setQuantity } from '@/lib/cart';
+import { lineCap } from '@/lib/product';
 import { PROMO, isPromoCode } from '@/lib/commerce';
 import { formatMoney } from '@/lib/money';
 import type { CartLine } from '@/lib/types';
@@ -28,7 +29,7 @@ export function Stepper({ line, size = 'md' }: { line: CartLine; size?: 'md' | '
         <Icon name="minus" size={16} stroke={2.4} />
       </button>
       <span className="w-6 text-center text-[15px] font-extrabold" aria-live="polite">{line.quantity}</span>
-      <button type="button" onClick={() => setQuantity(line.id, line.quantity + 1)} aria-label="Increase quantity" className="flex h-full w-10 items-center justify-center text-ink-900">
+      <button type="button" onClick={() => setQuantity(line.id, line.quantity + 1)} disabled={line.quantity >= lineCap(line.maxQuantity)} aria-label="Increase quantity" className="flex h-full w-10 items-center justify-center text-ink-900 disabled:cursor-not-allowed disabled:text-ink-300">
         <Icon name="plus" size={16} stroke={2.4} />
       </button>
     </div>
@@ -113,6 +114,7 @@ export function LineThumb({ line, size = 84 }: { line: CartLine; size?: number }
 
 export default function CartPanel({ upsells = [], mode = 'drawer', titleId = 'cart-title' }: Props) {
   const cart = useStore($cart);
+  const notices = useStore($cartNotices);
   const sub = useStore($subtotal);
   const promo = useStore($promo);
   const count = cart.lines.reduce((a, l) => a + l.quantity, 0);
@@ -154,6 +156,8 @@ export default function CartPanel({ upsells = [], mode = 'drawer', titleId = 'ca
                 </div>
                 {l.variantTitle && <span className="text-[13px] leading-[18px] text-ink-500">{l.variantTitle}</span>}
                 <span className="text-[13px] text-ink-500">{formatMoney(l.unitPrice)} each</span>
+                {l.leadTime && <span className="text-[13px] font-semibold text-success-700">{l.leadTime}</span>}
+                {notices[l.id] && <span role="status" className="text-[13px] font-bold text-sale-600">{notices[l.id]}</span>}
                 <div className="mt-1.5 flex items-center justify-between">
                   <Stepper line={l} />
                   <button type="button" onClick={() => removeLine(l.id)} className="h-10 px-1 text-[13px] font-semibold text-ink-700 underline">Remove</button>

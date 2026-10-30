@@ -9,6 +9,8 @@ export function toCartLine(p: Product, v: ProductVariant): Omit<CartLine, 'quant
     image: p.images[0]?.url ?? '',
     unitPrice: v.price,
     compareAtPrice: v.compareAtPrice,
+    maxQuantity: v.maxQuantity ?? null,
+    leadTime: leadTimeLabel(p.leadTime),
   };
 }
 
@@ -29,4 +31,20 @@ export function sized(url: string, width: number): string {
   const u = new URL(url);
   u.searchParams.set('width', String(width));
   return u.toString();
+}
+
+/**
+ * Shopify's lead-time snippets are uneven ("ships in " with nothing after,
+ * lower case, duplicated phrases). Returns a clean sentence-case label, or ''
+ * when there is nothing useful to show.
+ */
+export function leadTimeLabel(raw: string | undefined): string {
+  const t = (raw ?? '').replace(/\s+/g, ' ').trim();
+  if (!/\d/.test(t)) return '';
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
+/** Largest quantity allowed in the cart for a line (20 is the store-wide cap). */
+export function lineCap(maxQuantity: number | null | undefined): number {
+  return Math.min(20, maxQuantity ?? 20);
 }

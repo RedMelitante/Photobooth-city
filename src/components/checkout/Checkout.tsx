@@ -23,7 +23,7 @@ import {
   type OrderSnapshot,
   type StepId,
 } from '@/lib/checkout-session';
-import { US_STATES, estimateTax, promoState, shippingOptions } from '@/lib/commerce';
+import { STORE, US_STATES, estimateTax, promoState, shippingOptions } from '@/lib/commerce';
 import { formatMoney } from '@/lib/money';
 import { PAGES, collectionUrl } from '@/lib/routes';
 import Confirmed from './Confirmed';
@@ -46,6 +46,7 @@ function fieldError(p: CheckoutProgress, k: FieldKey): V.Msg {
 }
 const addressValid = (p: CheckoutProgress) => ADDRESS_ORDER.every((k) => !fieldError(p, k));
 
+const SHOW_EXPRESS = false;
 const EXPRESS = [
   { label: 'Apple Pay', method: 'Apple Pay', cls: 'border-0 bg-black text-white' },
   { label: 'Google Pay', method: 'Google Pay', cls: 'border-[1.5px] border-line-strong bg-surface text-ink-900' },
@@ -143,11 +144,18 @@ export default function Checkout() {
 
   const state = p?.address.state ?? '';
   const options = useMemo(() => shippingOptions(sub, state), [sub, state]);
-  const sel = options.find((o) => o.id === p?.ship) ?? options[0];
+  // Hawaii, Alaska and Puerto Rico: no priced option yet, so the order can't reach payment.
+  const quoteOnly = options.length === 0;
+  const sel = options.find((o) => o.id === p?.ship) ?? options[0] ?? { id: 'economy' as const, name: 'Shipping quote', detail: '', amount: null };
+
+  // No priced shipping (Hawaii, Alaska, Puerto Rico): payment isn't reachable.
+  useEffect(() => {
+    if (quoteOnly && p?.step === 'payment') setP((cur) => (cur ? { ...cur, step: 'shipping' } : cur));
+  }, [quoteOnly, p?.step]);
 
   const prepKey = p ? JSON.stringify([p.email.trim(), p.address, sel?.id]) : '';
   useEffect(() => {
-    if (!stripeEnabled || !p || order || p.step !== 'payment' || prepared?.key === prepKey) return;
+    if (!stripeEnabled || !p || order || quoteOnly || p.step !== 'payment' || prepared?.key === prepKey) return;
     let live = true;
     setPrepared(null);
     const a = p.address;
@@ -178,6 +186,10 @@ export default function Checkout() {
       requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>(`#f-${first}`)?.focus());
       return;
     }
+    if (target === 'payment' && quoteOnly) {
+      update({ step: 'shipping' });
+      return;
+    }
     const reached = idx(target) > idx(p.reached) ? target : p.reached;
     update({ step: target, reached, ship: sel.id });
   };
@@ -195,8 +207,8 @@ export default function Checkout() {
         subtotal: order.subtotal,
         discount: order.discount,
         total: order.total,
-        shipping: order.shipping == null ? 'Live rate' : formatMoney(order.shipping),
-        shippingNote: order.shipping == null ? 'calculated by carrier' : undefined,
+        shipping: formatMoney(order.shipping ?? 0),
+        shippingNote: undefined,
         tax: formatMoney(order.tax),
         promo: promoState(0, false),
         editable: false,
@@ -206,8 +218,8 @@ export default function Checkout() {
         subtotal: sub,
         discount,
         total,
-        shipping: past ? (sel.amount == null ? 'Live rate' : formatMoney(sel.amount)) : 'Calculated at next step',
-        shippingNote: past && sel.amount == null ? 'calculated by carrier' : undefined,
+        shipping: past ? (sel.amount == null ? 'Quoted by phone' : formatMoney(sel.amount)) : 'Calculated at next step',
+        shippingNote: undefined,
         tax: past ? formatMoney(tax) : 'Calculated at payment',
         promo,
         editable: true,
@@ -445,7 +457,7 @@ export default function Checkout() {
   );
 
   // ── Review box (shipping + payment) ─────────────────────
-  const shipPrice = sel.amount == null ? 'Live rate' : formatMoney(sel.amount);
+  const shipPrice = sel.amount == null ? 'Quoted by phone' : formatMoney(sel.amount);
   const reviewRow = (label: string, value: string, onChange: () => void, last = false) => (
     <div className={`flex gap-3 py-3.5 text-sm lg:gap-4 lg:py-4 ${last ? '' : 'border-b border-line'}`}>
       <dt className="flex-[0_0_64px] text-ink-500 lg:flex-[0_0_90px]">{label}</dt>
@@ -466,6 +478,9 @@ export default function Checkout() {
   // ── Steps ───────────────────────────────────────────────
   const addressStep = (
     <div className="flex flex-col gap-6 lg:gap-8">
+      {/* Express checkout (Apple Pay, Google Pay, Link, PayPal) is hidden until those
+          wallets are connected through Stripe and tested; see EXPRESS. */}
+      {SHOW_EXPRESS && (
       <section aria-labelledby="xp-title" className="flex flex-col gap-2.5 lg:gap-3">
         <h2 id="xp-title" className="m-0 text-center text-[13px] font-bold text-ink-700 lg:text-sm">Express checkout</h2>
         <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
@@ -490,6 +505,7 @@ export default function Checkout() {
           <span className="h-px flex-1 bg-line" />
         </div>
       </section>
+      )}
 
       <section aria-labelledby="ct-title" className="flex flex-col gap-3 lg:gap-3.5">
         <div className="flex items-baseline justify-between">
@@ -541,43 +557,49 @@ export default function Checkout() {
     </div>
   );
 
-  const remote = options.length === 1;
   const shippingStep = (
     <div className="flex flex-col gap-3 lg:gap-5">
       <fieldset className="m-0 flex flex-col gap-3 border-0 p-0 lg:gap-2.5">
         <legend className="p-0 pb-3 lg:pb-3.5">
           <h2 ref={heading} tabIndex={-1} className="m-0 text-xl font-extrabold outline-none lg:text-[22px]">Shipping method</h2>
         </legend>
-        {options.map((o) => {
-          const on = o.id === sel.id;
-          return (
-            <label
-              key={o.id}
-              className={`flex cursor-pointer items-center gap-3 rounded-[14px] border-2 p-4 lg:gap-3.5 lg:px-5 lg:py-[18px] ${on ? 'border-brand-600 bg-brand-50' : 'border-line bg-surface'}`}
-            >
-              <input type="radio" name="ship" checked={on} onChange={() => update({ ship: o.id })} className="m-0 size-5 flex-none accent-brand-600" />
-              <span className="flex flex-1 flex-col gap-0.5">
-                <span className="text-[15px] font-extrabold lg:text-base">{o.name}</span>
-                <span className="text-[13px] text-ink-700 lg:text-sm">{o.detail}</span>
-              </span>
-              <span className="flex flex-col items-end text-right">
-                <span className="text-[15px] font-extrabold lg:text-base">{o.amount == null ? 'Live rate' : formatMoney(o.amount)}</span>
-                {o.amount == null && <span className="text-xs text-ink-500">calculated by carrier</span>}
-              </span>
-            </label>
-          );
-        })}
+        {quoteOnly ? (
+          <div role="status" className="flex flex-col gap-2 rounded-[14px] border-2 border-line bg-canvas p-4 text-[15px] leading-[22px] lg:px-5 lg:py-[18px]">
+            <strong className="text-base font-extrabold">We'll quote your shipping</strong>
+            <span className="text-ink-700">
+              Orders to Hawaii, Alaska and Puerto Rico ship with UPS or USPS at carrier rates, which we quote before you pay. Call{' '}
+              <a href={STORE.phoneHref} className="font-bold">{STORE.phone}</a> ({STORE.hours}) or email{' '}
+              <a href={`mailto:${STORE.email}`} className="font-bold">{STORE.email}</a> and we'll send your total with a payment link. Your cart is saved.
+            </span>
+          </div>
+        ) : (
+          options.map((o) => {
+            const on = o.id === sel.id;
+            return (
+              <label
+                key={o.id}
+                className={`flex cursor-pointer items-center gap-3 rounded-[14px] border-2 p-4 lg:gap-3.5 lg:px-5 lg:py-[18px] ${on ? 'border-brand-600 bg-brand-50' : 'border-line bg-surface'}`}
+              >
+                <input type="radio" name="ship" checked={on} onChange={() => update({ ship: o.id })} className="m-0 size-5 flex-none accent-brand-600" />
+                <span className="flex flex-1 flex-col gap-0.5">
+                  <span className="text-[15px] font-extrabold lg:text-base">{o.name}</span>
+                  <span className="text-[13px] text-ink-700 lg:text-sm">{o.detail}</span>
+                </span>
+                <span className="text-[15px] font-extrabold lg:text-base">{formatMoney(o.amount ?? 0)}</span>
+              </label>
+            );
+          })
+        )}
       </fieldset>
-      <p className="m-0 flex gap-2.5 rounded-lg bg-brand-50 px-4 py-3.5 text-sm leading-5 font-semibold text-brand-700">
-        <Icon name="truck" size={18} className="mt-px" />
-        <span>
-          Orders ship within 3–5 days from our Mira Loma, CA warehouse.
-          {remote ? ' Hawaii, Alaska and Puerto Rico ship with UPS + USPS at live rates.' : ' Economy is $20–$200 depending on order value.'}
-        </span>
-      </p>
+      {!quoteOnly && (
+        <p className="m-0 flex gap-2.5 rounded-lg bg-brand-50 px-4 py-3.5 text-sm leading-5 font-semibold text-brand-700">
+          <Icon name="truck" size={18} className="mt-px" />
+          <span>Ships from our Mira Loma, CA warehouse once your order is ready; each item's lead time is shown in your cart. Economy is $20–$200 depending on order value.</span>
+        </p>
+      )}
       <div className="flex items-center justify-between gap-4 pt-2 lg:pt-3">
         <button type="button" onClick={() => goTo('address')} className={`${linkBtn} hidden text-[15px] lg:block`}>← Return to address</button>
-        <button type="button" onClick={() => goTo('payment')} className={`${primaryBtn} w-full lg:w-auto`}>Continue to payment</button>
+        {!quoteOnly && <button type="button" onClick={() => goTo('payment')} className={`${primaryBtn} w-full lg:w-auto`}>Continue to payment</button>}
       </div>
     </div>
   );
@@ -591,8 +613,8 @@ export default function Checkout() {
           {step !== 'confirmed' && progress}
           {step === 'address' && addressStep}
           {(step === 'shipping' || step === 'payment') && review}
-          {step === 'shipping' && shippingStep}
-          {step === 'payment' && stripeEnabled && (
+          {(step === 'shipping' || (step === 'payment' && quoteOnly)) && shippingStep}
+          {step === 'payment' && !quoteOnly && stripeEnabled && (
             prepared?.clientSecret ? (
               <StripePayment
                 headingRef={heading}
@@ -630,7 +652,7 @@ export default function Checkout() {
               </div>
             )
           )}
-          {step === 'payment' && !stripeEnabled && (
+          {step === 'payment' && !quoteOnly && !stripeEnabled && (
             <PaymentStep
               headingRef={heading}
               pay={p.pay as PayMethod}

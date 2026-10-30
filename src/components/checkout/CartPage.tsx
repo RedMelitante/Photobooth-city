@@ -1,14 +1,16 @@
 import { useStore } from '@nanostores/react';
 import CartPanel, { PromoForm, type Upsell } from '@/components/react/CartPanel';
 import Icon from '@/components/react/Icon';
-import { $cart, $promo, $subtotal, removeLine, setQuantity } from '@/lib/cart';
+import { $cart, $cartNotices, $promo, $subtotal, removeLine, setQuantity } from '@/lib/cart';
+import { lineCap } from '@/lib/product';
 import { PROMO, STORE } from '@/lib/commerce';
 import { formatMoney } from '@/lib/money';
 import { PAGES, collectionUrl, productUrl } from '@/lib/routes';
 import { useHydrated } from '@/lib/useHydrated';
 import type { CartLine } from '@/lib/types';
 
-const PAYMENTS = ['Visa', 'Mastercard', 'Amex', 'Discover', 'Diners', 'Apple Pay', 'Google Pay', 'PayPal', 'Affirm', 'Klarna'];
+// Only methods checkout accepts today (cards through Stripe).
+const PAYMENTS = ['Visa', 'Mastercard', 'Amex', 'Discover'];
 const COLS = 'grid grid-cols-[minmax(0,1fr)_140px_160px_120px] gap-4';
 const SHOP = collectionUrl('ipad-booths');
 
@@ -19,7 +21,7 @@ function QtyStepper({ line }: { line: CartLine }) {
         <Icon name="minus" size={16} stroke={2.4} />
       </button>
       <span className="w-7 text-center font-extrabold" aria-live="polite">{line.quantity}</span>
-      <button type="button" onClick={() => setQuantity(line.id, line.quantity + 1)} aria-label="Increase quantity" className="flex h-full w-11 items-center justify-center text-ink-900">
+      <button type="button" onClick={() => setQuantity(line.id, line.quantity + 1)} disabled={line.quantity >= lineCap(line.maxQuantity)} aria-label="Increase quantity" className="flex h-full w-11 items-center justify-center text-ink-900 disabled:cursor-not-allowed disabled:text-ink-300">
         <Icon name="plus" size={16} stroke={2.4} />
       </button>
     </div>
@@ -45,6 +47,7 @@ function Skeleton() {
 
 function Desktop({ ready }: { ready: boolean }) {
   const cart = useStore($cart);
+  const notices = useStore($cartNotices);
   const sub = useStore($subtotal);
   const promo = useStore($promo);
   const count = cart.lines.reduce((a, l) => a + l.quantity, 0);
@@ -96,7 +99,8 @@ function Desktop({ ready }: { ready: boolean }) {
                         {l.title}
                       </a>
                       {l.variantTitle && <span className="text-sm text-ink-500">{l.variantTitle}</span>}
-                      <span className="text-[13px] font-bold text-success-700">In stock · ships within 3–5 days</span>
+                      {l.leadTime && <span className="text-[13px] font-bold text-success-700">{l.leadTime}</span>}
+                      {notices[l.id] && <span role="status" className="text-[13px] font-bold text-sale-600">{notices[l.id]}</span>}
                       <button type="button" onClick={() => removeLine(l.id)} className="self-start border-0 bg-transparent px-0 py-1.5 text-[13px] font-semibold text-ink-700 underline">
                         Remove<span className="sr-only"> {l.title}</span>
                       </button>

@@ -24,8 +24,8 @@ interface Props {
 }
 
 /**
- * Stripe Payment Element: cards, Apple Pay, Google Pay, Affirm and Klarna,
- * whichever are enabled on the Stripe account. Card data goes straight to
+ * Stripe Payment Element: cards for now (wallets disabled below; pay-later
+ * methods follow the Stripe dashboard). Card data goes straight to
  * Stripe; the PaymentIntent belongs to the Medusa cart's payment session.
  */
 export default function StripePayment(p: Props) {
@@ -47,6 +47,10 @@ export default function StripePayment(p: Props) {
       const els = s.elements({ clientSecret: p.clientSecret, appearance: STRIPE_APPEARANCE, fonts: STRIPE_FONTS });
       element = els.create('payment', {
         layout: { type: 'tabs', defaultCollapsed: false },
+        // Wallets stay off until tested on this domain. Affirm / Klarna only
+        // appear if switched on in the Stripe dashboard; keep them off there
+        // until they're tested end to end.
+        wallets: { applePay: 'never', googlePay: 'never', link: 'never' },
         defaultValues: { billingDetails: { email: p.email, address: { country: 'US' } } },
       });
       element.on('ready', () => setReady(true));

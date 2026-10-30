@@ -3,7 +3,7 @@ import Icon from '@/components/react/Icon';
 import { addLine } from '@/lib/cart';
 import { PROMO, STORE } from '@/lib/commerce';
 import { formatMoney, formatShort } from '@/lib/money';
-import { findVariant, sized, toCartLine, valueAvailable } from '@/lib/product';
+import { findVariant, sized, toCartLine, valueAvailable, leadTimeLabel, lineCap } from '@/lib/product';
 import { PAGES } from '@/lib/routes';
 import type { Product, ProductVariant } from '@/lib/types';
 import { $variantId, defaultVariant, variantParam, type ClientProduct } from './state';
@@ -37,6 +37,10 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
   const emailRef = useRef<HTMLInputElement>(null);
 
   const variant = findVariant(p as Product, sel);
+  const variantMax = variant?.maxQuantity ?? null;
+  useEffect(() => {
+    if (variantMax != null && qty > Math.max(1, variantMax)) setQty(Math.max(1, variantMax));
+  }, [variantMax]); // eslint-disable-line react-hooks/exhaustive-deps
   const price = variant?.price ?? p.minPrice;
   const cmp = variant ? variant.compareAtPrice ?? 0 : p.compareAtPrice ?? 0;
   const sale = cmp > price;
@@ -104,7 +108,9 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
     setNotify('sent');
   };
 
-  const stockText = avail ? 'In stock' + (p.leadTime ? ' · ' + p.leadTime : '') : single ? 'Sold out' : exists ? 'Sold out in this configuration' : 'Unavailable in this configuration';
+  const leadLabel = leadTimeLabel(p.leadTime);
+  const max = variant?.maxQuantity ?? null;
+  const stockText = avail ? (max != null && max <= 5 ? `Only ${max} left` : 'In stock') + (leadLabel ? ' · ' + leadLabel : '') : single ? 'Sold out' : exists ? 'Sold out in this configuration' : 'Unavailable in this configuration';
   const shortTitle = p.title.replace(/ Photo Booth.*$| \|.*$/, '');
   const stickyName = shortTitle + (opts[0] && sel[opts[0].name] ? ' · ' + sel[opts[0].name] : '');
   const thumb = p.images[0]?.url;
@@ -158,9 +164,7 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
             </span>
           </div>
         )}
-        <p className={'m-0 text-[13px] leading-[18px] text-ink-700 ' + (pdp ? 'mt-1.5' : '')}>
-          Or pay over time with <strong className="text-ink-900">Affirm</strong> or <strong className="text-ink-900">Klarna</strong> at checkout. Subject to approval.
-        </p>
+        
       </div>
 
       {/* Options */}
@@ -251,7 +255,7 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
           <span aria-live="polite" className={'text-center font-extrabold ' + (pdp ? 'w-6 text-base lg:w-8 lg:text-[17px]' : 'w-7 text-[17px]')}>
             {qty}
           </span>
-          <button type="button" onClick={() => setQty((q) => Math.min(20, q + 1))} disabled={qty >= 20} aria-label="Increase quantity" className={'flex h-full items-center justify-center text-ink-900 disabled:text-ink-300 ' + (pdp ? 'w-11 lg:w-12' : 'w-[46px]')}>
+          <button type="button" onClick={() => setQty((q) => Math.min(lineCap(max), q + 1))} disabled={qty >= lineCap(max)} aria-label="Increase quantity" className={'flex h-full items-center justify-center text-ink-900 disabled:text-ink-300 ' + (pdp ? 'w-11 lg:w-12' : 'w-[46px]')}>
             <Icon name="plus" size={18} stroke={2.4} />
           </button>
         </div>

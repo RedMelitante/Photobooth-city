@@ -26,7 +26,6 @@ import { DEFAULT_REGION_STORE_POLICIES } from "../lib/region-store-policies"
 import {
   CA_TAX_RATE,
   CONTIGUOUS_STATES,
-  ECONOMY_TIERS,
   FLASH_SALE,
   STOCK_PER_AVAILABLE_VARIANT,
   STORE_DETAILS,
@@ -168,6 +167,10 @@ export default async function initialDataSeed({
     [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
     [Modules.FULFILLMENT]: { fulfillment_provider_id: "manual_manual" },
   })
+  await link.create({
+    [Modules.STOCK_LOCATION]: { stock_location_id: stockLocation.id },
+    [Modules.FULFILLMENT]: { fulfillment_provider_id: "economy_economy" },
+  })
 
   await linkSalesChannelsToStockLocationWorkflow(container).run({
     input: { id: stockLocation.id, add: [salesChannel.id] },
@@ -225,8 +228,11 @@ export default async function initialDataSeed({
     input: [
       {
         name: "Economy",
-        price_type: "flat",
-        provider_id: "manual_manual",
+        // Priced on the item subtotal before tax by the economy provider
+        // (src/modules/economy-shipping), as Shopify's price-based rates.
+        price_type: "calculated",
+        provider_id: "economy_economy",
+        data: { id: "economy" },
         service_zone_id: contiguous.id,
         shipping_profile_id: shippingProfile.id,
         type: {
@@ -234,14 +240,6 @@ export default async function initialDataSeed({
           description: "5–8 business days",
           code: "economy",
         },
-        // Priced by order value. Each tier is a closed range so exactly one
-        // tiered price matches (the pricing module prefers more rules, then
-        // the lowest amount); the unruled price is the $0–50 tier.
-        prices: ECONOMY_TIERS.map((tier) => ({
-          currency_code: "usd",
-          amount: tier.amount,
-          rules: tier.rules,
-        })),
         rules: storeRules(true),
       },
       {

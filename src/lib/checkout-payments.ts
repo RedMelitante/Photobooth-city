@@ -14,7 +14,8 @@
 
 export type PayMethod = 'Card' | 'Apple Pay' | 'Google Pay' | 'PayPal' | 'Pay later';
 
-export const PAY_METHODS: PayMethod[] = ['Card', 'Apple Pay', 'Google Pay', 'PayPal', 'Pay later'];
+// Only cards until the other methods are connected through Stripe and tested.
+export const PAY_METHODS: PayMethod[] = ['Card'];
 
 export interface CardInput {
   /** digits only */

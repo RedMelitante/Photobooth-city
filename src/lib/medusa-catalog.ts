@@ -77,6 +77,7 @@ function toProduct(p: MProduct): Product {
       compareAtPrice: original > price ? original : null,
       available: !v.manage_inventory || v.allow_backorder || (v.inventory_quantity ?? 0) > 0,
       weightGrams: v.weight,
+      maxQuantity: v.manage_inventory && !v.allow_backorder ? Math.max(0, v.inventory_quantity ?? 0) : null,
     };
   });
   const prices = variants.map((v) => v.price);

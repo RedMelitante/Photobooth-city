@@ -8,7 +8,8 @@ const socials = [
   ['Instagram', 'https://www.instagram.com/myphotoboothcity/'],
   ['YouTube', 'https://www.youtube.com/channel/UCS1p7x2qLRKwtKgI8URavcQ'],
 ];
-const payments = ['Affirm', 'Amex', 'Apple Pay', 'Diners', 'Discover', 'Google Pay', 'Klarna', 'Mastercard', 'PayPal', 'Visa'];
+// Only methods checkout accepts today (cards through Stripe).
+const payments = ['Visa', 'Mastercard', 'Amex', 'Discover'];
 ---
 
 <footer class="w-full bg-ink-950 text-white">

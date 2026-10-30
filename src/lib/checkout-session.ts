@@ -94,7 +94,7 @@ export function initialProgress(): CheckoutProgress {
     step: 'address',
     reached: 'address',
     email: saved?.email ?? '',
-    marketing: true,
+    marketing: false,
     saveInfo: !!saved,
     address: { ...emptyAddress(), ...saved?.address },
     ship: 'economy',
