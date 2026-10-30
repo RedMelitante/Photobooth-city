@@ -44,6 +44,26 @@ module.exports = defineConfig({
       },
     },
     {
+      resolve: "@medusajs/medusa/notification",
+      options: {
+        providers: [
+          // Admin notifications feed (keeps Medusa's default)
+          { resolve: "@medusajs/medusa/notification-local", id: "local", options: { channels: ["feed"] } },
+          // Store emails through Resend; rendered to files when RESEND_API_KEY is unset
+          {
+            resolve: "./src/modules/resend-email",
+            id: "resend",
+            options: {
+              channels: ["email"],
+              apiKey: process.env.RESEND_API_KEY,
+              from: process.env.EMAIL_FROM ?? "Photobooth City <orders@photoboothcity.com>",
+              replyTo: process.env.EMAIL_REPLY_TO ?? "info@photoboothcity.com",
+            },
+          },
+        ],
+      },
+    },
+    {
       resolve: "@medusajs/medusa/payment",
       options: { providers: paymentProviders },
     },

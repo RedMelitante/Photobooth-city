@@ -95,6 +95,17 @@ so it can show totals before the API answers, so change both together. The seed'
 `backend/apps/backend/src/data/catalog.json`; `node scripts/build-catalog.mjs` writes it alongside the
 storefront's copy.
 
+## Emails
+
+When an order is placed (`order.placed`), `backend/apps/backend/src/subscribers/order-placed.ts` sends
+the customer an order confirmation and the store a "new order" alert (`ORDER_ALERT_EMAIL`, default
+info@photoboothcity.com), once each. Templates are code (`src/lib/emails`); the provider
+(`src/modules/resend-email`) sends through [Resend](https://resend.com) when `RESEND_API_KEY` is set and
+otherwise writes the rendered HTML to `<tmp>/pbc-emails/` and logs it.
+
+Backend variables: `RESEND_API_KEY`, `EMAIL_FROM` (a sender on a domain verified in Resend),
+`EMAIL_REPLY_TO`, `ORDER_ALERT_EMAIL`, `STOREFRONT_URL` and `MEDUSA_BACKEND_URL` (for the logo and links).
+
 ## How the storefront talks to Medusa
 
 | Concern | File | What it does |
@@ -113,7 +124,7 @@ storefront's copy.
 | **Hawaii, Alaska, Puerto Rico shipping** | The "UPS + USPS" option exists but is hidden, so checkout asks these customers to call. | A carrier-rate fulfillment provider (ShipStation, EasyPost or Shippo); then enable the option. |
 | **Tax** | A flat 8.75% California rate | For destination rates, a tax provider such as Stripe Tax. |
 | **Order numbers** | Medusa counts from 1 (`#PBC1`) | To continue Shopify's numbering, restart Postgres's `order_display_id_seq` from the last Shopify number. |
-| **Emails** | Not configured | A notification provider (e.g. SendGrid) for order confirmation and password reset. |
+| **Emails** | Order confirmation + store alert built; sent once `RESEND_API_KEY` is set | Resend account with photoboothcity.com verified. Password-reset email not built yet. |
 | **Contact, newsletter, blog comments** | Show success but send nothing | Wire `src/lib/content-forms.ts` to a form endpoint or helpdesk. |
 | **Copy** | Placeholders are marked `[in brackets]`, as in the design | Content from the client. |
 
