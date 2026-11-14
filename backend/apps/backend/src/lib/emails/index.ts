@@ -33,16 +33,17 @@ export type OrderEmailData = {
 
 export type RenderedEmail = { subject: string; html: string; text: string }
 
+// v2 palette (dark ink + cyan); links and buttons use teal for contrast on white
 const C = {
-  ink950: "#0B1020",
-  ink900: "#141B2D",
-  ink700: "#394257",
-  ink500: "#5B6376",
-  line: "#E4E6EB",
-  canvas: "#F6F6F3",
-  brand: "#1F3FD1",
+  ink950: "#14191C",
+  ink900: "#111416",
+  ink700: "#515C61",
+  ink500: "#5A666B",
+  line: "#DCE1DF",
+  canvas: "#F7F8F6",
+  brand: "#295862",
   success: "#0F7A4A",
-  flash: "#FFD23F",
+  flash: "#74EDF5",
 }
 const FONT = "Manrope, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
 
@@ -64,11 +65,11 @@ function layout(storefront: string, preheader: string, body: string): string {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.canvas};">
 <tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;">
-<tr><td style="background:${C.ink950};border-radius:16px 16px 0 0;padding:20px 28px;">
-<a href="${esc(storefront)}" style="display:inline-block;background:#FFFFFF;border-radius:12px;padding:6px 12px;"><img src="${esc(storefront)}/images/logo.png" alt="Photobooth City" height="44" style="display:block;height:44px;width:auto;border:0;"></a>
+<tr><td style="background:${C.ink950};border-radius:8px 8px 0 0;border-bottom:3px solid ${C.flash};padding:20px 28px;">
+<a href="${esc(storefront)}" style="display:inline-block;background:#FFFFFF;border-radius:6px;padding:6px 12px;"><img src="${esc(storefront)}/images/logo.png" alt="Photobooth City" height="44" style="display:block;height:44px;width:auto;border:0;"></a>
 </td></tr>
 <tr><td style="background:#FFFFFF;padding:32px 28px;font-family:${FONT};color:${C.ink900};">${body}</td></tr>
-<tr><td style="background:#FFFFFF;border-top:1px solid ${C.line};border-radius:0 0 16px 16px;padding:20px 28px;font-family:${FONT};font-size:13px;line-height:20px;color:${C.ink500};">
+<tr><td style="background:#FFFFFF;border-top:1px solid ${C.line};border-radius:0 0 8px 8px;padding:20px 28px;font-family:${FONT};font-size:13px;line-height:20px;color:${C.ink500};">
 Questions? Call <a href="tel:18883124449" style="color:${C.brand};font-weight:700;text-decoration:none;">${esc(STORE_DETAILS.support_phone)}</a> (${esc(STORE_DETAILS.support_hours)}) or reply to this email.<br>
 Photobooth City · ${esc(STORE_DETAILS.address)}<br>
 <a href="${esc(storefront)}/policies/refund-policy" style="color:${C.ink500};">Refund policy</a> · <a href="${esc(storefront)}/policies/shipping-policy" style="color:${C.ink500};">Shipping policy</a>
@@ -82,7 +83,7 @@ function itemRows(d: OrderEmailData): string {
       (i) => `<tr>
 <td width="72" valign="top" style="padding:14px 0;border-bottom:1px solid ${C.line};">${
         i.image
-          ? `<img src="${esc(i.image)}" alt="" width="64" height="64" style="display:block;width:64px;height:64px;object-fit:contain;background:${C.canvas};border-radius:10px;border:0;">`
+          ? `<img src="${esc(i.image)}" alt="" width="64" height="64" style="display:block;width:64px;height:64px;object-fit:contain;background:${C.canvas};border-radius:4px;border:0;">`
           : ""
       }</td>
 <td valign="top" style="padding:14px 12px;border-bottom:1px solid ${C.line};font-size:14px;line-height:20px;">
@@ -118,11 +119,11 @@ function orderPlaced(d: OrderEmailData): RenderedEmail {
 <p style="margin:0 0 20px;font-size:15px;line-height:23px;color:${C.ink700};">Your order is confirmed. We'll email you tracking as soon as it ships from our Mira Loma, CA warehouse. Lead times are listed under each item.</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${itemRows(d)}</table>
 ${totals(d)}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;background:${C.canvas};border-radius:12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;background:${C.canvas};border-radius:6px;">
 <tr><td style="padding:16px 18px;font-size:14px;line-height:21px;">
 <strong>Shipping to</strong><br><span style="color:${C.ink700};">${d.address.map(esc).join("<br>")}</span>
 </td></tr></table>
-<p style="margin:24px 0 0;"><a href="${esc(d.storefront_url)}/account" style="display:inline-block;background:${C.brand};color:#FFFFFF;font-weight:800;font-size:15px;text-decoration:none;border-radius:12px;padding:14px 22px;">View your account</a></p>`
+<p style="margin:24px 0 0;"><a href="${esc(d.storefront_url)}/account" style="display:inline-block;background:${C.brand};color:#FFFFFF;font-weight:800;font-size:15px;text-decoration:none;border-radius:5px;padding:14px 22px;">View your account</a></p>`
   const text = [
     `${d.first_name ? `Thanks, ${d.first_name}!` : "Thanks for your order!"} Order ${d.number} is confirmed.`,
     "",
@@ -151,7 +152,7 @@ function orderPlacedStore(d: OrderEmailData): RenderedEmail {
 <strong style="color:${C.ink900};">${esc(d.email)}</strong>${d.phone ? ` · ${esc(d.phone)}` : ""}<br>${d.address.map(esc).join(", ")}</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${itemRows(d)}</table>
 ${totals(d)}
-<p style="margin:24px 0 0;"><a href="${esc(d.admin_url)}" style="display:inline-block;background:${C.ink900};color:#FFFFFF;font-weight:800;font-size:14px;text-decoration:none;border-radius:10px;padding:12px 18px;">Open in admin</a></p>`
+<p style="margin:24px 0 0;"><a href="${esc(d.admin_url)}" style="display:inline-block;background:${C.ink900};color:#FFFFFF;font-weight:800;font-size:14px;text-decoration:none;border-radius:5px;padding:12px 18px;">Open in admin</a></p>`
   const text = [subject, d.email, d.phone, d.address.join(", "), "", ...d.items.map((i) => `${i.quantity} × ${i.title} ${i.variant} [${i.sku}]`), "", d.admin_url].join("\n")
   return { subject, html: layout(d.storefront_url, subject, body), text }
 }
