@@ -88,7 +88,7 @@ const textCls = pdp ? 'text-base leading-[1.65] lg:text-[17px] lg:leading-7' : '
             {t.id === 'desc' &&
               (x ? (
                 <div class:list={['flex flex-col gap-4 text-ink-700', textCls]}>
-                  <h2 class="m-0 font-display text-[22px] leading-7 font-bold text-ink-900 lg:text-[28px] lg:leading-8">{x.description.heading}</h2>
+                  <h2 class="m-0 font-display text-[22px] leading-7 font-extrabold tracking-[-0.045em] text-ink-900 lg:text-[28px] lg:leading-8">{x.description.heading}</h2>
                   {x.description.paragraphs.map((t) => <p class="m-0">{t}</p>)}
                   <p class="m-0 font-bold text-ink-900">{x.description.strong}</p>
                 </div>
@@ -96,10 +96,10 @@ const textCls = pdp ? 'text-base leading-[1.65] lg:text-[17px] lg:leading-7' : '
                 <div class:list={['flex flex-col gap-3 text-ink-700', textCls]}>
                   {body.map((b) =>
                     b.type === 'heading' ? (
-                      <h2 class="m-0 mt-4 font-display text-[22px] leading-7 font-bold text-ink-900">{b.text}</h2>
+                      <h2 class="m-0 mt-4 font-display text-[22px] leading-7 font-extrabold tracking-[-0.045em] text-ink-900">{b.text}</h2>
                     ) : b.type === 'li' ? (
                       <p class="relative m-0 pl-5">
-                        <span aria-hidden="true" class="absolute top-0 left-1 font-extrabold text-brand-600">·</span>
+                        <span aria-hidden="true" class="absolute top-0 left-1 font-extrabold text-teal-700">·</span>
                         {b.text}
                       </p>
                     ) : (
@@ -126,12 +126,12 @@ const textCls = pdp ? 'text-base leading-[1.65] lg:text-[17px] lg:leading-7' : '
                 <ul class="m-0 flex flex-[1_1_380px] list-none flex-col gap-3 p-0">
                   {x.box.map((b) => (
                     <li class="flex items-center gap-3.5 text-[15px] lg:text-base">
-                      <span class="flex size-9 flex-none items-center justify-center rounded-md bg-brand-50 text-sm font-extrabold text-brand-600">1×</span>
+                      <span class="flex size-9 flex-none items-center justify-center rounded-md bg-cyan-50 text-sm font-extrabold text-teal-700">1×</span>
                       {b}
                     </li>
                   ))}
                 </ul>
-                <div class="flex flex-[1_1_280px] flex-col gap-2 rounded-card bg-canvas p-5 text-[15px] leading-[22px] text-ink-700">
+                <div class="flex flex-[1_1_280px] flex-col gap-2 rounded-card bg-tile p-5 text-[15px] leading-[22px] text-ink-700">
                   <strong class="text-ink-900">Sold separately</strong>
                   <span>{x.soldSeparately}</span>
                 </div>

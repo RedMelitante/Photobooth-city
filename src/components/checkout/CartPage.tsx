@@ -16,7 +16,7 @@ const SHOP = collectionUrl('ipad-booths');
 
 function QtyStepper({ line }: { line: CartLine }) {
   return (
-    <div role="group" aria-label={`Quantity for ${line.title}`} className="flex h-11 items-center justify-self-start rounded-lg border-[1.5px] border-line-strong">
+    <div role="group" aria-label={`Quantity for ${line.title}`} className="flex h-11 items-center justify-self-start rounded-md border-[1.5px] border-line-strong">
       <button type="button" onClick={() => setQuantity(line.id, line.quantity - 1)} aria-label="Decrease quantity" className="flex h-full w-11 items-center justify-center text-ink-900">
         <Icon name="minus" size={16} stroke={2.4} />
       </button>
@@ -34,10 +34,10 @@ function Skeleton() {
       <span className="sr-only">Loading your cart…</span>
       {[0, 1].map((i) => (
         <div key={i} className="flex gap-4">
-          <div className="size-[84px] animate-pulse rounded-lg bg-chip lg:size-[104px]" />
+          <div className="size-[84px] animate-pulse rounded-md bg-tile lg:size-[104px]" />
           <div className="flex flex-1 flex-col gap-2 pt-2">
-            <div className="h-4 w-3/4 animate-pulse rounded bg-chip" />
-            <div className="h-4 w-1/3 animate-pulse rounded bg-chip" />
+            <div className="h-4 w-3/4 animate-pulse rounded-xs bg-tile" />
+            <div className="h-4 w-1/3 animate-pulse rounded-xs bg-tile" />
           </div>
         </div>
       ))}
@@ -56,7 +56,7 @@ function Desktop({ ready }: { ready: boolean }) {
   return (
     <>
       <div className="mb-8 flex items-baseline gap-4">
-        <h1 className="m-0 font-display text-[48px] leading-none font-extrabold tracking-[-0.035em]">Your cart</h1>
+        <h1 className="m-0 font-display text-[48px] leading-none font-extrabold tracking-[-0.055em]">Your cart</h1>
         {ready && (
           <span className="text-base font-bold text-ink-500">
             {count} {count === 1 ? 'item' : 'items'}
@@ -67,21 +67,21 @@ function Desktop({ ready }: { ready: boolean }) {
       {!ready ? (
         <Skeleton />
       ) : cart.lines.length === 0 ? (
-        <section aria-label="Empty cart" className="flex flex-col items-center gap-4 rounded-hero bg-canvas px-6 pt-16 pb-24 text-center">
-          <h2 className="m-0 font-display text-[32px] leading-[1.1] font-bold tracking-[-0.02em]">Your cart is empty</h2>
-          <a href={SHOP} className="flex h-14 items-center rounded-lg bg-brand-600 px-7 font-extrabold text-white no-underline hover:bg-brand-700 hover:text-white">
+        <section aria-label="Empty cart" className="flex flex-col items-center gap-4 rounded-panel bg-tile px-6 pt-16 pb-24 text-center">
+          <h2 className="m-0 font-display text-[32px] leading-[1.1] font-extrabold tracking-[-0.055em]">Your cart is empty</h2>
+          <a href={SHOP} className="flex h-14 items-center rounded-md bg-cyan-400 px-7 font-extrabold text-ink-950 no-underline hover:bg-cyan-300 hover:text-ink-950">
             Continue shopping
           </a>
           <p className="m-0 mt-2 text-base leading-6 text-ink-700">
             <strong className="text-ink-900">Have an account?</strong>
             <br />
-            <a href={PAGES.login} className="font-bold">Log in</a> to check out faster.
+            <a href={PAGES.login} className="font-bold text-teal-700">Log in</a> to check out faster.
           </p>
         </section>
       ) : (
         <div className="flex flex-wrap items-start gap-12">
           <section aria-label="Cart items" className="min-w-0 flex-[999_1_640px]">
-            <div className={`${COLS} border-b border-line pb-3 text-xs font-extrabold tracking-[0.08em] text-ink-500 uppercase`} aria-hidden="true">
+            <div className={`${COLS} eyebrow border-b border-line pb-3 text-ink-500`} aria-hidden="true">
               <span>Product</span>
               <span>Price</span>
               <span>Quantity</span>
@@ -91,11 +91,11 @@ function Desktop({ ready }: { ready: boolean }) {
               {cart.lines.map((l) => (
                 <li key={l.id} className={`${COLS} items-center border-b border-line py-6`}>
                   <div className="flex min-w-0 items-center gap-[18px]">
-                    <span className="flex size-[104px] flex-none items-center justify-center overflow-hidden rounded-[14px] bg-canvas">
+                    <span className="flex size-[104px] flex-none items-center justify-center overflow-hidden rounded-card bg-tile">
                       {l.image ? <img src={l.image} alt="" className="product-shot box-border size-full p-1.5" loading="lazy" /> : <Icon name="bag" size={32} className="text-ink-300" />}
                     </span>
                     <div className="flex min-w-0 flex-col gap-1.5">
-                      <a href={productUrl(l.handle)} className="text-base leading-[22px] font-extrabold text-ink-900 no-underline hover:text-ink-900 hover:underline">
+                      <a href={productUrl(l.handle)} className="text-base leading-[22px] font-extrabold text-ink-900 no-underline hover:text-teal-700 hover:underline">
                         {l.title}
                       </a>
                       {l.variantTitle && <span className="text-sm text-ink-500">{l.variantTitle}</span>}
@@ -119,15 +119,15 @@ function Desktop({ ready }: { ready: boolean }) {
               ))}
             </ul>
             <div className="flex flex-wrap justify-between gap-4 py-6">
-              <a href={SHOP} className="text-[15px] font-bold">← Continue shopping</a>
-              <span className="flex items-center gap-2.5 text-sm font-semibold text-brand-700">
+              <a href={SHOP} className="text-[15px] font-bold text-ink-900 underline hover:text-teal-700">← Continue shopping</a>
+              <span className="flex items-center gap-2.5 text-sm font-semibold text-teal-800">
                 <Icon name="globe" size={18} />
                 We ship across the US — shipping calculated at checkout
               </span>
             </div>
           </section>
 
-          <aside aria-labelledby="sum-title" className="sticky top-6 flex max-w-[420px] flex-[1_1_360px] flex-col gap-[18px] rounded-panel bg-canvas p-7">
+          <aside aria-labelledby="sum-title" className="sticky top-6 flex max-w-[420px] flex-[1_1_360px] flex-col gap-[18px] rounded-panel bg-tile p-7">
             <h2 id="sum-title" className="m-0 text-xl font-extrabold">Order summary</h2>
             <div className="[&_button[type=submit]]:h-12 [&_input]:h-12 [&_input]:bg-surface">
               <PromoForm id="cp-code" />
@@ -144,7 +144,7 @@ function Desktop({ ready }: { ready: boolean }) {
                 <dd className="m-0 text-[26px] font-extrabold tracking-[-0.02em]">{formatMoney(total)}</dd>
               </div>
             </dl>
-            <a href={PAGES.checkout} className="flex h-[60px] items-center justify-center gap-2.5 rounded-[14px] bg-brand-600 text-[17px] font-extrabold text-white no-underline hover:bg-brand-700 hover:text-white">
+            <a href={PAGES.checkout} className="flex h-[60px] items-center justify-center gap-2.5 rounded-card bg-cyan-400 text-[17px] font-extrabold text-ink-950 no-underline hover:bg-cyan-300 hover:text-ink-950">
               <Icon name="lock" size={18} stroke={2.2} />
               Secure checkout
             </a>
@@ -154,10 +154,10 @@ function Desktop({ ready }: { ready: boolean }) {
               ))}
             </ul>
             <ul className="m-0 flex list-none flex-col gap-2.5 border-t border-line-strong p-0 pt-4 text-sm text-ink-700">
-              <li className="flex items-center gap-2.5"><Icon name="return" size={18} className="text-brand-600" />Easy returns within 7 days</li>
+              <li className="flex items-center gap-2.5"><Icon name="return" size={18} className="text-teal-700" />Easy returns within 7 days</li>
               <li className="flex items-center gap-2.5">
-                <Icon name="phone" size={18} className="text-brand-600" />
-                Questions? <a href={STORE.phoneHref} className="font-bold">{STORE.phone}</a>
+                <Icon name="phone" size={18} className="text-teal-700" />
+                Questions? <a href={STORE.phoneHref} className="font-bold text-ink-900 underline hover:text-teal-700">{STORE.phone}</a>
               </li>
             </ul>
           </aside>

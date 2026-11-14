@@ -6,19 +6,19 @@ interface Props {
   button: string;
 }
 const { slug, heading, note, button } = Astro.props;
-const input = 'box-border h-[52px] w-full rounded-md border-[1.5px] border-line-strong px-3.5 text-base font-normal aria-[invalid=true]:border-sale-600';
+const input = 'box-border h-[52px] w-full rounded-md border-[1.5px] border-line-strong bg-surface px-3.5 text-base font-normal aria-[invalid=true]:border-sale-600';
 ---
 <section aria-labelledby="cm" class="mt-12 flex flex-col gap-3.5">
   <h2 id="cm" class="m-0 text-[22px] font-extrabold text-ink-900">{heading}</h2>
-  <p class="m-0 text-sm text-ink-500">{note}</p>
+  <p class="m-0 text-[14px] text-ink-500">{note}</p>
   <form data-comment-form data-slug={slug} novalidate class="flex flex-col gap-3.5">
     <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
       <label class="flex flex-col gap-1.5 text-[13px] font-bold text-ink-900">Name<input name="name" type="text" required autocomplete="name" class={input} /></label>
       <label class="flex flex-col gap-1.5 text-[13px] font-bold text-ink-900">Email<input name="email" type="email" required autocomplete="email" class={input} /></label>
     </div>
-    <label class="flex flex-col gap-1.5 text-[13px] font-bold text-ink-900">Comment<textarea name="body" rows="4" required class="box-border w-full rounded-md border-[1.5px] border-line-strong p-3.5 text-base font-normal aria-[invalid=true]:border-sale-600"></textarea></label>
-    <p role="status" aria-live="polite" class="m-0 text-sm font-semibold empty:hidden"></p>
-    <button type="submit" class="h-[52px] self-start rounded-lg border-0 bg-ink-900 px-[26px] text-[15px] font-extrabold text-white hover:bg-ink-700 disabled:opacity-70">{button}</button>
+    <label class="flex flex-col gap-1.5 text-[13px] font-bold text-ink-900">Comment<textarea name="body" rows="4" required class="box-border w-full rounded-md border-[1.5px] border-line-strong bg-surface p-3.5 text-base font-normal aria-[invalid=true]:border-sale-600"></textarea></label>
+    <p role="status" aria-live="polite" class="m-0 text-[14px] font-semibold empty:hidden"></p>
+    <button type="submit" class="h-[52px] self-start rounded-md border-0 bg-ink-900 px-[26px] text-[15px] font-extrabold text-white transition-colors hover:bg-ink-700 disabled:opacity-70">{button}</button>
   </form>
 </section>
 

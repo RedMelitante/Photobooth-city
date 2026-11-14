@@ -121,39 +121,39 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
     <section aria-labelledby="pp-title" className={'flex min-w-0 flex-col ' + (pdp ? 'gap-5 lg:sticky lg:top-6 lg:gap-6' : 'gap-[22px]')}>
       {/* Title */}
       <div className={'flex flex-col ' + (pdp ? 'gap-2 lg:gap-3' : 'gap-3')}>
-        <span className={'font-extrabold tracking-[0.1em] text-brand-600 uppercase ' + (pdp ? 'text-[11px] lg:text-xs' : 'text-xs')}>{kicker}</span>
-        <h1 id="pp-title" className={'m-0 font-display text-[30px] font-extrabold tracking-[-0.03em] text-balance lg:text-[40px] lg:leading-[1.05] ' + (pdp ? 'leading-[1.08]' : 'leading-[1.05]')}>
+        <span className="eyebrow text-cyan-400">{kicker}</span>
+        <h1 id="pp-title" className={'m-0 font-display text-[30px] font-extrabold lg:text-[40px] lg:leading-[1.05] ' + (pdp ? 'leading-[1.08] tracking-[-0.045em] lg:tracking-[-0.055em]' : 'leading-[1.05] tracking-[-0.03em] text-balance')}>
           {p.title}
         </h1>
-        {lead && <p className={'m-0 text-base leading-6 text-ink-700 ' + (pdp ? 'max-lg:hidden' : '')}>{lead}</p>}
+        {lead && <p className={'m-0 text-base leading-6 text-fog ' + (pdp ? 'max-lg:hidden' : '')}>{lead}</p>}
       </div>
 
       {/* Price */}
-      <div className={'flex flex-col ' + (pdp ? 'gap-2 max-lg:-mt-3 lg:gap-2.5 lg:border-b lg:border-line lg:pb-6' : 'gap-2 border-b border-line pb-[22px]')}>
+      <div className={'flex flex-col ' + (pdp ? 'gap-2 max-lg:-mt-3 lg:gap-2.5 lg:border-b lg:border-line-dark lg:pb-6' : 'gap-2 border-b border-line-dark pb-[22px]')}>
         <div className={'flex flex-wrap items-baseline ' + (pdp ? 'gap-x-2.5 gap-y-1 lg:gap-3' : 'gap-3')}>
-          <span className={'font-extrabold tracking-[-0.02em] ' + (pdp ? 'text-[26px] lg:text-[32px] ' : 'text-[28px] lg:text-[32px] ') + (sale ? 'text-sale-600' : 'text-ink-900')} aria-live="polite">
+          <span className={'font-extrabold tracking-[-0.02em] ' + (pdp ? 'text-[26px] lg:text-[32px] ' : 'text-[28px] lg:text-[32px] ') + (sale ? 'text-sale-300' : 'text-[#F6F8F8]')} aria-live="polite">
             {sale && <span className="sr-only">Sale price </span>}
             {formatMoney(price)}
           </span>
           {sale && (
             <>
-              <s className="text-lg text-ink-500">
+              <s className="text-lg text-ink-300">
                 <span className="sr-only">Regular price </span>
                 {formatMoney(cmp)}
               </s>
-              <span className="rounded-sm bg-sale-50 px-2 py-[3px] text-[13px] font-extrabold text-sale-600">Save {formatMoney(cmp - price)}</span>
+              <span className="rounded-sm bg-sale-300/12 px-2 py-[3px] text-[13px] font-extrabold text-sale-300">Save {formatMoney(cmp - price)}</span>
             </>
           )}
           {pdp && (
-            <span className="text-[13px] text-ink-500 lg:text-sm">
+            <span className="text-[13px] text-ink-300 lg:text-sm">
               <span className="max-lg:hidden">USD · </span>Shipping calculated at checkout
             </span>
           )}
         </div>
-        {!pdp && <span className="text-sm text-ink-500">USD · Shipping calculated at checkout</span>}
+        {!pdp && <span className="text-sm text-ink-300">USD · Shipping calculated at checkout</span>}
         {pdp && (
-          <div className="flex items-center gap-2 self-stretch rounded-md bg-flash-100 px-2.5 py-2 text-[13px] leading-[18px] lg:gap-2.5 lg:self-start lg:px-3 lg:text-sm">
-            <span className="flex-none rounded-sm bg-flash-400 px-1.5 py-0.5 text-[11px] font-extrabold text-ink-950 lg:px-2 lg:text-xs">
+          <div className="flex items-center gap-2 self-stretch rounded-md bg-cyan-400/10 px-2.5 py-2 text-[13px] leading-[18px] lg:gap-2.5 lg:self-start lg:px-3 lg:text-sm">
+            <span className="flex-none rounded-sm bg-cyan-400 px-1.5 py-0.5 text-[11px] font-extrabold text-ink-950 lg:px-2 lg:text-xs">
               FLASH<span className="max-lg:hidden"> SALE</span>
             </span>
             <span>
@@ -175,30 +175,30 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
         const pills = o.values.map((v) => {
           const on = cur === v;
           const out = isUnavailable(o.name, v);
-          const base = 'relative text-ink-900 transition-colors duration-150 ' + (out ? 'text-ink-500 ' : '');
+          const base = 'relative transition-colors duration-150 ' + (out ? 'text-ink-300 ' : 'text-[#F6F8F8] ');
           const label = out ? `${v} (sold out)` : undefined;
           if (kind === 'swatch')
             return (
-              <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'flex h-12 items-center gap-2.5 rounded-full border-2 bg-surface pr-[18px] pl-2 text-sm font-bold max-lg:flex-1 max-lg:pr-3 ' + (on ? 'border-ink-900' : 'border-line hover:border-line-strong')}>
+              <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'flex h-12 items-center gap-2.5 rounded-sm border-2 bg-ink-800 pr-[18px] pl-2 text-sm font-bold max-lg:flex-1 max-lg:pr-3 ' + (on ? 'border-cyan-400' : 'border-line-dark hover:border-line-dark-strong')}>
                 <span className="size-[30px] flex-none rounded-full shadow-[inset_0_0_0_1px_rgb(11_16_32/0.2)]" style={{ background: swatches[v] }} />
                 <span className={out ? 'line-through' : ''}>{v}</span>
               </button>
             );
           if (kind === 'solid')
             return (
-              <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'min-h-12 rounded-lg border-2 px-5 text-sm font-bold max-lg:flex-1 max-lg:px-2.5 max-lg:py-1.5 max-lg:text-[13px] max-lg:leading-[17px] ' + (on ? 'border-ink-900 bg-ink-900 !text-white' : 'border-line-strong bg-surface hover:border-ink-900')}>
+              <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'min-h-12 rounded-md border-2 px-5 text-sm font-bold max-lg:flex-1 max-lg:px-2.5 max-lg:py-1.5 max-lg:text-[13px] max-lg:leading-[17px] ' + (on ? 'border-cyan-400 bg-cyan-400/12' : 'border-line-dark bg-ink-800 hover:border-line-dark-strong') + (out ? ' border-dashed' : '')}>
                 <span className={out ? 'line-through' : ''}>{v}</span>
               </button>
             );
           if (kind === 'grid')
             return (
-              <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'min-h-14 rounded-lg border-2 px-3.5 py-2 text-left text-[13px] leading-[18px] font-semibold ' + (on ? 'border-brand-600 bg-brand-50' : 'border-line bg-surface hover:border-line-strong') + (out ? ' border-dashed' : '')}>
+              <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'min-h-14 rounded-md border-2 px-3.5 py-2 text-left text-[13px] leading-[18px] font-semibold ' + (on ? 'border-cyan-400 bg-cyan-400/12' : 'border-line-dark bg-ink-800 hover:border-line-dark-strong') + (out ? ' border-dashed' : '')}>
                 <span className={out ? 'line-through' : ''}>{v}</span>
               </button>
             );
           return (
-            <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'min-h-[46px] rounded-lg border-2 px-4 py-2 text-left text-sm leading-[18px] font-semibold ' + (on ? 'border-brand-600 bg-brand-50' : 'border-line bg-surface hover:border-line-strong') + (out ? ' border-dashed' : '')}>
-              <span className={out ? 'line-through decoration-ink-300' : ''}>{v}</span>
+            <button key={v} type="button" onClick={() => pick(o.name, v)} aria-pressed={on} aria-label={label} className={base + 'min-h-[46px] rounded-md border-2 px-4 py-2 text-left text-sm leading-[18px] font-semibold ' + (on ? 'border-cyan-400 bg-cyan-400/12' : 'border-line-dark bg-ink-800 hover:border-line-dark-strong') + (out ? ' border-dashed' : '')}>
+              <span className={out ? 'line-through decoration-ink-500' : ''}>{v}</span>
             </button>
           );
         });
@@ -209,13 +209,13 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
               <fieldset className="m-0 flex min-w-0 flex-col border-0 p-0 max-lg:hidden">
                 <legend className={legendCls + ' flex w-full justify-between'}>
                   {o.name}
-                  <a href="#specs" className="text-[13px] font-bold">Which iPad do I have?</a>
+                  <a href="#specs" className="text-[13px] font-bold text-cyan-400 hover:text-cyan-300">Which iPad do I have?</a>
                 </legend>
                 <div className="grid grid-cols-2 gap-2">{pills}</div>
               </fieldset>
               <label className="flex flex-col gap-2.5 text-sm font-extrabold lg:hidden">
                 {o.name}
-                <select value={cur} onChange={(e) => pick(o.name, e.target.value)} className="h-[52px] rounded-lg border-[1.5px] border-line-strong bg-surface px-3.5 text-[15px] font-semibold text-ink-900">
+                <select value={cur} onChange={(e) => pick(o.name, e.target.value)} className="h-[52px] rounded-md border-[1.5px] border-line-dark bg-ink-800 px-3.5 text-[15px] font-semibold text-[#F6F8F8]">
                   {o.values.map((v) => (
                     <option key={v} value={v}>
                       {v}
@@ -232,7 +232,7 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
             <legend className={legendCls}>
               {o.name}
               <span className={kind === 'solid' ? 'max-lg:hidden' : ''}>
-                : <span className="font-semibold text-ink-700">{cur}</span>
+                : <span className="font-semibold text-fog">{cur}</span>
               </span>
             </legend>
             <div className={'flex gap-2 ' + (kind === 'pill' ? 'flex-wrap' : 'lg:flex-wrap lg:gap-2.5')}>{pills}</div>
@@ -241,26 +241,26 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
       })}
 
       {/* Stock */}
-      <p className={'m-0 flex items-start gap-2.5 text-[15px] leading-5 font-bold ' + (pdp ? 'max-lg:text-sm ' : '') + (avail ? 'text-success-700' : 'text-sale-600')} aria-live="polite">
+      <p className={'m-0 flex items-start gap-2.5 text-[15px] leading-5 font-bold ' + (pdp ? 'max-lg:text-sm ' : '') + (avail ? 'text-success-300' : 'text-sale-300')} aria-live="polite">
         <span aria-hidden="true" className={'mt-[5px] size-2.5 flex-none rounded-full ' + (avail ? 'bg-success-700 shadow-[0_0_0_4px_var(--color-success-50)]' : 'bg-sale-600')} />
         {stockText}
       </p>
 
       {/* Quantity + CTA */}
       <div ref={ctaRef} className={'flex ' + (pdp ? 'gap-2.5 lg:gap-3' : 'gap-3')}>
-        <div role="group" aria-label="Quantity" className={'flex flex-none items-center rounded-[14px] border-[1.5px] border-line-strong ' + (pdp ? 'h-14 lg:h-[60px]' : 'h-[58px]')}>
-          <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty <= 1} aria-label="Decrease quantity" className={'flex h-full items-center justify-center text-ink-900 disabled:text-ink-300 ' + (pdp ? 'w-11 lg:w-12' : 'w-[46px]')}>
+        <div role="group" aria-label="Quantity" className={'flex flex-none items-center rounded-card border-[1.5px] border-line-dark ' + (pdp ? 'h-14 lg:h-[60px]' : 'h-[58px]')}>
+          <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty <= 1} aria-label="Decrease quantity" className={'flex h-full items-center justify-center text-[#F6F8F8] disabled:text-ink-500 ' + (pdp ? 'w-11 lg:w-12' : 'w-[46px]')}>
             <Icon name="minus" size={18} stroke={2.4} />
           </button>
           <span aria-live="polite" className={'text-center font-extrabold ' + (pdp ? 'w-6 text-base lg:w-8 lg:text-[17px]' : 'w-7 text-[17px]')}>
             {qty}
           </span>
-          <button type="button" onClick={() => setQty((q) => Math.min(lineCap(max), q + 1))} disabled={qty >= lineCap(max)} aria-label="Increase quantity" className={'flex h-full items-center justify-center text-ink-900 disabled:text-ink-300 ' + (pdp ? 'w-11 lg:w-12' : 'w-[46px]')}>
+          <button type="button" onClick={() => setQty((q) => Math.min(lineCap(max), q + 1))} disabled={qty >= lineCap(max)} aria-label="Increase quantity" className={'flex h-full items-center justify-center text-[#F6F8F8] disabled:text-ink-500 ' + (pdp ? 'w-11 lg:w-12' : 'w-[46px]')}>
             <Icon name="plus" size={18} stroke={2.4} />
           </button>
         </div>
         {avail ? (
-          <button type="button" onClick={add} className={'flex min-w-0 flex-1 items-center justify-center gap-2.5 rounded-[14px] font-extrabold text-white transition-colors duration-150 ' + (pdp ? 'h-14 text-base lg:h-[60px] lg:text-[17px] ' : 'h-[58px] text-base ') + (flash ? 'bg-success-700' : 'bg-brand-600 hover:bg-brand-700')}>
+          <button type="button" onClick={add} className={'flex min-w-0 flex-1 items-center justify-center gap-2.5 rounded-card font-extrabold transition-colors duration-150 ' + (pdp ? 'h-14 text-base lg:h-[60px] lg:text-[17px] ' : 'h-[58px] text-base ') + (flash ? 'bg-success-700 text-white' : 'bg-cyan-400 text-ink-950 hover:bg-cyan-300')}>
             <Icon name={flash ? 'check' : 'bag'} size={20} stroke={2.2} />
             {flash ? (
               'Added to cart'
@@ -271,23 +271,23 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
             )}
           </button>
         ) : exists ? (
-          <button type="button" onClick={openNotify} aria-expanded={notify !== 'closed'} aria-controls="pp-notify" className={'min-w-0 flex-1 rounded-[14px] border-2 border-ink-900 bg-surface font-extrabold text-ink-900 hover:bg-ink-900 hover:text-white ' + (pdp ? 'h-14 text-base lg:h-[60px] lg:text-[17px]' : 'h-[58px] text-base')}>
+          <button type="button" onClick={openNotify} aria-expanded={notify !== 'closed'} aria-controls="pp-notify" className={'min-w-0 flex-1 rounded-card border-2 border-line-dark-strong bg-ink-800 font-extrabold text-[#F6F8F8] hover:border-cyan-400 ' + (pdp ? 'h-14 text-base lg:h-[60px] lg:text-[17px]' : 'h-[58px] text-base')}>
             Notify me when available
           </button>
         ) : (
-          <button type="button" disabled className={'min-w-0 flex-1 cursor-not-allowed rounded-[14px] border border-dashed border-line-strong bg-canvas font-bold text-ink-500 ' + (pdp ? 'h-14 lg:h-[60px]' : 'h-[58px]')}>
+          <button type="button" disabled className={'min-w-0 flex-1 cursor-not-allowed rounded-card border border-dashed border-line-dark-strong bg-ink-850 font-bold text-ink-300 ' + (pdp ? 'h-14 lg:h-[60px]' : 'h-[58px]')}>
             Unavailable
           </button>
         )}
       </div>
 
       {!avail && exists && notify !== 'closed' && (
-        <div id="pp-notify" className="-mt-2 rounded-card bg-canvas p-4">
+        <div id="pp-notify" className="-mt-2 rounded-card bg-ink-800 p-4">
           {notify === 'sent' ? (
-            <p role="status" className="m-0 flex items-start gap-2.5 text-sm leading-5 text-ink-700">
-              <Icon name="check" size={18} stroke={2.6} className="mt-px text-success-700" />
+            <p role="status" className="m-0 flex items-start gap-2.5 text-sm leading-5 text-fog">
+              <Icon name="check" size={18} stroke={2.6} className="mt-px text-success-300" />
               <span>
-                Thanks — we’ll email <strong className="text-ink-900">{email.trim()}</strong> when {single ? 'it' : 'this configuration'} is back in stock.
+                Thanks — we’ll email <strong className="text-[#F6F8F8]">{email.trim()}</strong> when {single ? 'it' : 'this configuration'} is back in stock.
               </span>
             </p>
           ) : (
@@ -310,14 +310,14 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
                   placeholder="you@example.com"
                   aria-invalid={emailErr}
                   aria-describedby={emailErr ? 'pp-notify-err' : undefined}
-                  className="h-12 min-w-0 flex-1 rounded-md border-[1.5px] border-line-strong bg-surface px-3.5 text-[15px] text-ink-900"
+                  className="h-12 min-w-0 flex-1 rounded-md border-[1.5px] border-line-dark bg-ink-950 px-3.5 text-[15px] text-[#F6F8F8] placeholder:text-ink-300"
                 />
-                <button type="submit" className="h-12 flex-none rounded-md bg-ink-900 px-[18px] text-sm font-extrabold text-white hover:bg-ink-950">
+                <button type="submit" className="h-12 flex-none rounded-md bg-cyan-400 px-[18px] text-sm font-extrabold text-ink-950 hover:bg-cyan-300">
                   Notify me
                 </button>
               </div>
               {emailErr && (
-                <span id="pp-notify-err" role="alert" className="text-[13px] font-semibold text-sale-600">
+                <span id="pp-notify-err" role="alert" className="text-[13px] font-semibold text-sale-300">
                   Enter a valid email address.
                 </span>
               )}
@@ -327,23 +327,23 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
       )}
 
       {added && avail && (
-        <a href={PAGES.cart} className={'text-sm font-bold ' + (pdp ? '-mt-3' : '-mt-2')}>
+        <a href={PAGES.cart} className={'text-sm font-bold text-cyan-400 hover:text-cyan-300 ' + (pdp ? '-mt-3' : '-mt-2')}>
           Added to your cart — view cart and checkout →
         </a>
       )}
 
       {note &&
         (pdp ? (
-          <p className="m-0 -mt-1.5 flex items-center gap-2 text-[13px] text-ink-700 lg:-mt-2 lg:text-sm">
-            <Icon name="info" size={16} className="text-ink-500 max-lg:hidden" />
+          <p className="m-0 -mt-1.5 flex items-center gap-2 text-[13px] text-fog lg:-mt-2 lg:text-sm">
+            <Icon name="info" size={16} className="flex-none text-ink-300 max-lg:hidden" />
             {note}
           </p>
         ) : (
-          <p className="m-0 -mt-1.5 text-sm leading-5 text-ink-700">{note}</p>
+          <p className="m-0 -mt-1.5 text-sm leading-5 text-fog">{note}</p>
         ))}
 
       {/* Reassurance */}
-      <ul className={'m-0 grid list-none grid-cols-3 border-y border-line p-0 ' + (pdp ? 'gap-2 py-3.5 lg:gap-3 lg:py-[18px]' : 'gap-3 py-4')}>
+      <ul className={'m-0 grid list-none grid-cols-3 border-y border-line-dark p-0 ' + (pdp ? 'gap-2 py-3.5 lg:gap-3 lg:py-[18px]' : 'gap-3 py-4')}>
         {(
           [
             ['globe', 'Ships across the US', ''],
@@ -352,7 +352,7 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
           ] as const
         ).map(([icon, a, b]) => (
           <li key={icon} className={'flex flex-col gap-1.5 text-[13px] leading-[18px] ' + (pdp ? 'max-lg:items-center max-lg:text-center max-lg:text-xs max-lg:leading-4 lg:items-start' : 'items-start')}>
-            <Icon name={icon} size={22} className="text-brand-600" />
+            <Icon name={icon} size={22} className="text-cyan-400" />
             <strong>
               {a}
               {icon === 'return' && <span className={pdp ? 'max-lg:hidden' : ''}> easy</span>}
@@ -363,13 +363,13 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
       </ul>
 
       {/* Help */}
-      <div className="flex items-center gap-4 rounded-card bg-ink-950 px-5 py-[18px] text-white max-lg:hidden">
-        <span className="flex size-12 flex-none items-center justify-center rounded-full bg-flash-400 text-ink-950">
+      <div className="flex items-center gap-4 rounded-card bg-ink-800 px-5 py-[18px] text-white max-lg:hidden">
+        <span className="flex size-12 flex-none items-center justify-center rounded-full bg-cyan-400 text-ink-950">
           <Icon name="phone" size={22} stroke={2.2} />
         </span>
         <span className="flex flex-1 flex-col gap-0.5">
           <span className="text-base font-extrabold">Need help choosing?</span>
-          <span className="text-sm text-ink-200">
+          <span className="text-sm text-fog">
             Call{' '}
             <a href={STORE.phoneHref} className="font-extrabold text-white hover:text-white">
               {STORE.phone}
@@ -378,24 +378,24 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
           </span>
         </span>
       </div>
-      <a href={STORE.phoneHref} className="flex items-center gap-3.5 rounded-card bg-ink-950 p-4 text-white no-underline hover:text-white lg:hidden">
-        <span className="flex size-11 flex-none items-center justify-center rounded-full bg-flash-400 text-ink-950">
+      <a href={STORE.phoneHref} className="flex items-center gap-3.5 rounded-card bg-ink-800 p-4 text-white no-underline hover:text-white lg:hidden">
+        <span className="flex size-11 flex-none items-center justify-center rounded-full bg-cyan-400 text-ink-950">
           <Icon name="phone" size={20} stroke={2.2} />
         </span>
         <span className="flex flex-col gap-0.5">
           <span className="text-[15px] font-extrabold">Need help choosing?</span>
-          <span className="text-sm text-ink-200">Call {STORE.phone}</span>
+          <span className="text-sm text-fog">Call {STORE.phone}</span>
         </span>
       </a>
 
       {/* Mobile sticky add-to-cart */}
       <div
-        className={'fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-line bg-surface px-4 py-3 shadow-[0_-8px_24px_rgb(11_16_32/0.10)] transition-transform duration-200 ease-out lg:hidden ' + (sticky ? 'translate-y-0' : 'pointer-events-none translate-y-full')}
+        className={'fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-line bg-surface px-4 py-3 text-ink-900 shadow-[0_-8px_24px_rgb(11_16_32/0.10)] transition-transform duration-200 ease-out lg:hidden ' + (sticky ? 'translate-y-0' : 'pointer-events-none translate-y-full')}
         aria-hidden={!sticky}
         inert={!sticky}
       >
         {thumb && (
-          <span className="size-12 flex-none overflow-hidden rounded-md bg-canvas">
+          <span className="size-12 flex-none overflow-hidden rounded-md bg-tile">
             <img src={sized(thumb, 120)} alt="" width={48} height={48} loading="lazy" className="product-shot size-full" />
           </span>
         )}
@@ -404,7 +404,7 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
           <span className={'text-[15px] font-extrabold ' + (sale ? 'text-sale-600' : '')}>{formatMoney(price)}</span>
         </span>
         {avail ? (
-          <button type="button" onClick={add} className={'flex h-12 flex-none items-center gap-2 rounded-lg px-5 text-[15px] font-extrabold text-white ' + (flash ? 'bg-success-700' : 'bg-brand-600 hover:bg-brand-700')}>
+          <button type="button" onClick={add} className={'flex h-12 flex-none items-center gap-2 rounded-md px-5 text-[15px] font-extrabold ' + (flash ? 'bg-success-700 text-white' : 'bg-cyan-400 text-ink-950 hover:bg-cyan-300')}>
             {flash && <Icon name="check" size={16} stroke={2.6} />}
             {flash ? 'Added' : 'Add to cart'}
           </button>
@@ -415,12 +415,12 @@ export default function BuyBox({ product: p, kicker, lead, note, layout, swatche
               ctaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
               openNotify();
             }}
-            className="h-12 flex-none rounded-lg border-2 border-ink-900 bg-surface px-4 text-sm font-extrabold text-ink-900"
+            className="h-12 flex-none rounded-md border-2 border-ink-900 bg-surface px-4 text-sm font-extrabold text-ink-900"
           >
             Notify me
           </button>
         ) : (
-          <span className="flex h-12 flex-none items-center rounded-lg bg-canvas px-4 text-sm font-bold text-ink-500">Unavailable</span>
+          <span className="flex h-12 flex-none items-center rounded-md bg-tile px-4 text-sm font-bold text-ink-500">Unavailable</span>
         )}
       </div>
     </section>

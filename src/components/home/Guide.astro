@@ -1,0 +1,39 @@
+---
+// Buying guide (#guide, dark): three formats + system packages link + rooftop photo.
+import Icon from '@/components/Icon.astro';
+import { GUIDE, GUIDE_PHOTO, H2 } from '@/lib/home';
+import { collectionUrl } from '@/lib/routes';
+---
+
+<section id="guide" aria-labelledby="guide-title" class="dark-band scroll-mt-4 bg-ink-850 text-[#F6F8F8]">
+  <div class="mx-auto flex max-w-[1440px] flex-col gap-9 px-4 py-14 lg:gap-16 lg:px-10 lg:py-24">
+    <div class="flex flex-wrap gap-9 lg:gap-16">
+      <div class="flex max-w-[520px] flex-[1_1_400px] flex-col gap-[22px]">
+        <span class="eyebrow flex items-center gap-2.5 text-fog"><span class="h-px w-5 bg-cyan-400" aria-hidden="true"></span>Buying guide</span>
+        <h2 id="guide-title" class={H2}>Match the booth to the event.</h2>
+        <p class="m-0 max-w-[380px] text-[15px] leading-[1.6] text-fog">Start with the experience you want guests to have, then choose the camera, lighting and accessories that fit.</p>
+        <a href={collectionUrl('system-packages')} class="flex h-[46px] items-center gap-2.5 self-start rounded-md border border-line-dark-strong px-[18px] text-[13px] font-extrabold text-[#F6F8F8] no-underline transition-colors hover:border-fog hover:text-[#F6F8F8]">
+          Explore system packages <Icon name="arrow-up-right" size={14} stroke={2.4} />
+        </a>
+      </div>
+      <ol class="m-0 min-w-0 flex-[999_1_520px] list-none border-t border-line-dark p-0">
+        {GUIDE.map((g) => (
+          <li class="border-b border-line-dark">
+            <a href={g.h} class="group flex items-start gap-5 py-6 text-[#F6F8F8] no-underline hover:text-[#F6F8F8]">
+              <span class="w-7 flex-none pt-1.5 font-mono text-[10px] font-semibold tracking-[0.08em] text-cyan-400">{g.n}</span>
+              <span class="flex flex-1 flex-col gap-1.5">
+                <span class="text-[19px] font-extrabold tracking-[-0.045em] group-hover:text-cyan-400 lg:text-[22px]">{g.t}</span>
+                <span class="text-sm leading-[1.55] text-fog">{g.d}</span>
+              </span>
+              <Icon name="arrow-up-right" size={16} stroke={2.2} class="mt-1.5 text-fog transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <figure class="relative m-0 h-[240px] overflow-hidden rounded-card border border-line-dark bg-ink-950 lg:h-[420px]">
+      <img src={GUIDE_PHOTO.src} alt={GUIDE_PHOTO.alt} width="1254" height="1254" loading="lazy" decoding="async" class="absolute inset-0 size-full object-cover object-[50%_42%]" />
+      <figcaption class="absolute bottom-3.5 left-3.5 rounded-sm bg-ink-950/78 px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-[0.12em] text-[#F6F8F8] uppercase">{GUIDE_PHOTO.caption}</figcaption>
+    </figure>
+  </div>
+</section>

@@ -13,7 +13,7 @@ const { heading, items, class: className } = Astro.props;
 ---
 
 <section aria-labelledby="pp-faq" data-pfaq class:list={['max-w-[960px]', className]}>
-  <h2 id="pp-faq" class="m-0 mb-3.5 font-display text-[26px] leading-[1.15] font-bold tracking-[-0.02em] lg:mb-5 lg:text-[32px]">{heading}</h2>
+  <h2 id="pp-faq" class="m-0 mb-3.5 font-display text-[26px] leading-[1.15] font-extrabold tracking-[-0.045em] lg:mb-5 lg:text-[32px] lg:tracking-[-0.055em]">{heading}</h2>
   <div class="border-t border-line">
     {
       items.map((f, i) => (
@@ -29,7 +29,7 @@ const { heading, items, class: className } = Astro.props;
               {f.q}
               <span
                 aria-hidden="true"
-                class="flex size-8 flex-none items-center justify-center rounded-full bg-chip text-ink-900 transition-colors duration-150 group-aria-expanded:bg-ink-900 group-aria-expanded:text-white"
+                class="flex size-8 flex-none items-center justify-center rounded-full bg-tile text-ink-900 transition-colors duration-150 group-aria-expanded:bg-ink-900 group-aria-expanded:text-white"
               >
                 <Icon name="chevron-down" size={16} stroke={2.6} class="transition-transform duration-150 group-aria-expanded:rotate-180" />
               </span>

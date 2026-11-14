@@ -16,5 +16,5 @@ for (const m of text.matchAll(RE)) {
 if (last < text.length) parts.push({ t: text.slice(last) });
 ---
 {parts.map((p) => p.href ? (
-  <a href={p.href} class="font-semibold break-words text-brand-600 underline underline-offset-2" {...(p.ext ? { target: '_blank', rel: 'noopener' } : {})}>{p.t}</a>
+  <a href={p.href} class="font-semibold break-words text-teal-700 underline underline-offset-2 hover:text-teal-800" {...(p.ext ? { target: '_blank', rel: 'noopener' } : {})}>{p.t}</a>
 ) : p.t)}

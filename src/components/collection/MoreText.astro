@@ -33,15 +33,15 @@ const blocks = c.more.map((b) => {
 {blocks.length > 0 && (
   <section
     aria-labelledby="cp-more"
-    class="mt-8 flex flex-col gap-3 rounded-panel bg-canvas px-5 py-6 lg:mt-24 lg:flex-row lg:flex-wrap lg:gap-12 lg:rounded-hero lg:p-14"
+    class="mt-8 flex flex-col gap-3 rounded-panel bg-tile px-5 py-6 lg:mt-24 lg:flex-row lg:flex-wrap lg:gap-12 lg:p-14"
   >
-    <h2 id="cp-more" class="m-0 font-display text-2xl leading-7 font-bold tracking-[-0.02em] text-ink-900 lg:flex-[1_1_300px] lg:text-[32px] lg:leading-9">{heading}</h2>
+    <h2 id="cp-more" class="m-0 font-display text-2xl leading-7 font-extrabold tracking-[-0.045em] text-ink-900 lg:flex-[1_1_300px] lg:text-[32px] lg:leading-9 lg:tracking-[-0.055em]">{heading}</h2>
     <div class="flex min-w-0 flex-col gap-3 text-[15px] leading-6 text-ink-700 lg:flex-[2_1_480px] lg:gap-4 lg:text-base lg:leading-[27px]">
       {blocks.map((b) => (
         <p class:list={['m-0', b.li && 'relative pl-[22px]']}>
-          {b.li && <span aria-hidden="true" class="absolute top-0 left-1.5 font-extrabold text-brand-600">•</span>}
+          {b.li && <span aria-hidden="true" class="absolute top-0 left-1.5 font-extrabold text-teal-700">•</span>}
           {b.lead && <><strong class="text-ink-900">{b.lead}</strong>{' '}</>}
-          {b.segs.map((s) => (s.href ? <a href={s.href} class="font-bold">{s.t}</a> : s.t))}
+          {b.segs.map((s) => (s.href ? <a href={s.href} class="font-bold text-ink-900 underline underline-offset-2 hover:text-teal-700">{s.t}</a> : s.t))}
         </p>
       ))}
     </div>

@@ -32,7 +32,7 @@ export default function Confirmed({ order }: { order: OrderSnapshot }) {
         </span>
         <div className="flex flex-col gap-1.5 lg:gap-1">
           <span className="text-[13px] font-bold text-ink-500 lg:text-sm">Order {order.number}</span>
-          <h1 ref={h1} tabIndex={-1} className="m-0 font-display text-[32px] leading-[1.05] font-extrabold tracking-[-0.03em] outline-none lg:text-[40px]">
+          <h1 ref={h1} tabIndex={-1} className="m-0 font-display text-[32px] leading-[1.05] font-extrabold tracking-[-0.055em] outline-none lg:text-[40px]">
             Thank you, {a.first}!
           </h1>
         </div>
@@ -41,7 +41,7 @@ export default function Confirmed({ order }: { order: OrderSnapshot }) {
         Your order is confirmed. We’ve emailed your receipt to {order.email} and we’ll send tracking as soon as it ships.
       </p>
 
-      <ol aria-label="Order status" className="m-0 flex list-none flex-col gap-3.5 rounded-[14px] border border-line p-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:rounded-card lg:p-6">
+      <ol aria-label="Order status" className="m-0 flex list-none flex-col gap-3.5 rounded-card border border-line p-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:rounded-card lg:p-6">
         {STATUS.map(([label, when], i) => (
           <li key={label} className="flex items-center gap-3 lg:flex-col lg:items-stretch lg:gap-2">
             <span
@@ -57,7 +57,7 @@ export default function Confirmed({ order }: { order: OrderSnapshot }) {
         ))}
       </ol>
 
-      <dl className="m-0 flex flex-col gap-3.5 rounded-[14px] border border-line p-4 text-sm leading-5 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-5 lg:rounded-card lg:p-6 lg:leading-[21px]">
+      <dl className="m-0 flex flex-col gap-3.5 rounded-card border border-line p-4 text-sm leading-5 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-5 lg:rounded-card lg:p-6 lg:leading-[21px]">
         <div className="order-1 lg:order-none">
           <dt className="font-extrabold lg:mb-1">Contact</dt>
           <dd className="m-0 break-words text-ink-700">{order.email}</dd>
@@ -89,7 +89,7 @@ export default function Confirmed({ order }: { order: OrderSnapshot }) {
         </div>
       </dl>
 
-      <form onSubmit={createAccount} className="flex flex-col gap-2.5 rounded-[14px] bg-canvas p-4 lg:flex-row lg:flex-wrap lg:items-end lg:gap-3 lg:rounded-card lg:p-6">
+      <form onSubmit={createAccount} className="flex flex-col gap-2.5 rounded-card bg-tile p-4 lg:flex-row lg:flex-wrap lg:items-end lg:gap-3 lg:rounded-card lg:p-6">
         <div className="flex flex-col gap-1 lg:basis-full">
           <strong className="text-[15px] lg:text-base">Save your details for faster reorders</strong>
           <span className="hidden text-sm text-ink-700 lg:block">Create an account to track this order and check out in one step next time.</span>

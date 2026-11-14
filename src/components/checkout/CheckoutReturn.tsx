@@ -114,7 +114,7 @@ export default function CheckoutReturn() {
     <section aria-labelledby="ret-title" className="flex w-full max-w-[560px] flex-col items-center gap-5 text-center">
       {phase === 'processing' ? (
         <div role="status" aria-live="polite" className="flex flex-col items-center gap-5">
-          <span className="flex size-[72px] items-center justify-center rounded-full bg-brand-50">
+          <span className="flex size-[72px] items-center justify-center rounded-full bg-cyan-50">
             <Spinner />
           </span>
           <h1 id="ret-title" className="m-0 font-display text-[30px] leading-[1.05] font-extrabold tracking-[-0.03em] lg:text-[40px]">Finishing your order…</h1>
@@ -129,14 +129,14 @@ export default function CheckoutReturn() {
           </span>
           <h1 id="ret-title" className="m-0 font-display text-[30px] leading-[1.05] font-extrabold tracking-[-0.03em] lg:text-[40px]">Payment approved</h1>
           <p className="m-0 text-[15px] leading-[1.55] text-ink-700 lg:text-[17px]">{provider === 'Affirm' || provider === 'Klarna' ? `${provider} approved your plan.` : 'Your bank approved the payment.'} Taking you to your order confirmation…</p>
-          <a href={CONFIRM_HREF} className="flex h-[52px] items-center justify-center rounded-lg bg-brand-600 px-6 text-[15px] font-extrabold text-white no-underline hover:bg-brand-700 hover:text-white">
+          <a href={CONFIRM_HREF} className="flex h-[52px] items-center justify-center rounded-md bg-cyan-400 px-6 text-[15px] font-extrabold text-ink-950 no-underline hover:bg-cyan-300 hover:text-ink-950">
             View order confirmation
           </a>
         </div>
       )}
 
       {recap && (
-        <dl className="m-0 mt-2 flex w-full flex-col gap-2.5 rounded-card bg-canvas px-5 py-[18px] text-left text-sm">
+        <dl className="m-0 mt-2 flex w-full flex-col gap-2.5 rounded-card bg-tile px-5 py-[18px] text-left text-sm">
           <div className="flex justify-between gap-3">
             <dt className="flex-none text-ink-700">Order</dt>
             <dd className="m-0 text-right font-bold">

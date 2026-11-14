@@ -1,0 +1,27 @@
+---
+interface Props {
+  chips: { t: string; h: string }[];
+  label: string;
+  /** list layout classes */
+  cls: string;
+  /** colour classes for each chip link */
+  chipCls: string;
+}
+const { chips, label, cls, chipCls } = Astro.props;
+---
+
+<ul aria-label={label} class:list={['m-0 list-none gap-2 p-0', cls]}>
+  {chips.map((s) => (
+    <li class="flex-none">
+      <a
+        href={s.h}
+        class:list={[
+          'flex h-10 items-center rounded-sm border px-3.5 text-sm font-semibold whitespace-nowrap no-underline transition-colors duration-150 lg:px-4',
+          chipCls,
+        ]}
+      >
+        {s.t}
+      </a>
+    </li>
+  ))}
+</ul>

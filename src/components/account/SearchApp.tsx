@@ -154,7 +154,7 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
         }}
         className="flex max-w-[760px] flex-col gap-2.5"
       >
-        <label htmlFor="sq" className="text-sm font-bold text-ink-700">
+        <label htmlFor="sq" className="text-[14px] font-bold text-ink-700">
           Search
         </label>
         <div className="relative flex">
@@ -172,7 +172,7 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
             placeholder="Search booths, printers, backdrops…"
             value={q}
             onChange={(e) => changeQ(e.target.value)}
-            className="box-border h-[60px] w-full rounded-full border-2 border-ink-900 bg-surface pr-14 pl-[54px] text-lg font-semibold text-ink-900 placeholder:font-medium placeholder:text-ink-500 lg:pr-40 [&::-webkit-search-cancel-button]:hidden"
+            className="box-border h-[60px] w-full rounded-sm border-2 border-ink-900 bg-surface pr-14 pl-[54px] text-lg font-semibold text-ink-900 placeholder:font-medium placeholder:text-ink-500 lg:pr-40 [&::-webkit-search-cancel-button]:hidden"
           />
           {q.length > 0 && (
             <button
@@ -182,21 +182,21 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
                 inputRef.current?.focus();
               }}
               aria-label="Clear search"
-              className="absolute top-3 right-3 flex size-9 items-center justify-center rounded-full border-0 bg-chip text-ink-900 hover:bg-line lg:right-[116px]"
+              className="absolute top-3 right-3 flex size-9 items-center justify-center rounded-full border-0 bg-tile text-ink-900 hover:bg-line lg:right-[116px]"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
                 <path d="M6 6l12 12M18 6L6 18" />
               </svg>
             </button>
           )}
-          <button type="submit" className="absolute top-1.5 right-1.5 hidden h-12 items-center rounded-full border-0 bg-brand-600 px-5 text-[15px] font-extrabold text-white hover:bg-brand-700 lg:flex">
+          <button type="submit" className="absolute top-1.5 right-1.5 hidden h-12 items-center rounded-sm border-0 bg-cyan-400 px-5 text-[15px] font-extrabold text-ink-950 transition-colors hover:bg-cyan-300 lg:flex">
             Search
           </button>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-[13px] text-ink-500">
           Popular:
           {popular.map((t) => (
-            <button key={t} type="button" onClick={() => changeQ(t)} className="flex h-8 items-center rounded-full border-0 bg-chip px-3 text-[13px] font-bold text-ink-900 hover:bg-line">
+            <button key={t} type="button" onClick={() => changeQ(t)} className="flex h-8 items-center rounded-sm border-0 bg-tile px-3 text-[13px] font-bold text-ink-900 transition-colors hover:bg-line">
               {t}
             </button>
           ))}
@@ -233,12 +233,12 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
           })}
         </div>
         {active === 'Products' && products.length > 1 && (
-          <label className="flex items-center gap-2 pb-2 text-sm font-bold text-ink-700">
+          <label className="flex items-center gap-2 pb-2 text-[14px] font-bold text-ink-700">
             Sort
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as Sort)}
-              className="h-11 rounded-md border-[1.5px] border-line-strong bg-surface px-3 text-sm font-semibold text-ink-900"
+              className="h-11 rounded-md border-[1.5px] border-line-strong bg-surface px-3 text-[14px] font-semibold text-ink-900"
             >
               <option value="rel">Relevance</option>
               <option value="low">Price: low to high</option>
@@ -253,7 +253,7 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
           <ul aria-label="Matching categories" className="-mt-2 mb-6 flex list-none flex-wrap gap-2 p-0">
             {cats.map((c) => (
               <li key={c.h}>
-                <a href={collectionUrl(c.h)} className="flex h-10 items-center gap-1.5 rounded-full border border-line-strong px-3.5 text-sm font-bold text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900">
+                <a href={collectionUrl(c.h)} className="flex h-10 items-center gap-1.5 rounded-sm border border-line-strong px-3.5 text-[14px] font-bold text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900">
                   {c.t} <span aria-hidden="true">→</span>
                 </a>
               </li>
@@ -264,7 +264,7 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
         {loading && (
           <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-[repeat(auto-fill,minmax(min(240px,100%),1fr))] lg:gap-x-6 lg:gap-y-10" aria-hidden="true">
             {Array.from({ length: 4 }, (_, i) => (
-              <span key={i} className="aspect-square animate-pulse rounded-card bg-canvas" />
+              <span key={i} className="aspect-square animate-pulse rounded-card bg-tile" />
             ))}
           </div>
         )}
@@ -281,10 +281,10 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
           <ul className="m-0 flex max-w-[860px] list-none flex-col gap-3 p-0">
             {arts.map((a) => (
               <li key={a.t}>
-                <a href={a.h} className="flex items-center gap-4 rounded-card border border-line p-4 text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900">
+                <a href={a.h} className="flex items-center gap-4 rounded-card border border-line bg-surface p-4 text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900">
                   {a.img && <img src={a.img} alt="" loading="lazy" className="h-16 w-24 flex-none rounded-md bg-tile object-cover" />}
                   <span className="flex flex-col gap-1">
-                    <span className="text-xs font-extrabold tracking-[0.08em] text-brand-600 uppercase">Blog</span>
+                    <span className="eyebrow text-teal-700">Blog</span>
                     <strong className="text-base leading-[22px]">{a.t}</strong>
                   </span>
                 </a>
@@ -297,10 +297,10 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
           <ul className="m-0 flex max-w-[860px] list-none flex-col gap-3 p-0">
             {pgs.map((a) => (
               <li key={a.t}>
-                <a href={a.h} className="flex flex-col gap-1 rounded-card border border-line px-[18px] py-4 text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900">
-                  <span className="text-xs font-extrabold tracking-[0.08em] text-brand-600 uppercase">Page</span>
+                <a href={a.h} className="flex flex-col gap-1 rounded-card border border-line bg-surface px-[18px] py-4 text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900">
+                  <span className="eyebrow text-teal-700">Page</span>
                   <strong className="text-base leading-[22px]">{a.t}</strong>
-                  <span className="text-sm leading-5 text-ink-700">{a.d}</span>
+                  <span className="text-[14px] leading-5 text-ink-700">{a.d}</span>
                 </a>
               </li>
             ))}
@@ -308,17 +308,17 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
         )}
 
         {ready && n === 0 && (
-          <div className="flex flex-col items-center gap-3 rounded-panel bg-canvas px-6 py-10 text-center">
+          <div className="flex flex-col items-center gap-3 rounded-panel bg-tile px-6 py-10 text-center">
             <strong className="text-lg [overflow-wrap:anywhere]">{toks.length ? `No ${label[1]} match “${qTrim}”` : 'Type something to search'}</strong>
             <span className="text-[15px] text-ink-700">Check the spelling, try a shorter word, or browse a popular category.</span>
             <div className="flex flex-wrap justify-center gap-2">
               {fallback.map((c) => (
-                <a key={c.t} href={c.h} className="flex h-11 items-center rounded-lg bg-ink-900 px-4 text-sm font-bold text-white no-underline hover:bg-ink-950 hover:text-white">
+                <a key={c.t} href={c.h} className="flex h-11 items-center rounded-md bg-ink-900 px-4 text-[14px] font-bold text-white no-underline transition-colors hover:bg-ink-700 hover:text-white">
                   {c.t}
                 </a>
               ))}
             </div>
-            <a href={STORE.phoneHref} className="flex min-h-11 items-center text-sm font-bold">
+            <a href={STORE.phoneHref} className="flex min-h-11 items-center text-[14px] font-bold text-teal-700 underline underline-offset-2 hover:text-teal-800">
               Or call an expert: {STORE.phone}
             </a>
           </div>

@@ -94,17 +94,17 @@ export default function FilterSheet({ open, onClose, state: s, togglePrice, upda
         role="dialog"
         aria-modal="true"
         aria-labelledby="cp-sheet-title"
-        className="absolute inset-x-0 bottom-0 flex h-[720px] max-h-[calc(100dvh-24px)] animate-sheet-up flex-col rounded-t-hero bg-surface shadow-[0_-12px_40px_rgba(11,16,32,0.25)]"
+        className="absolute inset-x-0 bottom-0 flex h-[720px] max-h-[calc(100dvh-24px)] animate-sheet-up flex-col rounded-t-[24px] bg-surface shadow-[0_-12px_40px_rgba(11,16,32,0.25)]"
       >
         <div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} className="touch-none">
           <div className="flex justify-center pt-2.5">
-            <span aria-hidden="true" className="h-[5px] w-10 rounded-full bg-line-strong" />
+            <span aria-hidden="true" className="h-[5px] w-10 rounded-sm bg-line-strong" />
           </div>
           <div className="flex items-center justify-between border-b border-line pt-2 pr-2 pb-3 pl-5">
             <h2 id="cp-sheet-title" tabIndex={-1} className="m-0 text-xl font-extrabold outline-none">
               Filter &amp; sort
             </h2>
-            <button type="button" onClick={onClose} aria-label="Close" className="flex size-11 items-center justify-center rounded-full text-ink-900 hover:bg-chip">
+            <button type="button" onClick={onClose} aria-label="Close" className="flex size-11 items-center justify-center rounded-full text-ink-900 hover:bg-tile">
               <Icon name="close" size={22} stroke={2.2} />
             </button>
           </div>
@@ -121,7 +121,7 @@ export default function FilterSheet({ open, onClose, state: s, togglePrice, upda
                   value={o.id}
                   checked={s.sort === o.id}
                   onChange={() => update({ sort: o.id })}
-                  className="m-0 size-5 accent-brand-600"
+                  className="m-0 size-5 accent-teal-700"
                 />
                 {o.label}
               </label>
@@ -140,7 +140,7 @@ export default function FilterSheet({ open, onClose, state: s, togglePrice, upda
                     aria-pressed={on}
                     onClick={() => togglePrice(r.id)}
                     className={
-                      'h-11 rounded-full border-[1.5px] px-4 text-sm font-bold transition-colors duration-150 ' +
+                      'h-11 rounded-sm border-[1.5px] px-4 text-sm font-bold transition-colors duration-150 ' +
                       (on ? 'border-ink-900 bg-ink-900 text-white' : 'border-line-strong bg-surface text-ink-900 hover:border-ink-900')
                     }
                   >
@@ -154,11 +154,11 @@ export default function FilterSheet({ open, onClose, state: s, togglePrice, upda
           <fieldset className="m-0 flex flex-col gap-1 border-0 px-0 pt-5 pb-7">
             <legend className="float-left w-full pb-2 text-[15px] font-extrabold">Availability &amp; deals</legend>
             <label className="flex min-h-11 cursor-pointer items-center gap-3 text-[15px]">
-              <input type="checkbox" checked={s.stock} onChange={() => update({ stock: !s.stock })} className="m-0 size-5 accent-brand-600" />
+              <input type="checkbox" checked={s.stock} onChange={() => update({ stock: !s.stock })} className="m-0 size-5 accent-teal-700" />
               <span className="flex-1">In stock only</span>
             </label>
             <label className="flex min-h-11 cursor-pointer items-center gap-3 text-[15px]">
-              <input type="checkbox" checked={s.sale} onChange={() => update({ sale: !s.sale })} className="m-0 size-5 accent-brand-600" />
+              <input type="checkbox" checked={s.sale} onChange={() => update({ sale: !s.sale })} className="m-0 size-5 accent-teal-700" />
               <span className="flex-1">On sale</span>
               <span className="text-[13px] text-ink-500">{saleCount}</span>
             </label>
@@ -169,14 +169,14 @@ export default function FilterSheet({ open, onClose, state: s, togglePrice, upda
           <button
             type="button"
             onClick={clearAll}
-            className="h-13 flex-[0_0_120px] rounded-lg border-[1.5px] border-line-strong bg-surface text-[15px] font-bold text-ink-900 hover:border-ink-900"
+            className="h-13 flex-[0_0_120px] rounded-md border-[1.5px] border-line-strong bg-surface text-[15px] font-bold text-ink-900 hover:border-ink-900"
           >
             Clear all
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-13 flex-1 items-center justify-center rounded-lg bg-brand-600 text-[15px] font-extrabold text-white hover:bg-brand-700"
+            className="flex h-13 flex-1 items-center justify-center rounded-md bg-cyan-400 text-[15px] font-extrabold text-ink-950 hover:bg-cyan-300"
           >
             Show {resultCount} {word}
           </button>

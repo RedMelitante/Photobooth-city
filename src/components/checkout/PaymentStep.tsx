@@ -119,9 +119,9 @@ export default function PaymentStep(p: Props) {
     const on = p.billingSame === same;
     return (
       <label
-        className={`flex min-h-[52px] cursor-pointer items-center gap-3 rounded-lg px-4 text-[15px] font-semibold ${on ? 'border-2 border-brand-600 bg-brand-50' : 'border-[1.5px] border-line'}`}
+        className={`flex min-h-[52px] cursor-pointer items-center gap-3 rounded-md px-4 text-[15px] font-semibold ${on ? 'border-2 border-ink-900 bg-cyan-50' : 'border-[1.5px] border-line'}`}
       >
-        <input type="radio" name="bill" checked={on} onChange={() => p.setBillingSame(same)} className="m-0 size-5 accent-brand-600" />
+        <input type="radio" name="bill" checked={on} onChange={() => p.setBillingSame(same)} className="m-0 size-5 accent-teal-700" />
         {label}
       </label>
     );
@@ -134,8 +134,8 @@ export default function PaymentStep(p: Props) {
         <p className="m-0 text-[13px] text-ink-700 lg:text-sm">All transactions are secure and encrypted.</p>
       </div>
 
-      <div className="flex flex-col gap-3.5 rounded-[14px] border border-line p-4 lg:gap-4 lg:p-5">
-        <p role="note" className="m-0 rounded-lg border-[1.5px] border-flash-400 bg-flash-100 px-4 py-3 text-sm leading-5 text-ink-950">
+      <div className="flex flex-col gap-3.5 rounded-card border border-line p-4 lg:gap-4 lg:p-5">
+        <p role="note" className="m-0 rounded-md border-[1.5px] border-cyan-400 bg-cyan-50 px-4 py-3 text-sm leading-5 text-ink-950">
           <strong>Test checkout.</strong> Payments aren't connected yet, so no card is charged. Use any card number; 4000 0000 0000 0002 shows a decline.
         </p>
         {p.declined?.kind === 'paylater' && (
@@ -170,7 +170,7 @@ export default function PaymentStep(p: Props) {
                   p.setPay(next);
                   requestAnimationFrame(() => document.getElementById(`tab-${next}`)?.focus());
                 }}
-                className={`flex h-12 flex-none flex-col items-start justify-center gap-1 rounded-md border-2 bg-surface px-4 text-sm font-extrabold whitespace-nowrap lg:h-16 lg:px-3.5 lg:py-2.5 ${on ? 'border-brand-600 text-brand-600' : 'border-line text-ink-900'}`}
+                className={`flex h-12 flex-none flex-col items-start justify-center gap-1 rounded-md border-2 bg-surface px-4 text-sm font-extrabold whitespace-nowrap lg:h-16 lg:px-3.5 lg:py-2.5 ${on ? 'border-teal-700 text-teal-700' : 'border-line text-ink-900'}`}
               >
                 <Icon name="card" size={20} className="hidden lg:block" />
                 {m}
@@ -219,7 +219,7 @@ export default function PaymentStep(p: Props) {
               </div>
             </div>
           ) : (
-            <p className="m-0 rounded-md bg-canvas p-5 text-sm leading-[21px] text-ink-700">
+            <p className="m-0 rounded-md bg-tile p-5 text-sm leading-[21px] text-ink-700">
               After you select <strong>Pay now</strong>, you’ll confirm the payment in {walletWhere(p.pay)}.
             </p>
           )}
@@ -232,11 +232,11 @@ export default function PaymentStep(p: Props) {
         {radio(false, 'Use a different billing address')}
       </fieldset>
       <label className="flex min-h-8 items-center gap-2.5 text-sm lg:hidden">
-        <input type="checkbox" checked={p.billingSame} onChange={(e) => p.setBillingSame(e.target.checked)} className="m-0 size-5 accent-brand-600" />
+        <input type="checkbox" checked={p.billingSame} onChange={(e) => p.setBillingSame(e.target.checked)} className="m-0 size-5 accent-teal-700" />
         Billing address same as shipping
       </label>
       {!p.billingSame && (
-        <div className="flex flex-col gap-3 rounded-[14px] border border-line p-4 lg:p-5">
+        <div className="flex flex-col gap-3 rounded-card border border-line p-4 lg:p-5">
           {billInput('line1', 'Address', 'billing address-line1')}
           {billInput('city', 'City', 'billing address-level2')}
           <div className="grid grid-cols-2 gap-2.5 lg:gap-3">
@@ -251,7 +251,7 @@ export default function PaymentStep(p: Props) {
         onClick={submit}
         disabled={p.paying}
         aria-busy={p.paying}
-        className="flex h-14 items-center justify-center gap-2 rounded-lg bg-brand-600 text-base font-extrabold text-white hover:bg-brand-700 disabled:cursor-wait disabled:opacity-80 lg:h-[60px] lg:gap-2.5 lg:rounded-[14px] lg:text-[17px]"
+        className="flex h-14 items-center justify-center gap-2 rounded-md bg-cyan-400 text-base font-extrabold text-ink-950 hover:bg-cyan-300 disabled:cursor-wait disabled:opacity-80 lg:h-[60px] lg:gap-2.5 lg:rounded-card lg:text-[17px]"
       >
         {p.paying ? <Spinner size={20} light /> : <Icon name="lock" size={18} stroke={2.2} />}
         {p.paying ? 'Processing…' : 'Pay now'}

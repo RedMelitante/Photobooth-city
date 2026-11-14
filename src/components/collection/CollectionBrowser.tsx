@@ -96,7 +96,7 @@ export default function CollectionBrowser({ products }: Props) {
     <div>
       {/* Mobile: sticky Filter + Sort bar */}
       {!noProducts && (
-      <div className="sticky top-0 z-10 -mx-4 flex items-center gap-2.5 border-y border-line bg-surface px-4 py-2.5 lg:hidden">
+      <div className="sticky top-0 z-10 -mx-4 flex items-center gap-2.5 border-y border-line bg-paper px-4 py-2.5 lg:hidden">
         <button
           type="button"
           onClick={() => setSheet(true)}
@@ -107,7 +107,7 @@ export default function CollectionBrowser({ products }: Props) {
           <Icon name="filter" size={18} stroke={2.2} />
           Filter
           {nActive > 0 && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-flash-400 px-1.5 text-xs font-extrabold text-ink-950">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-xs bg-cyan-400 px-1.5 text-xs font-extrabold text-ink-950">
               <span className="sr-only">(</span>
               {nActive}
               <span className="sr-only"> active)</span>
@@ -128,7 +128,7 @@ export default function CollectionBrowser({ products }: Props) {
           <div className="flex items-center justify-between pb-4">
             <h2 className="m-0 text-lg font-extrabold">Filters</h2>
             {nActive > 0 && (
-              <button type="button" onClick={clearAll} className="border-0 bg-transparent py-2 text-sm font-bold text-brand-600 underline hover:text-brand-700">
+              <button type="button" onClick={clearAll} className="border-0 bg-transparent py-2 text-sm font-bold text-teal-700 underline hover:text-teal-800">
                 Clear all
               </button>
             )}
@@ -139,7 +139,7 @@ export default function CollectionBrowser({ products }: Props) {
             <MinMax min={s.min} max={s.max} ceiling={ceiling} onCommit={(min, max) => update({ min, max })} />
             {PRICE_RANGES.map((r) => (
               <label key={r.id} className="flex min-h-8 cursor-pointer items-center gap-3 text-[15px]">
-                <input type="checkbox" checked={s.price.includes(r.id)} onChange={() => togglePrice(r.id)} className="m-0 size-5 accent-brand-600" />
+                <input type="checkbox" checked={s.price.includes(r.id)} onChange={() => togglePrice(r.id)} className="m-0 size-5 accent-teal-700" />
                 <span className="flex-1">{r.label}</span>
                 <span className="text-[13px] text-ink-500">{products.filter((p) => inRange(p, r.id)).length}</span>
               </label>
@@ -160,10 +160,10 @@ export default function CollectionBrowser({ products }: Props) {
             </div>
           </fieldset>
 
-          <a href={STORE.phoneHref} className="mt-6 flex flex-col gap-1.5 rounded-card bg-canvas p-5 text-ink-900 no-underline hover:bg-tile hover:text-ink-900">
+          <a href={STORE.phoneHref} className="mt-6 flex flex-col gap-1.5 rounded-card bg-tile p-5 text-ink-900 no-underline hover:bg-tile-hover hover:text-ink-900">
             <span className="text-[15px] font-extrabold">Not sure what fits?</span>
             <span className="text-sm leading-5 text-ink-700">
-              Call an expert: <strong className="text-brand-600">{STORE.phone}</strong>
+              Call an expert: <strong className="text-teal-700">{STORE.phone}</strong>
             </span>
           </a>
         </aside>
@@ -193,7 +193,7 @@ export default function CollectionBrowser({ products }: Props) {
                     type="button"
                     onClick={c.remove}
                     aria-label={`Remove filter ${c.label}`}
-                    className="flex h-9 items-center gap-2 rounded-full border-0 bg-ink-900 pr-3 pl-3.5 text-[13px] font-bold text-white hover:bg-ink-950"
+                    className="flex h-9 items-center gap-2 rounded-sm border-0 bg-ink-900 pr-3 pl-3.5 text-[13px] font-bold text-white hover:bg-ink-950"
                   >
                     {c.label}
                     <Icon name="close" size={14} stroke={2.6} />
@@ -212,7 +212,7 @@ export default function CollectionBrowser({ products }: Props) {
           )}
 
           {empty && (
-            <div className="flex flex-col items-center gap-3 rounded-card bg-canvas px-6 py-14 text-center lg:py-16">
+            <div className="flex flex-col items-center gap-3 rounded-card bg-tile px-6 py-14 text-center lg:py-16">
               <span className="text-lg font-extrabold">{noProducts ? 'Nothing listed here right now' : 'No products match these filters'}</span>
               <span className="max-w-[460px] text-[15px] leading-[23px] text-ink-700">
                 {noProducts
@@ -225,7 +225,7 @@ export default function CollectionBrowser({ products }: Props) {
                 </button>
               )}
               {nActive === 0 && (
-                <a href={STORE.phoneHref} className="flex h-12 items-center rounded-lg bg-ink-900 px-5 font-extrabold text-white no-underline hover:bg-ink-950 hover:text-white">
+                <a href={STORE.phoneHref} className="flex h-12 items-center rounded-md bg-ink-900 px-5 font-extrabold text-white no-underline hover:bg-ink-950 hover:text-white">
                   Call {STORE.phone}
                 </a>
               )}
@@ -237,7 +237,7 @@ export default function CollectionBrowser({ products }: Props) {
               <p className="m-0 text-[13px] text-ink-700 lg:text-sm">
                 Showing {shown.length} of {list.length} {countWord}
               </p>
-              <div aria-hidden="true" className="h-1 w-[200px] overflow-hidden rounded-full bg-line lg:w-[240px]">
+              <div aria-hidden="true" className="h-1 w-[200px] overflow-hidden rounded-sm bg-line lg:w-[240px]">
                 <div className="h-full bg-ink-900 transition-[width] duration-200" style={{ width: `${Math.round((shown.length / list.length) * 100)}%` }} />
               </div>
               {hasNext && (
@@ -249,7 +249,7 @@ export default function CollectionBrowser({ products }: Props) {
                     focusFrom.current = shown.length;
                     setS((prev) => ({ ...prev, page: prev.page + 1 }));
                   }}
-                  className="flex h-13 w-full items-center justify-center rounded-lg border-[1.5px] border-ink-900 bg-surface px-8 text-[15px] font-extrabold text-ink-900 no-underline hover:bg-ink-900 hover:text-white sm:w-auto"
+                  className="flex h-13 w-full items-center justify-center rounded-md border-[1.5px] border-ink-900 bg-surface px-8 text-[15px] font-extrabold text-ink-900 no-underline hover:bg-ink-900 hover:text-white sm:w-auto"
                 >
                   Load more products
                 </a>
@@ -304,8 +304,8 @@ function Switch({ on, onToggle, labelledBy }: { on: boolean; onToggle: () => voi
       aria-labelledby={labelledBy}
       onClick={onToggle}
       className={
-        'relative flex h-[26px] w-11 flex-none rounded-full border-0 p-[3px] transition-colors duration-150 before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-[""] ' +
-        (on ? 'justify-end bg-brand-600' : 'justify-start bg-line-strong')
+        'relative flex h-[26px] w-11 flex-none rounded-sm border-0 p-[3px] transition-colors duration-150 before:absolute before:inset-x-0 before:-inset-y-2.5 before:content-[""] ' +
+        (on ? 'justify-end bg-teal-700' : 'justify-start bg-line-strong')
       }
     >
       <span className="size-5 rounded-full bg-white shadow-[0_1px_2px_rgba(11,16,32,0.3)]" />

@@ -119,7 +119,7 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
             onClick={() => setIdx(i)}
             aria-label={pdp && labels[i] ? `View image: ${labels[i]}` : `View image ${i + 1} of ${n}`}
             aria-current={i === idx}
-            className={'flex size-[84px] items-center justify-center overflow-hidden rounded-lg border-2 bg-canvas p-0 transition-colors duration-150 ' + (i === idx ? 'border-ink-900' : 'border-transparent hover:border-line-strong')}
+            className={'flex size-[84px] items-center justify-center overflow-hidden rounded-md border-2 bg-tile p-0 transition-colors duration-150 ' + (i === idx ? 'border-cyan-400' : 'border-transparent hover:border-line-dark-strong')}
           >
             <img src={sized(im.url, 200)} alt="" width={84} height={84} loading="lazy" decoding="async" className={'product-shot size-full ' + (pdp ? '' : 'p-1')} />
           </button>
@@ -135,7 +135,7 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
         {pdp && multi && thumbs(true)}
         <div
           ref={mainRef}
-          className={'relative aspect-square min-w-0 flex-1 overflow-hidden rounded-[20px] bg-canvas ' + (cur.url ? 'cursor-zoom-in' : '')}
+          className={'relative aspect-square min-w-0 flex-1 overflow-hidden rounded-panel bg-tile text-ink-900 ' + (cur.url ? 'cursor-zoom-in' : '')}
           onPointerMove={onMove}
           onPointerLeave={() => setLens(null)}
           onClick={(e) => {
@@ -161,7 +161,7 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
           {lens && (
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute z-10 rounded-full border-[3px] border-white bg-canvas bg-no-repeat shadow-pop"
+              className="pointer-events-none absolute z-10 rounded-full border-[3px] border-white bg-tile bg-no-repeat shadow-pop"
               style={{
                 width: LENS,
                 height: LENS,
@@ -176,14 +176,14 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
           )}
           {pdp ? (
             <>
-              {labels[idx] && <span className="absolute top-5 left-5 rounded-full bg-surface px-3 py-1.5 text-xs font-bold text-ink-700">{labels[idx]}</span>}
-              {!labels[idx] && sale && <span className="absolute top-5 left-5 rounded-full bg-sale-600 px-3 py-1.5 text-xs font-extrabold text-white">Sale</span>}
+              {labels[idx] && <span className="absolute top-5 left-5 rounded-sm bg-surface px-3 py-1.5 text-xs font-bold text-ink-700">{labels[idx]}</span>}
+              {!labels[idx] && sale && <span className="absolute top-5 left-5 rounded-sm bg-sale-600 px-3 py-1.5 text-xs font-extrabold text-white">Sale</span>}
               {cur.url && (
                 <button
                   type="button"
                   onClick={(e) => openLightbox(idx, e.currentTarget)}
                   aria-label="Zoom image"
-                  className="absolute right-5 bottom-5 flex h-11 cursor-zoom-in items-center gap-2 rounded-full bg-surface px-4 text-[13px] font-bold text-ink-900 shadow-pop"
+                  className="absolute right-5 bottom-5 flex h-11 cursor-zoom-in items-center gap-2 rounded-sm bg-surface px-4 text-[13px] font-bold text-ink-900 shadow-pop"
                 >
                   <Icon name="zoom" size={18} stroke={2.2} />
                   Zoom
@@ -193,11 +193,11 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
             </>
           ) : (
             <>
-              {sale && <span className="absolute top-4 left-4 rounded-full bg-sale-600 px-3 py-1.5 text-xs font-extrabold text-white">Sale</span>}
-              {soldOut && <span className="absolute top-4 left-4 rounded-full bg-ink-900 px-3 py-1.5 text-xs font-extrabold text-white">Sold out</span>}
-              <span className="absolute right-4 bottom-4 rounded-full bg-surface px-2.5 py-1 text-xs font-bold text-ink-700">{counter(idx)}</span>
+              {sale && <span className="absolute top-4 left-4 rounded-sm bg-sale-600 px-3 py-1.5 text-xs font-extrabold text-white">Sale</span>}
+              {soldOut && <span className="absolute top-4 left-4 rounded-sm bg-ink-900 px-3 py-1.5 text-xs font-extrabold text-white">Sold out</span>}
+              <span className="absolute right-4 bottom-4 rounded-sm bg-surface px-2.5 py-1 text-xs font-bold text-ink-700">{counter(idx)}</span>
               {cur.url && (
-                <button type="button" onClick={(e) => openLightbox(idx, e.currentTarget)} className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:right-4 focus:rounded-full focus:bg-surface focus:px-3 focus:py-1.5 focus:text-xs focus:font-bold">
+                <button type="button" onClick={(e) => openLightbox(idx, e.currentTarget)} className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:right-4 focus:rounded-sm focus:bg-surface focus:px-3 focus:py-1.5 focus:text-xs focus:font-bold">
                   Open full-screen image
                 </button>
               )}
@@ -209,7 +209,7 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
 
       {/* ── Mobile: swipe carousel ── */}
       <div className="lg:hidden" aria-roledescription="carousel">
-        <div className="relative aspect-square overflow-hidden rounded-[20px] bg-canvas">
+        <div className="relative aspect-square overflow-hidden rounded-panel bg-tile text-ink-900">
           <div ref={trackRef} onScroll={onScroll} className="snap-row size-full">
             {imgs.map((im, i) => (
               <div key={im.url + i} className="relative size-full flex-none" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${n}`}>
@@ -230,15 +230,15 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
             ))}
           </div>
           {pdp && labelsMobile[mIdx] ? (
-            <span className="pointer-events-none absolute top-3.5 left-3.5 rounded-full bg-surface px-2.5 py-[5px] text-[11px] font-bold text-ink-700">{labelsMobile[mIdx]}</span>
+            <span className="pointer-events-none absolute top-3.5 left-3.5 rounded-sm bg-surface px-2.5 py-[5px] text-[11px] font-bold text-ink-700">{labelsMobile[mIdx]}</span>
           ) : sale ? (
-            <span className="pointer-events-none absolute top-3.5 left-3.5 rounded-full bg-sale-600 px-2.5 py-[5px] text-xs font-extrabold text-white">Sale</span>
+            <span className="pointer-events-none absolute top-3.5 left-3.5 rounded-sm bg-sale-600 px-2.5 py-[5px] text-xs font-extrabold text-white">Sale</span>
           ) : soldOut ? (
-            <span className="pointer-events-none absolute top-3.5 left-3.5 rounded-full bg-ink-900 px-2.5 py-[5px] text-xs font-extrabold text-white">Sold out</span>
+            <span className="pointer-events-none absolute top-3.5 left-3.5 rounded-sm bg-ink-900 px-2.5 py-[5px] text-xs font-extrabold text-white">Sold out</span>
           ) : null}
           {multi && (
             <>
-              <span className="pointer-events-none absolute top-3.5 right-3.5 rounded-full bg-ink-950/75 px-2.5 py-[5px] text-xs font-bold text-white">{counter(mIdx)}</span>
+              <span className="pointer-events-none absolute top-3.5 right-3.5 rounded-sm bg-ink-950/75 px-2.5 py-[5px] text-xs font-bold text-white">{counter(mIdx)}</span>
               <button type="button" onClick={() => goTo(mIdx - 1)} aria-label="Previous image" className="absolute top-1/2 left-2.5 -mt-[22px] flex size-11 items-center justify-center rounded-full bg-surface text-ink-900 shadow-[0_4px_12px_rgb(11_16_32/0.15)]">
                 <Icon name="chevron-left" size={18} stroke={2.4} />
               </button>
@@ -252,7 +252,7 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
           <div className="flex flex-wrap justify-center gap-1.5 pt-3.5">
             {imgs.map((_, i) => (
               <button key={i} type="button" onClick={() => goTo(i)} aria-label={`Image ${i + 1}`} aria-current={i === mIdx} className="flex size-6 items-center justify-center p-0">
-                <span className={'h-2 rounded-full transition-[width,background-color] duration-200 ' + (i === mIdx ? 'w-[22px] bg-ink-900' : 'w-2 bg-line-strong')} />
+                <span className={'h-2 rounded-sm transition-[width,background-color] duration-200 ' + (i === mIdx ? 'w-[22px] bg-cyan-400' : 'w-2 bg-line-dark-strong')} />
               </button>
             ))}
           </div>
@@ -274,7 +274,7 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
               {counter(lbIdx)}
               {labels[lbIdx] ? ` · ${labels[lbIdx]}` : ''}
             </span>
-            <button type="button" onClick={closeLightbox} aria-label="Close" autoFocus className="flex size-11 items-center justify-center rounded-full bg-chip text-ink-900 hover:bg-line">
+            <button type="button" onClick={closeLightbox} aria-label="Close" autoFocus className="flex size-11 items-center justify-center rounded-full bg-tile text-ink-900 hover:bg-line">
               <Icon name="close" size={20} stroke={2.4} />
             </button>
           </div>
@@ -297,7 +297,7 @@ export default function Gallery({ images, title, layout, labels = [], labelsMobi
             <ul className="m-0 flex list-none justify-center gap-2 overflow-x-auto px-4 py-4 max-lg:hidden">
               {imgs.map((im, i) => (
                 <li key={im.url + i} className="flex-none">
-                  <button type="button" onClick={() => setLbIdx(i)} aria-label={`View image ${i + 1} of ${n}`} aria-current={i === lbIdx} className={'flex size-16 overflow-hidden rounded-md border-2 bg-canvas p-0 ' + (i === lbIdx ? 'border-ink-900' : 'border-transparent')}>
+                  <button type="button" onClick={() => setLbIdx(i)} aria-label={`View image ${i + 1} of ${n}`} aria-current={i === lbIdx} className={'flex size-16 overflow-hidden rounded-md border-2 bg-tile p-0 ' + (i === lbIdx ? 'border-ink-900' : 'border-transparent')}>
                     <img src={sized(im.url, 160)} alt="" loading="lazy" className="product-shot size-full p-1" />
                   </button>
                 </li>

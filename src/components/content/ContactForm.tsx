@@ -4,7 +4,7 @@ import { EMAIL_RE, submitContactMessage } from '@/lib/content-forms';
 
 const TOPICS = ['Help choosing a booth', 'An existing order', 'Returns or damage', 'Something else'];
 const field =
-  'box-border h-[52px] w-full rounded-md border-[1.5px] border-line-strong bg-surface px-3.5 text-base font-normal text-ink-900 aria-[invalid=true]:border-sale-600';
+  'box-border h-[52px] w-full rounded-md border-[1.5px] border-line-strong bg-surface px-3.5 text-base font-normal text-ink-900 placeholder:text-ink-500 aria-[invalid=true]:border-sale-600';
 
 interface Props {
   phone: string;
@@ -73,7 +73,7 @@ export default function ContactForm({ phone }: Props) {
             setSent(false);
             setEmailError('');
           }}
-          className="h-12 rounded-lg border-[1.5px] border-ink-900 bg-surface px-5 font-bold text-ink-900 hover:bg-chip"
+          className="h-12 rounded-md border-[1.5px] border-ink-900 bg-surface px-5 font-bold text-ink-900 transition-colors hover:bg-tile"
         >
           Send another message
         </button>
@@ -137,11 +137,11 @@ export default function ContactForm({ phone }: Props) {
           name="comment"
           rows={6}
           placeholder="E.g. I run a DJ business doing 6–8 weddings a month and want a roaming iPad booth that works with my 11-inch iPad Pro."
-          className="box-border w-full resize-y rounded-md border-[1.5px] border-line-strong p-3.5 text-base leading-6 font-normal text-ink-900"
+          className="box-border w-full resize-y rounded-md border-[1.5px] border-line-strong bg-surface p-3.5 text-base leading-6 font-normal text-ink-900 placeholder:text-ink-500"
         />
       </label>
       {failed && (
-        <p role="alert" className="m-0 rounded-md bg-sale-50 px-3 py-2.5 text-sm font-semibold text-sale-600">
+        <p role="alert" className="m-0 rounded-md bg-sale-50 px-3 py-2.5 text-[14px] font-semibold text-sale-600">
           Something went wrong sending your message. Please try again or call {phone}.
         </p>
       )}
@@ -150,7 +150,7 @@ export default function ContactForm({ phone }: Props) {
         <button
           type="submit"
           disabled={busy}
-          className="h-14 flex-[1_1_100%] rounded-lg border-0 bg-brand-600 px-9 text-base font-extrabold text-white hover:bg-brand-700 disabled:opacity-70 sm:flex-none"
+          className="h-14 flex-[1_1_100%] rounded-md border-0 bg-cyan-400 px-9 text-base font-extrabold text-ink-950 transition-colors hover:bg-cyan-300 disabled:opacity-70 sm:flex-none"
         >
           {busy ? 'Sending…' : 'Send'}
         </button>

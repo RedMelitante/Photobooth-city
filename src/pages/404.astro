@@ -14,8 +14,8 @@ const corner = 'absolute size-[22px] border-white';
 
 <Layout title="Page not found" description="The link may be broken, or the page may have moved." noindex>
   <div class="mx-auto flex max-w-[1100px] flex-col items-center gap-[22px] px-4 pt-10 pb-16 text-center lg:px-10 lg:pt-20 lg:pb-28">
-    <div aria-hidden="true" class="relative flex size-[200px] items-center justify-center rounded-[28px] bg-ink-950 lg:size-[260px]">
-      <span class="font-display text-[76px] leading-none font-extrabold tracking-[-0.05em] text-flash-400 lg:text-[100px]">404</span>
+    <div aria-hidden="true" class="relative flex size-[200px] items-center justify-center rounded-[10px] bg-ink-950 lg:size-[260px]">
+      <span class="font-display text-[76px] leading-none font-extrabold tracking-[-0.03em] text-cyan-400 lg:text-[100px]">404</span>
       <span class:list={[corner, 'top-3.5 left-3.5 border-t-[3px] border-l-[3px]']}></span>
       <span class:list={[corner, 'top-3.5 right-3.5 border-t-[3px] border-r-[3px]']}></span>
       <span class:list={[corner, 'bottom-3.5 left-3.5 border-b-[3px] border-l-[3px]']}></span>
@@ -35,7 +35,7 @@ const corner = 'absolute size-[22px] border-white';
         aria-label="Search products"
         enterkeyhint="search"
         placeholder="Search booths, printers, backdrops…"
-        class="box-border h-[54px] w-full rounded-full border-[1.5px] border-line-strong bg-canvas pr-4 pl-12 text-base text-ink-900 placeholder:text-ink-500"
+        class="box-border h-[54px] w-full rounded-sm border-[1.5px] border-line-strong bg-tile pr-4 pl-12 text-base text-ink-900 placeholder:text-ink-500"
       />
     </form>
 
@@ -45,7 +45,7 @@ const corner = 'absolute size-[22px] border-white';
           <li>
             <a
               href={href}
-              class="flex min-h-16 items-center justify-between gap-2.5 rounded-card border border-line px-[18px] text-[15px] font-extrabold text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900"
+              class="flex min-h-16 items-center justify-between gap-2.5 rounded-card border border-line bg-surface px-[18px] text-[15px] font-extrabold text-ink-900 no-underline transition-colors hover:border-ink-900 hover:text-ink-900"
             >
               {label}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -58,8 +58,8 @@ const corner = 'absolute size-[22px] border-white';
     </ul>
 
     <div class="mt-2 flex flex-wrap justify-center gap-2.5">
-      <a href={PAGES.home} class="flex h-[52px] items-center rounded-lg bg-brand-600 px-6 font-extrabold text-white no-underline transition-colors hover:bg-brand-700 hover:text-white">Back to homepage</a>
-      <a href={STORE.phoneHref} class="flex h-[52px] items-center rounded-lg border-[1.5px] border-ink-900 px-5 font-extrabold text-ink-900 no-underline transition-colors hover:bg-ink-900 hover:text-white">Call {STORE.phone}</a>
+      <a href={PAGES.home} class="flex h-[52px] items-center rounded-md bg-cyan-400 px-6 font-extrabold text-ink-950 no-underline transition-colors hover:bg-cyan-300 hover:text-ink-950">Back to homepage</a>
+      <a href={STORE.phoneHref} class="flex h-[52px] items-center rounded-md border-[1.5px] border-ink-900 px-5 font-extrabold text-ink-900 no-underline transition-colors hover:bg-ink-900 hover:text-white">Call {STORE.phone}</a>
     </div>
   </div>
 </Layout>

@@ -67,13 +67,13 @@ export function PromoForm({ id = 'cart-code' }: { id?: string }) {
           autoComplete="off"
           aria-invalid={error}
           aria-describedby={error ? `${id}-err` : undefined}
-          className="h-11 min-w-0 flex-1 rounded-md border-[1.5px] border-line-strong px-3.5 text-[15px] text-ink-900 uppercase placeholder:normal-case"
+          className="h-11 min-w-0 flex-1 rounded-md border-[1.5px] border-line-strong px-3.5 text-[15px] text-ink-900 uppercase"
         />
-        <button type="submit" className="h-11 rounded-md bg-ink-900 px-[18px] text-sm font-extrabold text-white hover:bg-ink-950">Apply</button>
+        <button type="submit" className="h-11 rounded-md bg-ink-900 px-[18px] text-sm font-extrabold text-white hover:bg-ink-800">Apply</button>
       </div>
       {error && <span id={`${id}-err`} role="alert" className="text-[13px] font-semibold text-sale-600">That code isn’t valid.</span>}
       {promo.applied && (
-        <span className="flex h-8 items-center gap-2 self-start rounded-full bg-flash-100 pr-1.5 pl-3 text-[13px] font-extrabold">
+        <span className="flex h-8 items-center gap-2 self-start rounded-sm bg-cyan-50 pr-1.5 pl-3 text-[13px] font-extrabold">
           <Icon name="tag" size={14} stroke={2.4} />
           {PROMO.code} · {PROMO.percent}% off
           <button type="button" onClick={() => saveCode(null)} aria-label="Remove discount" className="flex size-6 items-center justify-center rounded-full bg-ink-950/8 text-ink-900">
@@ -82,7 +82,7 @@ export function PromoForm({ id = 'cart-code' }: { id?: string }) {
         </span>
       )}
       {promo.pending && (
-        <span className="mt-1 flex h-8 items-center gap-2 self-start rounded-full border-[1.5px] border-dashed border-ink-950 bg-surface pr-1.5 pl-3 text-[13px] font-extrabold">
+        <span className="mt-1 flex h-8 items-center gap-2 self-start rounded-sm border-[1.5px] border-dashed border-ink-950 bg-surface pr-1.5 pl-3 text-[13px] font-extrabold">
           {PROMO.code} saved · applies at $3,500+
           <button type="button" onClick={() => saveCode(null)} aria-label="Remove discount code" className="flex size-6 items-center justify-center rounded-full bg-ink-950/8 text-ink-900">
             <Icon name="close" size={12} stroke={2.6} />
@@ -90,13 +90,13 @@ export function PromoForm({ id = 'cart-code' }: { id?: string }) {
         </span>
       )}
       {sub > 0 && sub < PROMO.minSubtotal && (
-        <div role="status" className="mt-2 flex flex-col gap-2 rounded-lg bg-flash-100 px-3.5 py-3 text-[13px] leading-[18px] text-ink-950">
+        <div role="status" className="mt-2 flex flex-col gap-2 rounded-md bg-cyan-50 px-3.5 py-3 text-[13px] leading-[18px] text-ink-950">
           <span>
             Add <strong>{formatMoney(promo.needed)}</strong> more to unlock <strong>{PROMO.percent}% off</strong> with code{' '}
             <strong className="font-mono">{PROMO.code}</strong>. It applies to orders of $3,500 or more.
           </span>
-          <span aria-hidden="true" className="block h-1.5 overflow-hidden rounded-full bg-ink-950/12">
-            <span className="block h-full rounded-full bg-ink-950 transition-[width] duration-200" style={{ width: `${promo.progress}%` }} />
+          <span aria-hidden="true" className="block h-1.5 overflow-hidden rounded-sm bg-ink-950/12">
+            <span className="block h-full rounded-sm bg-ink-950 transition-[width] duration-200" style={{ width: `${promo.progress}%` }} />
           </span>
         </div>
       )}
@@ -106,7 +106,7 @@ export function PromoForm({ id = 'cart-code' }: { id?: string }) {
 
 export function LineThumb({ line, size = 84 }: { line: CartLine; size?: number }) {
   return (
-    <span className="flex flex-none items-center justify-center overflow-hidden rounded-lg bg-canvas" style={{ width: size, height: size }}>
+    <span className="flex flex-none items-center justify-center overflow-hidden rounded-md bg-tile" style={{ width: size, height: size }}>
       {line.image ? <img src={line.image} alt="" className="product-shot size-full p-1" loading="lazy" /> : <Icon name="bag" size={28} className="text-ink-300" />}
     </span>
   );
@@ -125,21 +125,21 @@ export default function CartPanel({ upsells = [], mode = 'drawer', titleId = 'ca
   return (
     <section className="flex min-h-full w-full flex-col bg-surface text-ink-900">
       <div className="flex items-center justify-between border-b border-line py-4 pr-3 pl-6">
-        <h2 id={titleId} tabIndex={-1} className="font-display text-2xl font-bold tracking-[-0.02em] outline-none">
+        <h2 id={titleId} tabIndex={-1} className="font-display text-2xl font-extrabold tracking-[-0.045em] outline-none">
           Your cart <span className="font-sans text-[15px] font-bold text-ink-500">({count})</span>
         </h2>
         {mode === 'drawer' ? (
-          <button type="button" onClick={closeCart} aria-label="Close cart" className="flex size-11 items-center justify-center rounded-full bg-chip text-ink-900">
+          <button type="button" onClick={closeCart} aria-label="Close cart" className="flex size-11 items-center justify-center rounded-full bg-tile text-ink-900 hover:bg-tile-hover">
             <Icon name="close" size={20} stroke={2.4} />
           </button>
         ) : (
-          <a href="/" aria-label="Continue shopping" className="flex size-11 items-center justify-center rounded-full bg-chip text-ink-900">
+          <a href="/" aria-label="Continue shopping" className="flex size-11 items-center justify-center rounded-full bg-tile text-ink-900 hover:bg-tile-hover">
             <Icon name="close" size={20} stroke={2.4} />
           </a>
         )}
       </div>
 
-      <p className="flex items-center gap-2.5 bg-brand-50 px-6 py-3 text-[13px] leading-[18px] font-semibold text-brand-700">
+      <p className="flex items-center gap-2.5 bg-cyan-50 px-6 py-3 text-[13px] leading-[18px] font-semibold text-teal-800">
         <Icon name="globe" size={18} />
         We ship across the US. Shipping is calculated at checkout.
       </p>
@@ -169,12 +169,12 @@ export default function CartPanel({ upsells = [], mode = 'drawer', titleId = 'ca
       ) : (
         <div className="flex flex-col items-center gap-3.5 px-6 py-12 text-center">
           <span className="text-lg font-extrabold">Your cart is empty</span>
-          <a href="/collections/ipad-booths" className="flex h-12 items-center rounded-lg bg-brand-600 px-[22px] font-extrabold text-white no-underline hover:bg-brand-700 hover:text-white">Shop photo booths</a>
+          <a href="/collections/ipad-booths" className="flex h-12 items-center rounded-md bg-cyan-400 px-[22px] font-extrabold text-ink-950 no-underline hover:bg-cyan-300 hover:text-ink-950">Shop photo booths</a>
         </div>
       )}
 
       {upsell && (
-        <div className="mx-6 mt-2 flex items-center gap-3 rounded-[14px] bg-canvas p-3.5">
+        <div className="mx-6 mt-2 flex items-center gap-3 rounded-card bg-tile p-3.5">
           <span className="flex size-[52px] flex-none items-center justify-center overflow-hidden rounded-md bg-surface">
             <img src={upsell.line.image} alt="" className="product-shot size-full" loading="lazy" />
           </span>
@@ -186,7 +186,7 @@ export default function CartPanel({ upsells = [], mode = 'drawer', titleId = 'ca
               {upsell.line.compareAtPrice && <s className="text-ink-500">{formatMoney(upsell.line.compareAtPrice)}</s>}
             </span>
           </span>
-          <button type="button" onClick={() => addLine(upsell.line, 1, false)} className="h-10 flex-none rounded-md border-[1.5px] border-ink-900 bg-surface px-3.5 text-[13px] font-extrabold text-ink-900">Add</button>
+          <button type="button" onClick={() => addLine(upsell.line, 1, false)} className="h-10 flex-none rounded-md border-[1.5px] border-ink-900 bg-surface px-3.5 text-[13px] font-extrabold text-ink-900 hover:bg-ink-900 hover:text-white">Add</button>
         </div>
       )}
 
@@ -204,12 +204,12 @@ export default function CartPanel({ upsells = [], mode = 'drawer', titleId = 'ca
               <dd className="text-[22px] font-extrabold tracking-[-0.02em]">{formatMoney(total)}</dd>
             </div>
           </dl>
-          <a href="/checkout" className="flex h-14 items-center justify-center gap-2.5 rounded-[14px] bg-brand-600 text-base font-extrabold text-white no-underline hover:bg-brand-700 hover:text-white">
+          <a href="/checkout" className="flex h-14 items-center justify-center gap-2.5 rounded-card bg-cyan-400 text-base font-extrabold text-ink-950 no-underline hover:bg-cyan-300 hover:text-ink-950">
             <Icon name="lock" size={18} stroke={2.2} />
             Checkout · {formatMoney(total)}
           </a>
           <div className="flex items-center justify-between gap-3">
-            {mode === 'drawer' ? <a href="/cart" className="text-sm font-bold text-ink-900">View full cart</a> : <a href="/" className="text-sm font-bold text-ink-900">Continue shopping</a>}
+            {mode === 'drawer' ? <a href="/cart" className="text-sm font-bold text-ink-900 hover:text-teal-700">View full cart</a> : <a href="/" className="text-sm font-bold text-ink-900 hover:text-teal-700">Continue shopping</a>}
             <span className="text-xs text-ink-500">Taxes calculated at checkout</span>
           </div>
         </div>

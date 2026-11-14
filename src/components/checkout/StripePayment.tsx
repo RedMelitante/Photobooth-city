@@ -101,7 +101,7 @@ export default function StripePayment(p: Props) {
         <p className="m-0 text-[13px] text-ink-700 lg:text-sm">All transactions are secure and encrypted.</p>
       </div>
 
-      <div className="flex flex-col gap-3.5 rounded-[14px] border border-line p-4 lg:gap-4 lg:p-5">
+      <div className="flex flex-col gap-3.5 rounded-card border border-line p-4 lg:gap-4 lg:p-5">
         {p.declined?.kind === 'paylater' && (
           <DeclinedAlert>
             <strong>Your {p.declined.provider} application wasn’t completed.</strong> No payment was taken and your cart is saved. Choose another payment method, or try again.
@@ -122,7 +122,7 @@ export default function StripePayment(p: Props) {
         onClick={pay}
         disabled={p.paying || !ready}
         aria-busy={p.paying}
-        className="flex h-14 items-center justify-center gap-2 rounded-lg bg-brand-600 text-base font-extrabold text-white hover:bg-brand-700 disabled:cursor-wait disabled:opacity-80 lg:h-[60px] lg:gap-2.5 lg:rounded-[14px] lg:text-[17px]"
+        className="flex h-14 items-center justify-center gap-2 rounded-md bg-cyan-400 text-base font-extrabold text-ink-950 hover:bg-cyan-300 disabled:cursor-wait disabled:opacity-80 lg:h-[60px] lg:gap-2.5 lg:rounded-card lg:text-[17px]"
       >
         {p.paying ? <Spinner size={20} light /> : <Icon name="lock" size={18} stroke={2.2} />}
         {p.paying ? 'Processing…' : 'Pay now'}

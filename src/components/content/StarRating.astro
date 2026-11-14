@@ -11,6 +11,6 @@ const { rating, filled, total = 5, size = 24, class: className } = Astro.props;
 ---
 <div role="img" aria-label={`Rated ${rating} out of ${total}`} class:list={['flex gap-[3px]', className]}>
   {Array.from({ length: total }, (_, i) => (
-    <Icon name="star" size={size} class={i < filled ? 'text-star' : 'text-[#D8DBE2]'} />
+    <Icon name="star" size={size} class={i < filled ? 'text-[#D99A00]' : 'text-[#D3DAD9]'} />
   ))}
 </div>

@@ -57,7 +57,7 @@ const EXPRESS = [
 function Skeleton() {
   return (
     <div className="flex flex-1 flex-col lg:flex-row" aria-busy="true">
-      <div className="h-[60px] border-b border-line bg-canvas lg:hidden" />
+      <div className="h-[60px] border-b border-line bg-tile lg:hidden" />
       <div className="flex flex-1 justify-end px-4 pt-5 lg:pt-10 lg:pr-16 lg:pl-10">
         <div className="flex w-full max-w-[660px] flex-col gap-4">
           <span className="sr-only">Loading checkout…</span>
@@ -67,7 +67,7 @@ function Skeleton() {
           <div className="h-[52px] animate-pulse rounded-md bg-chip" />
         </div>
       </div>
-      <div className="hidden border-l border-line bg-canvas lg:block lg:w-[420px]" />
+      <div className="hidden border-l border-line bg-tile lg:block lg:w-[510px]" />
     </div>
   );
 }
@@ -75,10 +75,10 @@ function Skeleton() {
 function EmptyCart() {
   return (
     <div className="mx-auto w-full max-w-[1440px] px-4 py-12 lg:px-10 lg:py-20">
-      <section aria-labelledby="empty-title" className="flex flex-col items-center gap-4 rounded-hero bg-canvas px-6 pt-16 pb-20 text-center">
-        <h1 id="empty-title" className="m-0 font-display text-[28px] leading-[1.1] font-bold tracking-[-0.02em] lg:text-[32px]">Your cart is empty</h1>
+      <section aria-labelledby="empty-title" className="flex flex-col items-center gap-4 rounded-panel bg-tile px-6 pt-16 pb-20 text-center">
+        <h1 id="empty-title" className="m-0 font-display text-[28px] leading-[1.1] font-extrabold tracking-[-0.055em] lg:text-[32px]">Your cart is empty</h1>
         <a href={collectionUrl('ipad-booths')} className={`${primaryBtn} px-7`}>Continue shopping</a>
-        <a href={PAGES.cart} className="text-[15px] font-bold">← Return to cart</a>
+        <a href={PAGES.cart} className="text-[15px] font-bold text-teal-700 underline">← Return to cart</a>
       </section>
     </div>
   );
@@ -446,7 +446,7 @@ export default function Checkout() {
                   onClick={() => !current && goTo(s)}
                   className="flex h-6 w-full items-center border-0 bg-transparent p-0 disabled:cursor-default"
                 >
-                  <span className={`block h-1.5 w-full rounded-full ${si < cur ? 'bg-success-700' : current ? 'bg-ink-900' : 'bg-line'}`} />
+                  <span className={`block h-1.5 w-full rounded-sm ${si < cur ? 'bg-success-700' : current ? 'bg-ink-900' : 'bg-line'}`} />
                 </button>
               </li>
             );
@@ -468,7 +468,7 @@ export default function Checkout() {
     </div>
   );
   const review = (
-    <dl className="m-0 rounded-[14px] border border-line px-4 lg:px-5">
+    <dl className="m-0 rounded-card border border-line px-4 lg:px-5">
       {reviewRow('Contact', p.email, () => goTo('address'))}
       {reviewRow('Ship to', formatAddress(p.address, true), () => goTo('address'), step === 'shipping')}
       {step === 'payment' && reviewRow('Method', `${sel.name} · ${shipPrice}`, () => goTo('shipping'), true)}
@@ -493,7 +493,7 @@ export default function Checkout() {
                 setExpress(x.label);
                 update({ pay: x.method });
               }}
-              className={`h-[52px] rounded-md text-[15px] font-extrabold ${x.cls} ${i === 0 || i === 3 ? 'col-span-2 lg:col-span-1' : ''} ${express === x.label ? 'ring-[3px] ring-brand-600 ring-offset-2' : ''}`}
+              className={`h-[52px] rounded-md text-[15px] font-extrabold ${x.cls} ${i === 0 || i === 3 ? 'col-span-2 lg:col-span-1' : ''} ${express === x.label ? 'ring-[3px] ring-teal-700 ring-offset-2' : ''}`}
             >
               {x.label}
             </button>
@@ -510,7 +510,7 @@ export default function Checkout() {
       <section aria-labelledby="ct-title" className="flex flex-col gap-3 lg:gap-3.5">
         <div className="flex items-baseline justify-between">
           <h2 id="ct-title" ref={heading} tabIndex={-1} className="m-0 text-xl font-extrabold outline-none lg:text-[22px]">Contact</h2>
-          <a href={PAGES.login} className="text-[13px] font-bold lg:text-sm">
+          <a href={PAGES.login} className="text-[13px] font-bold text-teal-700 underline lg:text-sm">
             <span className="hidden lg:inline">Have an account? </span>Log in
           </a>
         </div>
@@ -551,7 +551,7 @@ export default function Checkout() {
       </section>
 
       <div className="flex flex-col-reverse items-stretch gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <a href={PAGES.cart} className="self-center p-2 text-sm font-bold lg:self-auto lg:p-0 lg:text-[15px]">← Return to cart</a>
+        <a href={PAGES.cart} className="self-center p-2 text-sm font-bold text-teal-700 underline lg:self-auto lg:p-0 lg:text-[15px]">← Return to cart</a>
         <button type="button" onClick={() => goTo('shipping')} className={primaryBtn}>Continue to shipping</button>
       </div>
     </div>
@@ -564,7 +564,7 @@ export default function Checkout() {
           <h2 ref={heading} tabIndex={-1} className="m-0 text-xl font-extrabold outline-none lg:text-[22px]">Shipping method</h2>
         </legend>
         {quoteOnly ? (
-          <div role="status" className="flex flex-col gap-2 rounded-[14px] border-2 border-line bg-canvas p-4 text-[15px] leading-[22px] lg:px-5 lg:py-[18px]">
+          <div role="status" className="flex flex-col gap-2 rounded-card border-2 border-line bg-tile p-4 text-[15px] leading-[22px] lg:px-5 lg:py-[18px]">
             <strong className="text-base font-extrabold">We'll quote your shipping</strong>
             <span className="text-ink-700">
               Orders to Hawaii, Alaska and Puerto Rico ship with UPS or USPS at carrier rates, which we quote before you pay. Call{' '}
@@ -578,9 +578,9 @@ export default function Checkout() {
             return (
               <label
                 key={o.id}
-                className={`flex cursor-pointer items-center gap-3 rounded-[14px] border-2 p-4 lg:gap-3.5 lg:px-5 lg:py-[18px] ${on ? 'border-brand-600 bg-brand-50' : 'border-line bg-surface'}`}
+                className={`flex cursor-pointer items-center gap-3 rounded-card border-2 p-4 lg:gap-3.5 lg:px-5 lg:py-[18px] ${on ? 'border-teal-700 bg-cyan-50' : 'border-line bg-surface'}`}
               >
-                <input type="radio" name="ship" checked={on} onChange={() => update({ ship: o.id })} className="m-0 size-5 flex-none accent-brand-600" />
+                <input type="radio" name="ship" checked={on} onChange={() => update({ ship: o.id })} className="m-0 size-5 flex-none accent-teal-700" />
                 <span className="flex flex-1 flex-col gap-0.5">
                   <span className="text-[15px] font-extrabold lg:text-base">{o.name}</span>
                   <span className="text-[13px] text-ink-700 lg:text-sm">{o.detail}</span>
@@ -592,7 +592,7 @@ export default function Checkout() {
         )}
       </fieldset>
       {!quoteOnly && (
-        <p className="m-0 flex gap-2.5 rounded-lg bg-brand-50 px-4 py-3.5 text-sm leading-5 font-semibold text-brand-700">
+        <p className="m-0 flex gap-2.5 rounded-md bg-cyan-50 px-4 py-3.5 text-sm leading-5 font-semibold text-teal-800">
           <Icon name="truck" size={18} className="mt-px" />
           <span>Ships from our Mira Loma, CA warehouse once your order is ready; each item's lead time is shown in your cart. Economy is $20–$200 depending on order value.</span>
         </p>

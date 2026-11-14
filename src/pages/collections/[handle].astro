@@ -68,16 +68,16 @@ const ld = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
     <script type="application/ld+json" set:html={ld} />
   </Fragment>
 
-  <div class="container-page">
-    <CollectionHeader
-      collection={c}
-      parent={parent}
-      parentHref={parent ? collectionUrl(parent.handle) : undefined}
-      chips={chips}
-      chipsLabel={popular ? 'Popular in this collection' : 'Related collections'}
-      finalSale={handle === 'clearance-sale'}
-    />
+  <CollectionHeader
+    collection={c}
+    parent={parent}
+    parentHref={parent ? collectionUrl(parent.handle) : undefined}
+    chips={chips}
+    chipsLabel={popular ? 'Popular in this collection' : 'Related collections'}
+    finalSale={handle === 'clearance-sale'}
+  />
 
+  <div class="container-page">
     <CollectionBrowser client:load products={cards} />
 
     <MoreText collection={c} />

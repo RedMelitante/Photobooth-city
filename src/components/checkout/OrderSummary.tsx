@@ -63,7 +63,7 @@ function SummaryPromo({ id, promo, subtotal }: { id: string; promo: PromoState; 
         {error && <span id={`${id}-err`} role="alert" className="text-[13px] font-semibold text-sale-600">That code isn’t valid.</span>}
       </form>
       {promo.applied && (
-        <span className="flex h-8 items-center gap-2 self-start rounded-full bg-flash-100 pr-1.5 pl-3 text-[13px] font-extrabold">
+        <span className="flex h-8 items-center gap-2 self-start rounded-sm bg-cyan-50 pr-1.5 pl-3 text-[13px] font-extrabold">
           <Icon name="tag" size={14} stroke={2.4} />
           {PROMO.code} · {PROMO.percent}% off
           <button type="button" onClick={() => saveCode(null)} aria-label="Remove discount" className="flex size-6 items-center justify-center rounded-full bg-ink-950/8 text-ink-900">
@@ -72,7 +72,7 @@ function SummaryPromo({ id, promo, subtotal }: { id: string; promo: PromoState; 
         </span>
       )}
       {promo.pending && (
-        <span className="flex h-8 items-center gap-2 self-start rounded-full border-[1.5px] border-dashed border-ink-950 bg-surface pr-1.5 pl-3 text-[13px] font-extrabold">
+        <span className="flex h-8 items-center gap-2 self-start rounded-sm border-[1.5px] border-dashed border-ink-950 bg-surface pr-1.5 pl-3 text-[13px] font-extrabold">
           {PROMO.code} saved · applies at $3,500+
           <button type="button" onClick={() => saveCode(null)} aria-label="Remove discount code" className="flex size-6 items-center justify-center rounded-full bg-ink-950/8 text-ink-900">
             <Icon name="close" size={12} stroke={2.6} />
@@ -80,7 +80,7 @@ function SummaryPromo({ id, promo, subtotal }: { id: string; promo: PromoState; 
         </span>
       )}
       {subtotal > 0 && subtotal < PROMO.minSubtotal && (
-        <span role="status" className="block self-start rounded-lg bg-flash-100 px-3 py-2 text-[13px] leading-[18px] font-semibold text-ink-950">
+        <span role="status" className="block self-start rounded-md bg-cyan-50 px-3 py-2 text-[13px] leading-[18px] font-semibold text-ink-950">
           Add <strong>{formatMoney(promo.needed)}</strong> more to unlock {PROMO.percent}% off with <strong className="font-mono">{PROMO.code}</strong> (orders $3,500+)
         </span>
       )}
@@ -91,7 +91,7 @@ function SummaryPromo({ id, promo, subtotal }: { id: string; promo: PromoState; 
 function Thumb({ line, size }: { line: CartLine; size: 56 | 64 }) {
   return (
     <span
-      className={`relative flex flex-none items-center justify-center border border-line bg-surface ${size === 64 ? 'size-16 rounded-lg' : 'size-14 rounded-[10px]'}`}
+      className={`relative flex flex-none items-center justify-center border border-line bg-surface ${size === 64 ? 'size-16 rounded-md' : 'size-14 rounded-md'}`}
     >
       {line.image ? (
         <img src={line.image} alt="" className={`product-shot ${size === 64 ? 'size-[54px]' : 'size-12'}`} loading="lazy" />
@@ -100,7 +100,7 @@ function Thumb({ line, size }: { line: CartLine; size: 56 | 64 }) {
       )}
       <span
         aria-label={`Quantity ${line.quantity}`}
-        className="absolute -top-2 -right-2 flex h-[22px] min-w-[22px] items-center justify-center rounded-full bg-ink-500 px-1.5 text-xs font-extrabold text-white"
+        className="absolute -top-2 -right-2 flex h-[22px] min-w-[22px] items-center justify-center rounded-sm bg-ink-500 px-1.5 text-xs font-extrabold text-white"
       >
         {line.quantity}
       </span>
@@ -157,7 +157,7 @@ function Rows({ d, compact }: { d: SummaryData; compact?: boolean }) {
 /** Desktop: right-hand column, sticky. */
 export function SummaryAside({ d }: { d: SummaryData }) {
   return (
-    <aside aria-labelledby="os-title" className="hidden border-l border-line bg-canvas pt-10 pr-10 pb-20 pl-12 lg:block lg:w-[420px] lg:flex-none">
+    <aside aria-labelledby="os-title" className="hidden border-l border-line bg-tile pt-10 pr-10 pb-20 pl-12 lg:block lg:w-[510px] lg:flex-none">
       <div className="sticky top-6 flex max-w-[440px] flex-col gap-5">
         <h2 id="os-title" className="m-0 text-lg font-extrabold">Order summary</h2>
         <Lines lines={d.lines} size={64} />
@@ -173,7 +173,7 @@ export function SummaryAside({ d }: { d: SummaryData }) {
           </div>
         </dl>
         <p className="m-0 flex items-center gap-2 text-[13px] text-ink-700">
-          <Icon name="return" size={16} className="text-brand-600" />
+          <Icon name="return" size={16} className="text-teal-700" />
           Easy returns within 7 days
         </p>
       </div>
@@ -185,7 +185,7 @@ export function SummaryAside({ d }: { d: SummaryData }) {
 export function SummaryBar({ d }: { d: SummaryData }) {
   const [open, setOpen] = useState(false);
   return (
-    <section aria-label="Order summary" className="border-b border-line bg-canvas lg:hidden">
+    <section aria-label="Order summary" className="border-b border-line bg-tile lg:hidden">
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -193,7 +193,7 @@ export function SummaryBar({ d }: { d: SummaryData }) {
         aria-controls="m-summary"
         className="flex h-[60px] w-full items-center justify-between border-0 bg-transparent px-4"
       >
-        <span className="flex items-center gap-2 text-sm font-bold text-brand-600">
+        <span className="flex items-center gap-2 text-sm font-bold text-teal-700">
           <Icon name="bag" size={18} />
           {open ? 'Hide order summary' : 'Show order summary'}
           <Icon name="chevron-down" size={14} stroke={2.8} className={open ? 'rotate-180' : ''} />

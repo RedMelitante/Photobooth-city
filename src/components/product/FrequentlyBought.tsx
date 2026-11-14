@@ -54,16 +54,16 @@ export default function FrequentlyBought({ main, items }: Props) {
     <div className="flex flex-wrap items-center gap-3.5 lg:gap-8">
       <ul className="m-0 grid flex-[999_1_640px] list-none grid-cols-1 gap-2.5 p-0 lg:grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] lg:gap-4">
         {rows.map((r) => (
-          <li key={r.key} className={'flex items-center gap-3 rounded-[14px] border-2 bg-surface p-3 lg:gap-3.5 lg:rounded-card lg:p-3.5 ' + (r.checked ? 'border-brand-600' : 'border-transparent')}>
+          <li key={r.key} className={'flex items-center gap-3 rounded-card border-2 bg-surface p-3 lg:gap-3.5 lg:p-3.5 ' + (r.checked ? 'border-teal-700' : 'border-transparent')}>
             <input
               type="checkbox"
               id={r.id}
               checked={r.checked}
               disabled={r.locked}
               onChange={() => !r.locked && setOn((s) => ({ ...s, [r.key]: !s[r.key] }))}
-              className="m-0 size-[22px] flex-none accent-brand-600"
+              className="m-0 size-[22px] flex-none accent-teal-700"
             />
-            <span className="flex size-[72px] flex-none items-center justify-center overflow-hidden rounded-lg bg-canvas max-lg:hidden">
+            <span className="flex size-[72px] flex-none items-center justify-center overflow-hidden rounded-md bg-tile max-lg:hidden">
               {r.img && <img src={sized(r.img, 160)} alt="" width={72} height={72} loading="lazy" className="product-shot size-full p-1" />}
             </span>
             <label htmlFor={r.id} className="flex flex-1 cursor-pointer flex-col gap-0.5 lg:gap-1">
@@ -82,10 +82,10 @@ export default function FrequentlyBought({ main, items }: Props) {
         <span className="text-[32px] font-extrabold tracking-[-0.02em] max-lg:hidden" aria-live="polite">
           {formatMoney(total)}
         </span>
-        <button type="button" onClick={addAll} disabled={!chosen.length} className={'h-14 rounded-[14px] text-base font-extrabold text-white max-lg:hidden ' + (done ? 'bg-success-700' : 'bg-brand-600 hover:bg-brand-700')}>
+        <button type="button" onClick={addAll} disabled={!chosen.length} className={'h-14 rounded-card text-base font-extrabold max-lg:hidden ' + (done ? 'bg-success-700 text-white' : 'bg-cyan-400 text-ink-950 hover:bg-cyan-300')}>
           {label}
         </button>
-        <button type="button" onClick={addAll} disabled={!chosen.length} className={'h-[52px] w-full rounded-lg text-[15px] font-extrabold text-white lg:hidden ' + (done ? 'bg-success-700' : 'bg-ink-900 hover:bg-ink-950')}>
+        <button type="button" onClick={addAll} disabled={!chosen.length} className={'h-[52px] w-full rounded-md text-[15px] font-extrabold lg:hidden ' + (done ? 'bg-success-700 text-white' : 'bg-ink-900 text-white hover:bg-ink-950')}>
           {done ? label : `${label} · ${formatMoney(total)}`}
         </button>
       </div>
