@@ -1,4 +1,4 @@
-// Hero product spotlight (Main board): three products on a gridded light disc,
+// Hero product spotlight: three cut-out product renders on a dark stage (rings, glow, floor),
 // switched with the 01/02/03 buttons (aria-pressed). Slides are resolved from
 // the catalog at build time (spotlightSlides() in src/lib/home.ts).
 import { useState } from 'react';
@@ -6,7 +6,7 @@ import Icon from '@/components/react/Icon';
 import type { SpotlightSlide } from '@/lib/home';
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
-const callout = 'eyebrow absolute z-[2] hidden border-b border-cyan-400 bg-ink-950 pt-1 pb-1.5 text-[10px] tracking-[0.12em] text-fog lg:block';
+const callout = 'eyebrow absolute z-[2] hidden border-b border-cyan-400/60 pt-1 pb-2 text-[11px] tracking-[0.12em] text-fog lg:block';
 
 export default function Spotlight({ slides }: { slides: SpotlightSlide[] }) {
   const [i, setI] = useState(0);
@@ -14,7 +14,7 @@ export default function Spotlight({ slides }: { slides: SpotlightSlide[] }) {
   if (!s) return null;
 
   return (
-    <div aria-roledescription="carousel" aria-label="Product spotlight" className="flex min-w-0 flex-col gap-3.5 lg:flex-[1_1_560px]">
+    <div aria-roledescription="carousel" aria-label="Product spotlight" className="flex w-full min-w-0 flex-col gap-3.5 lg:w-auto lg:flex-[1_1_560px]">
       <div className="eyebrow flex justify-between text-ink-300">
         <span>Product spotlight</span>
         <span>
@@ -22,35 +22,41 @@ export default function Spotlight({ slides }: { slides: SpotlightSlide[] }) {
         </span>
       </div>
 
-      <div className="relative flex h-[320px] items-center justify-center lg:h-[470px]">
-        <div aria-hidden="true" className="absolute size-[330px] rounded-full border border-cyan-400/22 lg:size-[500px]" />
+      <div className="relative flex h-[340px] items-center justify-center overflow-hidden lg:h-[560px]">
+        {/* stage: faint grid fading out, teal glow, two rings, glowing floor */}
         <div
           aria-hidden="true"
-          className="absolute size-[260px] overflow-hidden rounded-full bg-[radial-gradient(circle_at_50%_42%,#F4F7F7_0%,#DCE5E5_62%,#B9C8C9_100%)] shadow-[0_0_0_10px_rgba(116,237,245,0.06),0_40px_80px_-20px_rgba(116,237,245,0.35)] lg:size-[380px]"
-        >
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(16,19,22,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(16,19,22,0.06)_1px,transparent_1px)] bg-size-[28px_28px]" />
-        </div>
-        <div className="relative size-[230px] lg:size-[350px]">
+          className="absolute inset-0 bg-[linear-gradient(rgba(116,237,245,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(116,237,245,0.05)_1px,transparent_1px)] bg-size-[56px_56px] [mask-image:radial-gradient(ellipse_at_50%_45%,#000_30%,transparent_72%)]"
+        />
+        <div aria-hidden="true" className="absolute top-1/2 left-1/2 size-[420px] -translate-1/2 rounded-full bg-[radial-gradient(circle,rgba(41,88,98,0.55)_0%,rgba(20,25,28,0)_65%)] lg:size-[640px]" />
+        <div aria-hidden="true" className="absolute top-1/2 left-1/2 size-[300px] -translate-1/2 rounded-full border border-cyan-400/25 lg:size-[540px]" />
+        <div aria-hidden="true" className="absolute top-1/2 left-1/2 size-[230px] -translate-1/2 rounded-full border border-dashed border-cyan-400/20 lg:size-[430px]" />
+        <div aria-hidden="true" className="absolute bottom-[4%] left-1/2 h-[46px] w-[90%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse,rgba(116,237,245,0.28)_0%,rgba(116,237,245,0.08)_45%,transparent_72%)] blur-[2px] lg:h-[80px]" />
+
+        <div className="relative flex h-[88%] w-full items-end justify-center pb-[5%]">
           {slides.map((x, n) => (
             <img
               key={x.idx}
               src={x.img}
               alt={n === i ? x.name : ''}
               aria-hidden={n === i ? undefined : true}
-              width="350"
-              height="350"
+              width={x.w}
+              height={x.h}
               loading={n === 0 ? 'eager' : 'lazy'}
               decoding="async"
-              className={cx('absolute inset-0 size-full object-contain mix-blend-multiply transition-opacity duration-300', n === i ? 'opacity-100' : 'opacity-0')}
+              className={cx(
+                'absolute bottom-[5%] left-1/2 h-full max-w-[80%] -translate-x-1/2 object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.55)] transition-opacity duration-300',
+                n === i ? 'opacity-100' : 'opacity-0',
+              )}
             />
           ))}
         </div>
-        <span className={cx(callout, 'top-[22%] left-0')}>{s.c1}</span>
-        <span className={cx(callout, 'right-0 bottom-[20%] text-right')}>{s.c2}</span>
-        <span aria-hidden="true" className="absolute top-1/2 left-[14%] hidden text-lg leading-none text-line-dark-strong lg:block">
+        <span className={cx(callout, 'top-[24%] left-0 min-w-[150px]')}>{s.c1}</span>
+        <span className={cx(callout, 'right-0 bottom-[26%] min-w-[150px] text-right')}>{s.c2}</span>
+        <span aria-hidden="true" className="absolute top-1/2 left-[13%] hidden text-lg leading-none text-line-dark-strong lg:block">
           +
         </span>
-        <span aria-hidden="true" className="absolute top-1/2 right-[2%] hidden text-lg leading-none text-line-dark-strong lg:block">
+        <span aria-hidden="true" className="absolute top-1/2 right-[3%] hidden text-lg leading-none text-line-dark-strong lg:block">
           +
         </span>
       </div>

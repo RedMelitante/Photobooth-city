@@ -4,7 +4,6 @@
 import { cardCategory, collectionsFor, designImage, getProduct, listProducts } from './catalog';
 import { toCardProduct, type CardProduct } from './collection';
 import { priceLabel } from './money';
-import { sized } from './product';
 import { collectionUrl, PAGES, productUrl } from './routes';
 import type { Product } from './types';
 
@@ -34,14 +33,18 @@ export interface SpotlightSlide {
   href: string;
   price: string;
   img: string;
+  w: number;
+  h: number;
   c1: string;
   c2: string;
 }
 
+// Cut-out renders on transparent backgrounds (public/images/spotlight-*.webp), made from
+// the products' own Shopify photos. Short names as on the client's reference site.
 const SPOTLIGHT = [
-  { handle: 'helio-v2-ipad-ringlight-photobooth', type: 'iPad', c1: 'Push-to-tilt head', c2: '2500-lumen LED ring light' },
-  { handle: 'lumia-m-basic-led-photobooth-diy-shell', type: 'DSLR', c1: 'T12R LED ring light', c2: 'iPad + DSLR ready' },
-  { handle: '360-photobooth-27-32-39-inch-motorized-4-led-panel-bundle-package', type: '360°', c1: '27, 32 or 39 inch platform', c2: '4 LED panel bundle' },
+  { handle: 'helio-v2-ipad-ringlight-photobooth', name: 'Helio Sport', type: 'iPad', img: '/images/spotlight-helio-sport.webp', w: 401, h: 980, c1: 'Tilting halo head', c2: 'Aluminum enclosure' },
+  { handle: 'lumia-m-basic-led-photobooth-diy-shell', name: 'Lumia M Basic', type: 'DSLR', img: '/images/spotlight-lumia-m-basic.webp', w: 348, h: 1163, c1: 'T12R LED ring light', c2: 'iPad + DSLR ready' },
+  { handle: '360-photobooth-27-32-39-inch-motorized-4-led-panel-bundle-package', name: '360 Motorized Bundle', type: '360°', img: '/images/spotlight-360-bundle.webp', w: 607, h: 981, c1: '27, 32 or 39 inch platform', c2: '4 LED panel bundle' },
 ];
 
 export function spotlightSlides(): SpotlightSlide[] {
@@ -50,10 +53,12 @@ export function spotlightSlides(): SpotlightSlide[] {
     return {
       idx: `0${i + 1}`,
       type: s.type,
-      name: p.title,
+      name: s.name,
       href: productUrl(p.handle),
       price: priceLabel(p.minPrice, p.maxPrice),
-      img: p.images[0] ? sized(p.images[0].url, 800) : '',
+      img: s.img,
+      w: s.w,
+      h: s.h,
       c1: s.c1,
       c2: s.c2,
     };
