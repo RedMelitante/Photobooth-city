@@ -9,7 +9,7 @@ interface Props {
 }
 
 /** Header search with predictive results after 2 characters. */
-export default function SearchBox({ variant, initialQuery = '' }: Props) {
+export default function SearchBox({ variant, initialQuery = ''}: Props) {
   const [q, setQ] = useState(initialQuery);
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState<SearchIndex | null>(null);
@@ -60,7 +60,7 @@ export default function SearchBox({ variant, initialQuery = '' }: Props) {
 
   return (
     <form ref={rootRef} role="search" action="/search" method="get" className="relative flex w-full">
-      {m && <Icon name="search" size={18} stroke={2.2} className="pointer-events-none absolute top-[13px] left-4 text-ink-500" />}
+      <Icon name="search" size={18} stroke={2.2} className={'pointer-events-none absolute left-4 text-[#87949A] ' + (m ? 'top-[13px]' : 'top-[14px]')} />
       <input
         type="search"
         name="q"
@@ -81,44 +81,43 @@ export default function SearchBox({ variant, initialQuery = '' }: Props) {
           setOpen(true);
         }}
         onKeyDown={onKey}
+        data-header-search
         placeholder="Search booths, printers, backdrops…"
         className={
-          'w-full rounded-full border-[1.5px] border-line-strong bg-canvas text-ink-900 placeholder:text-ink-500 ' +
-          (m ? 'h-11 pr-12 pl-11 text-base' : 'h-12 pr-14 pl-5 text-[15px]')
+          'w-full border border-line-dark-strong bg-ink-950 text-[#F6F8F8] placeholder:text-[#87949A] ' +
+          (m ? 'h-11 rounded-sm pr-12 pl-11 text-base' : 'h-[46px] rounded-md pr-4 pl-11 text-[15px]')
         }
       />
-      <button
-        type="submit"
-        aria-label="Search"
-        className={'absolute top-1 flex items-center justify-center rounded-full bg-ink-900 text-white ' + (m ? 'right-1 size-9' : 'right-1 size-10')}
-      >
-        <Icon name="search" size={m ? 16 : 18} stroke={2.4} />
-      </button>
+      {m && (
+        <button type="submit" aria-label="Search" className="absolute top-1 right-1 flex size-9 items-center justify-center rounded-sm bg-cyan-400 text-ink-950">
+          <Icon name="search" size={16} stroke={2.4} />
+        </button>
+      )}
 
       {showPanel && (
         <div
           id={listId}
           className={
-            'absolute z-60 flex flex-col gap-1 rounded-[18px] border border-line bg-surface p-2 text-left shadow-[0_24px_48px_-12px_rgb(11_16_32/0.28)] ' +
-            (m ? '-inset-x-1 top-[52px]' : 'inset-x-0 top-14')
+            'absolute z-60 flex flex-col gap-1 rounded-card border border-line bg-surface p-2 text-left text-ink-900 shadow-menu ' +
+            (m ? '-inset-x-1 top-[52px]' : 'inset-x-0 top-[54px]')
           }
         >
           {products.length > 0 && (
             <>
-              <span className="px-2.5 pt-2 pb-1 text-[11px] font-extrabold tracking-[0.1em] text-ink-500 uppercase">Products</span>
+              <span className="eyebrow px-2.5 pt-2 pb-1 text-ink-500">Products</span>
               <ul role="listbox" aria-label="Products">
                 {products.map((r, i) => (
                   <li key={r.h} role="option" id={`${listId}-${i}`} aria-selected={i === active}>
                     <a
                       href={`/products/${r.h}`}
-                      className={'flex min-h-14 items-center gap-3 rounded-lg px-2.5 py-1.5 text-ink-900 no-underline hover:bg-canvas hover:text-ink-900 ' + (i === active ? 'bg-canvas' : '')}
+                      className={'flex min-h-14 items-center gap-3 rounded-md px-2.5 py-1.5 text-ink-900 no-underline hover:bg-paper hover:text-ink-900 ' + (i === active ? 'bg-paper' : '')}
                     >
-                      <span className="size-12 flex-none overflow-hidden rounded-md bg-canvas">
+                      <span className="size-12 flex-none overflow-hidden rounded-sm bg-tile">
                         {r.img && <img src={r.img} alt="" className="product-shot size-full p-[3px]" loading="lazy" />}
                       </span>
                       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                         <span className="truncate text-sm leading-[19px] font-bold">{r.t}</span>
-                        <span className={'text-[13px] font-extrabold ' + (r.cmp ? 'text-sale-600' : 'text-ink-900')}>{priceLabel(r.min, r.max)}</span>
+                        <span className={'text-[13px] font-extrabold ' + (r.cmp ? 'text-sale-600' : 'text-teal-700')}>{priceLabel(r.min, r.max)}</span>
                       </span>
                     </a>
                   </li>
@@ -128,10 +127,10 @@ export default function SearchBox({ variant, initialQuery = '' }: Props) {
           )}
           {cats.length > 0 && (
             <>
-              <span className="px-2.5 pt-2 pb-1 text-[11px] font-extrabold tracking-[0.1em] text-ink-500 uppercase">Categories</span>
+              <span className="eyebrow px-2.5 pt-2 pb-1 text-ink-500">Categories</span>
               <div className="flex flex-wrap gap-1.5 px-2.5 pb-1.5">
                 {cats.map((c) => (
-                  <a key={c.h} href={`/collections/${c.h}`} className="flex h-[34px] items-center rounded-full bg-chip px-3 text-[13px] font-bold text-ink-900 no-underline hover:text-ink-900">
+                  <a key={c.h} href={`/collections/${c.h}`} className="flex h-[34px] items-center rounded-sm border border-line-strong px-3 text-xs font-extrabold text-ink-900 no-underline hover:border-ink-900 hover:text-ink-900">
                     {c.t}
                   </a>
                 ))}
@@ -139,7 +138,7 @@ export default function SearchBox({ variant, initialQuery = '' }: Props) {
             </>
           )}
           {!products.length && !cats.length && <p className="px-2.5 py-3.5 text-sm text-ink-700">No products match “{qTrim}”.</p>}
-          <a href={searchHref} className="mt-0.5 flex min-h-12 items-center justify-between border-t border-line px-2.5 text-sm font-extrabold no-underline">
+          <a href={searchHref} className="mt-0.5 flex min-h-12 items-center justify-between border-t border-line px-2.5 text-sm font-extrabold text-ink-900 no-underline hover:text-ink-900">
             See all results for “{qTrim}” <span aria-hidden="true">→</span>
           </a>
         </div>

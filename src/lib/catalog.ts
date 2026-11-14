@@ -42,6 +42,24 @@ export function collectionsFor(handle: string): Collection[] {
   return collections.filter((c) => c.products.includes(handle));
 }
 
+/** Mono label on v2 product cards ("IPAD BOOTHS", "SYSTEM PACKAGES", …). */
+export function cardCategory(p: Product): string {
+  const in_ = new Set(collectionsFor(p.handle).map((c) => c.handle));
+  const t = p.title.toLowerCase();
+  if (/lounge|sapphire|mirror|vintage/.test(t)) return 'Mirror & vintage';
+  if (in_.has('system-packages')) return 'System packages';
+  if (in_.has('dj-gear')) return 'DJ gear';
+  if (in_.has('360-booths')) return '360° booths';
+  if (in_.has('dslr-booths')) return 'DSLR booths';
+  if (in_.has('ipad-booths')) return 'iPad booths';
+  if (in_.has('printers-and-medias') || in_.has('printer-accessories')) return 'Printers & media';
+  if (in_.has('backdrops') || in_.has('enclosures')) return 'Backdrops & enclosures';
+  if (in_.has('roamer-accessories')) return 'Roamer accessories';
+  if (in_.has('travel-case')) return 'Travel cases';
+  if (/flash|light/.test(t)) return 'Lighting';
+  return 'Accessories';
+}
+
 export function isOnSale(p: Product): boolean {
   return !!p.compareAtPrice && p.compareAtPrice > p.minPrice;
 }

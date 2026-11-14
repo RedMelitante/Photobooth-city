@@ -1,4 +1,6 @@
+// v2 product card for islands. Same markup and classes as src/components/ProductCard.astro.
 import QuickAdd from '@/components/react/QuickAdd';
+import Icon from '@/components/react/Icon';
 import { formatShort, priceLabel } from '@/lib/money';
 import { sized } from '@/lib/product';
 import { productUrl } from '@/lib/routes';
@@ -13,8 +15,9 @@ interface Props {
 }
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
+const badgeCls = 'rounded-xs px-[7px] py-[3px] font-mono text-[10px] font-bold tracking-[0.08em] uppercase';
+const shot = 'product-shot absolute inset-0 size-full px-[9%] pt-[13%] pb-[7%]';
 
-/** React twin of ProductCard.astro (same markup and classes) for use inside islands. */
 export default function ProductCardReact({ product: p, eager = false, badge, className }: Props) {
   const href = productUrl(p.handle);
   const sale = p.sale && p.available;
@@ -22,12 +25,13 @@ export default function ProductCardReact({ product: p, eager = false, badge, cla
   const [img1, img2] = p.images;
 
   return (
-    <article className={cx('group/card flex h-full min-w-0 flex-col gap-3.5 text-ink-900', className)}>
-      <a
-        href={href}
-        aria-label={p.title}
-        className="relative flex aspect-square items-center justify-center overflow-hidden rounded-card bg-canvas transition-[background-color,box-shadow] duration-150 group-hover/card:bg-[#F1F1EC] group-hover/card:shadow-[inset_0_0_0_1px_var(--color-line-strong)]"
-      >
+    <article
+      className={cx(
+        'group/card flex h-full min-w-0 flex-col overflow-hidden rounded-card border border-[#D9E1E0] bg-surface text-ink-900 transition-colors duration-150 focus-within:border-ink-900 hover:border-ink-900',
+        className,
+      )}
+    >
+      <a href={href} aria-label={p.title} className="relative flex aspect-square items-center justify-center bg-tile transition-colors duration-150 group-hover/card:bg-tile-hover">
         {img1 && (
           <img
             src={sized(img1.url, 600)}
@@ -36,11 +40,7 @@ export default function ProductCardReact({ product: p, eager = false, badge, cla
             decoding="async"
             width="600"
             height="600"
-            className={cx(
-              'product-shot absolute inset-0 size-full p-[6%] transition-[transform,opacity] duration-200',
-              soldOut && 'opacity-45',
-              img2 ? 'group-hover/card:opacity-0' : 'group-hover/card:scale-105',
-            )}
+            className={cx(shot, 'transition-[transform,opacity] duration-200', soldOut && 'opacity-45', img2 ? 'group-hover/card:opacity-0' : 'group-hover/card:scale-105')}
           />
         )}
         {img2 && (
@@ -51,38 +51,36 @@ export default function ProductCardReact({ product: p, eager = false, badge, cla
             decoding="async"
             width="600"
             height="600"
-            className="product-shot absolute inset-0 size-full p-[6%] opacity-0 transition-opacity duration-200 group-hover/card:opacity-100"
+            className={cx(shot, 'opacity-0 transition-opacity duration-150 group-hover/card:opacity-100')}
           />
         )}
-        <span className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-          {sale && <span className="rounded-full bg-sale-600 px-2.5 py-1 text-xs font-extrabold tracking-[0.02em] text-white">Sale</span>}
-          {badge === 'new' && <span className="rounded-full bg-flash-400 px-2.5 py-1 text-xs font-extrabold tracking-[0.02em] text-ink-950">New</span>}
-          {soldOut && <span className="rounded-full bg-ink-900 px-2.5 py-1 text-xs font-extrabold tracking-[0.02em] text-white">Sold out</span>}
+        <span className="absolute inset-x-2.5 top-2.5 flex items-center justify-between gap-1.5">
+          <span className="font-mono text-[10px] font-semibold tracking-[0.08em] text-[#2B464E] uppercase">{p.cat ?? ''}</span>
+          <span className="flex gap-1">
+            {sale && <span className={cx(badgeCls, 'bg-sale-600 text-white')}>Sale</span>}
+            {badge === 'new' && <span className={cx(badgeCls, 'bg-cyan-400 text-ink-950')}>New</span>}
+            {soldOut && <span className={cx(badgeCls, 'bg-ink-900 text-white')}>Sold out</span>}
+          </span>
         </span>
       </a>
-      <div className="flex flex-1 flex-col gap-1.5">
-        <a href={href} className="text-[15px] leading-[21px] font-bold text-ink-900 no-underline group-hover/card:underline hover:text-ink-900">
+      <div className="flex flex-1 flex-col gap-1.5 px-3.5 pt-3.5 pb-4">
+        <a href={href} className="text-h4 font-extrabold text-pretty text-ink-900 no-underline group-hover/card:underline hover:text-ink-900">
           {p.title}
         </a>
-        <div className="flex flex-wrap items-baseline gap-2">
-          <span className={cx('text-base font-extrabold', sale ? 'text-sale-600' : 'text-ink-900')}>{priceLabel(p.minPrice, p.maxPrice)}</span>
-          {sale && p.compareAtPrice && <s className="text-sm text-ink-500">{formatShort(p.compareAtPrice)}</s>}
+        <div className="flex flex-wrap items-baseline gap-1.5">
+          <span className={cx('text-sm font-extrabold', sale ? 'text-sale-600' : 'text-teal-700')}>
+            {priceLabel(p.minPrice, p.maxPrice)} <span className="text-[9px] font-bold tracking-[0.04em]">USD</span>
+          </span>
+          {sale && p.compareAtPrice && <s className="text-[13px] text-ink-500">{formatShort(p.compareAtPrice)}</s>}
+        </div>
+        <div className="mt-auto flex min-h-9 flex-wrap items-center justify-between gap-2 pt-2.5">
+          <a href={href} className="flex items-center gap-1.5 text-[13px] font-extrabold text-ink-900 no-underline hover:text-ink-900">
+            {p.line ? 'View product' : 'View options'}
+            <Icon name="arrow-right" size={13} stroke={2.6} className="transition-transform duration-150 group-hover/card:translate-x-0.5" />
+          </a>
+          {soldOut ? <span className="text-xs font-bold text-ink-500">Sold out</span> : p.line && <QuickAdd line={p.line} />}
         </div>
       </div>
-      {soldOut ? (
-        <button type="button" disabled className="h-11 w-full cursor-not-allowed rounded-md border border-dashed border-line-strong bg-canvas text-sm font-bold text-ink-500">
-          Sold out
-        </button>
-      ) : p.line ? (
-        <QuickAdd line={p.line} />
-      ) : (
-        <a
-          href={href}
-          className="flex h-11 w-full items-center justify-center rounded-md border-[1.5px] border-line-strong bg-surface text-sm font-bold text-ink-900 no-underline transition-colors duration-150 group-hover/card:border-ink-900 group-hover/card:bg-ink-900 group-hover/card:text-white"
-        >
-          View options
-        </a>
-      )}
     </article>
   );
 }

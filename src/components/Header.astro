@@ -1,81 +1,92 @@
 ---
 import Icon from './Icon.astro';
+import Logo from './Logo.astro';
 import SearchBox from './react/SearchBox';
 import CartButton from './react/CartButton';
-import { MEGA_COLUMNS, NAV_LINKS, menuHref, PAGES, collectionUrl } from '@/lib/routes';
-import { STORE } from '@/lib/commerce';
-
-// Below 1280px these stay reachable through the mega menu.
-const XL_ONLY = new Set(['Mirror Booth Package', 'Vintage Enclosed', 'System Packages', 'DJ Gear']);
+import { MEGA_COLUMNS, NAV_V2, menuHref, PAGES, collectionUrl } from '@/lib/routes';
+import { STORE, PROMO } from '@/lib/commerce';
 ---
 
-<header class="relative z-40 w-full bg-surface text-ink-900">
+<header class="dark-band relative z-40 w-full bg-ink-850 text-[#F6F8F8]">
   <!-- Announcement bar -->
-  <div class="bg-ink-950 text-white">
-    <p class="container-page flex items-center justify-center gap-2.5 py-2 text-center text-xs leading-4 lg:py-2.5 lg:text-[13px] lg:leading-[18px]">
-      <Icon name="globe" size={16} class="hidden text-flash-400 lg:block" />
-      <span>
-        <strong class="font-extrabold">We Ship Across the US!</strong>{' '}
-        <span class="text-ink-200">Fast and reliable shipping to all 50 states and Puerto Rico.</span>
+  <div class="bg-cyan-300 text-ink-950">
+    <div class="container-page hidden h-[34px] items-center justify-between gap-4 text-[13px] leading-[18px] lg:flex">
+      <span class="flex flex-1 items-center gap-2 font-bold text-teal-800">
+        <Icon name="phone" size={15} stroke={2.2} />
+        <a href={STORE.phoneHref} class="text-inherit no-underline hover:text-inherit">{STORE.phone}</a>
       </span>
+      <p class="flex items-center gap-2.5 font-extrabold whitespace-nowrap">
+        <Icon name="globe" size={15} stroke={2.2} />
+        We ship across the US
+        <span aria-hidden="true" class="opacity-50">·</span>
+        <a href={PAGES.shipping} class="flex items-center gap-1 text-inherit no-underline hover:text-inherit hover:underline">Shipping details <Icon name="arrow-up-right" size={12} stroke={2.6} /></a>
+      </p>
+      <span class="flex flex-1 items-center justify-end gap-2 font-bold text-teal-800">
+        Flash sale: 7% off $3,500+
+        <code class="rounded-xs bg-ink-950 px-1.5 py-px font-mono text-[11px] font-semibold tracking-[0.04em] text-cyan-300">{PROMO.code}</code>
+      </span>
+    </div>
+    <p class="flex items-center justify-center gap-2 px-4 py-2 text-xs leading-4 font-extrabold lg:hidden">
+      <Icon name="globe" size={14} stroke={2.2} />
+      We ship across the US <span aria-hidden="true" class="opacity-50">·</span>
+      <a href={PAGES.shipping} class="text-inherit no-underline hover:text-inherit">Shipping details ↗</a>
     </p>
   </div>
 
-  <!-- Desktop main row -->
-  <div class="container-page hidden h-[84px] items-center gap-8 lg:flex">
-    <a href="/" aria-label="Photobooth City home" class="flex flex-none items-center">
-      <img src="/images/logo.png" alt="Photobooth City" width="135" height="68" class="block h-[68px] w-auto" />
-    </a>
-    <div class="max-w-[600px] flex-auto">
-      <SearchBox client:idle variant="desktop" />
-    </div>
-    <div class="ml-auto flex items-center gap-2">
-      <a href={STORE.phoneHref} class="flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-ink-900 no-underline hover:bg-canvas hover:text-ink-900">
-        <span class="flex size-10 items-center justify-center rounded-full bg-brand-50 text-brand-600"><Icon name="phone" size={18} /></span>
-        <span class="flex flex-col leading-tight">
-          <span class="text-xs font-semibold text-ink-500">Talk to an expert</span>
-          <span class="text-[15px] font-extrabold whitespace-nowrap">{STORE.phone}</span>
-        </span>
-      </a>
-      <a href={PAGES.login} class="flex h-11 items-center gap-2 rounded-lg px-3 text-sm font-bold text-ink-900 no-underline hover:bg-canvas hover:text-ink-900">
-        <Icon name="user" size={20} />
-        Log in
-      </a>
-      <CartButton client:idle variant="desktop" />
-    </div>
-  </div>
+  <!-- Desktop main bar -->
+  <div class="hidden border-b border-line-dark lg:block" data-mega-root>
+    <div class="container-page flex h-[72px] items-center gap-6">
+      <div class="flex flex-1 basis-0"><Logo /></div>
 
-  <!-- Desktop nav row -->
-  <nav aria-label="Main" class="hidden border-y border-line lg:block" data-mega-root>
-    <ul class="mx-auto flex h-[52px] max-w-(--container-page) items-center gap-1 overflow-x-auto px-7 [scrollbar-width:none]">
-      <li>
+      <nav aria-label="Main">
+        <ul class="flex items-center gap-1">
+          <li>
+            <button
+              type="button"
+              aria-expanded="false"
+              aria-controls="mega"
+              data-mega-trigger
+              class="flex h-10 items-center gap-1.5 rounded-md px-3 text-sm font-[750] text-[#DBE2E4] transition-colors duration-150 hover:bg-ink-800 aria-expanded:bg-cyan-400 aria-expanded:text-ink-950"
+            >
+              Shop all
+              <Icon name="chevron-down" size={15} stroke={2.6} class="transition-transform duration-150 [[aria-expanded=true]>&]:rotate-180" />
+            </button>
+          </li>
+          {NAV_V2.map(([t, h]) => (
+            <li class:list={[t === 'System packages' && 'hidden xl:block']}>
+              <a href={h} class="flex h-10 items-center rounded-md px-3 text-sm font-[750] whitespace-nowrap text-[#DBE2E4] no-underline hover:bg-ink-800 hover:text-white">{t}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="flex flex-1 basis-0 items-center justify-end gap-1">
         <button
           type="button"
+          aria-label="Search"
           aria-expanded="false"
-          aria-controls="mega"
-          data-mega-trigger
-          class="flex h-10 items-center gap-2 rounded-md bg-chip px-3.5 text-sm font-extrabold text-ink-900 transition-colors duration-150 aria-expanded:bg-ink-900 aria-expanded:text-white"
+          aria-controls="hdr-search"
+          data-search-toggle
+          class="flex size-11 items-center justify-center rounded-md text-[#F6F8F8] hover:bg-ink-800 aria-expanded:bg-ink-800"
         >
-          <Icon name="grid" size={16} />
-          Shop all
-          <Icon name="chevron-down" size={16} stroke={2.6} class="transition-transform duration-150 [[aria-expanded=true]>&]:rotate-180" />
+          <Icon name="search" size={20} stroke={2.2} />
         </button>
-      </li>
-      {NAV_LINKS.map((t) => (
-        <li class:list={[XL_ONLY.has(t) && 'hidden xl:block']}>
-          <a href={menuHref(t)} class="flex h-10 items-center rounded-md px-3 text-sm font-semibold whitespace-nowrap text-ink-900 no-underline hover:bg-canvas hover:text-ink-900">{t}</a>
-        </li>
-      ))}
-      <li class="ml-auto">
-        <a href={collectionUrl('clearance-sale')} class="flex h-9 items-center gap-2 rounded-full bg-sale-50 px-3.5 text-sm font-extrabold whitespace-nowrap text-sale-600 no-underline hover:text-sale-600">
-          <span class="size-2 rounded-full bg-sale-600"></span>
-          Clearance Sale
+        <a href={PAGES.login} aria-label="Account" class="flex size-11 items-center justify-center rounded-md text-[#F6F8F8] hover:bg-ink-800 hover:text-[#F6F8F8]">
+          <Icon name="user" size={20} />
         </a>
-      </li>
-    </ul>
+        <CartButton client:idle variant="desktop" />
+      </div>
+    </div>
+
+    <!-- Search row -->
+    <div id="hdr-search" hidden data-search-row class="border-t border-line-dark bg-ink-850">
+      <div class="mx-auto max-w-[760px] px-10 py-4">
+        <SearchBox client:idle variant="desktop" />
+      </div>
+    </div>
 
     <!-- Mega menu -->
-    <div id="mega" hidden data-mega-panel class="absolute inset-x-0 top-full border-b border-line bg-surface shadow-menu">
+    <div id="mega" hidden data-mega-panel class="absolute inset-x-0 top-full border-b border-line-dark bg-ink-850 shadow-menu">
       <div class="mx-auto grid max-w-(--container-page) grid-cols-[repeat(4,minmax(0,1fr))_minmax(0,1.25fr)] gap-8 px-10 pt-9 pb-10">
         {MEGA_COLUMNS.map((col) => (
           <div class="flex flex-col gap-7">
@@ -84,13 +95,13 @@ const XL_ONLY = new Set(['Mirror Booth Package', 'Vintage Enclosed', 'System Pac
               return (
                 <div class="flex flex-col gap-3">
                   {h ? (
-                    <a href={h} class="text-xs font-extrabold tracking-[0.08em] text-brand-600 uppercase no-underline">{g.title} →</a>
+                    <a href={h} class="eyebrow text-cyan-400 no-underline hover:text-cyan-300">{g.title} →</a>
                   ) : (
-                    <span class="text-xs font-extrabold tracking-[0.08em] text-ink-500 uppercase">{g.title}</span>
+                    <span class="eyebrow text-fog">{g.title}</span>
                   )}
                   <ul class="flex flex-col gap-0.5">
                     {g.items.map((it) => (
-                      <li><a href={menuHref(it)} class="block py-1.5 text-[15px] font-medium text-ink-900 no-underline hover:text-brand-600 hover:underline">{it}</a></li>
+                      <li><a href={menuHref(it)} class="block py-1.5 text-[15px] font-semibold text-[#F6F8F8] no-underline hover:text-cyan-400">{it}</a></li>
                     ))}
                   </ul>
                 </div>
@@ -98,34 +109,32 @@ const XL_ONLY = new Set(['Mirror Booth Package', 'Vintage Enclosed', 'System Pac
             })}
           </div>
         ))}
-        <div class="flex flex-col gap-4">
-          <a href={collectionUrl('clearance-sale')} class="flex flex-col gap-1.5 rounded-card bg-sale-50 p-5 text-sale-600 no-underline hover:text-sale-600">
-            <span class="text-xs font-extrabold tracking-[0.08em] uppercase">Clearance Sale</span>
-            <span class="font-display text-[22px] leading-[26px] font-bold text-ink-900">Marked-down booths and gear</span>
-            <span class="text-sm font-bold">Shop clearance →</span>
+        <div class="flex flex-col gap-3">
+          <a href={collectionUrl('clearance-sale')} class="flex flex-col gap-1.5 rounded-card border border-line-dark bg-ink-800 p-5 text-[#F6F8F8] no-underline hover:border-line-dark-strong hover:text-[#F6F8F8]">
+            <span class="eyebrow text-sale-300">Clearance sale</span>
+            <span class="text-[22px] leading-[26px] font-extrabold tracking-[-0.045em]">Marked-down booths and gear</span>
+            <span class="text-[13px] font-extrabold text-cyan-400">Shop clearance →</span>
           </a>
-          <div class="flex flex-col gap-2.5 rounded-card bg-ink-950 p-5 text-white">
-            <span class="font-display text-[22px] leading-[26px] font-bold">Ready to start your business?</span>
-            <span class="text-sm leading-5 text-ink-200">An expert can match a booth to your events and budget.</span>
-            <a href={STORE.phoneHref} class="flex h-11 items-center gap-2 self-start rounded-md bg-flash-400 px-4 text-sm font-extrabold text-ink-950 no-underline hover:text-ink-950">Call {STORE.phone}</a>
+          <div class="flex flex-col gap-2.5 rounded-card bg-cyan-400 p-5 text-ink-950">
+            <span class="text-[22px] leading-[26px] font-extrabold tracking-[-0.045em]">Not sure which booth fits?</span>
+            <span class="text-sm leading-5 text-teal-800">An expert can match a booth to your events and budget.</span>
+            <a href={STORE.phoneHref} class="flex h-10 items-center gap-2 self-start rounded-md bg-ink-950 px-4 text-[13px] font-extrabold text-[#F6F8F8] no-underline hover:text-white">Call {STORE.phone}</a>
           </div>
         </div>
       </div>
     </div>
-  </nav>
-  <div data-mega-scrim hidden class="fixed inset-x-0 top-0 bottom-0 -z-10 bg-ink-950/45 animate-fade-in"></div>
+  </div>
+  <div data-mega-scrim hidden class="fixed inset-0 -z-10 bg-ink-950/60 animate-fade-in"></div>
 
   <!-- Mobile rows -->
-  <div class="border-b border-line lg:hidden">
+  <div class="border-b border-line-dark lg:hidden">
     <div class="flex h-[60px] items-center gap-0.5 px-2">
-      <button type="button" aria-label="Open menu" aria-controls="mobile-menu" data-mobile-menu-open class="flex size-11 items-center justify-center rounded-md text-ink-900">
+      <button type="button" aria-label="Open menu" aria-controls="mobile-menu" data-mobile-menu-open class="flex size-11 items-center justify-center rounded-md text-[#F6F8F8]">
         <Icon name="menu" size={24} stroke={2.2} />
       </button>
-      <a href="/" aria-label="Photobooth City home" class="flex items-center px-1">
-        <img src="/images/logo.png" alt="Photobooth City" width="103" height="52" class="block h-[52px] w-auto" />
-      </a>
+      <Logo size="sm" class="px-1" />
       <span class="flex-1"></span>
-      <a href={STORE.phoneHref} aria-label={`Call ${STORE.phone}`} class="flex size-11 items-center justify-center rounded-full bg-brand-50 text-brand-600">
+      <a href={STORE.phoneHref} aria-label={`Call ${STORE.phone}`} class="flex size-11 items-center justify-center rounded-full text-[#F6F8F8] hover:text-[#F6F8F8]">
         <Icon name="phone" size={20} />
       </a>
       <CartButton client:idle variant="mobile" />
@@ -137,33 +146,50 @@ const XL_ONLY = new Set(['Mirror Booth Package', 'Vintage Enclosed', 'System Pac
 </header>
 
 <script>
-  // Mega menu: click or hover-intent (150 ms) opens, Esc / outside click closes.
+  // Mega menu: click or hover-intent (150 ms) opens; Esc, outside click or
+  // pointer leave (300 ms grace) closes.
   const root = document.querySelector<HTMLElement>('[data-mega-root]');
   const trigger = root?.querySelector<HTMLButtonElement>('[data-mega-trigger]');
   const panel = root?.querySelector<HTMLElement>('[data-mega-panel]');
   const scrim = document.querySelector<HTMLElement>('[data-mega-scrim]');
+  const searchBtn = root?.querySelector<HTMLButtonElement>('[data-search-toggle]');
+  const searchRow = root?.querySelector<HTMLElement>('[data-search-row]');
+
+  const setSearch = (open: boolean) => {
+    if (!searchBtn || !searchRow) return;
+    searchBtn.setAttribute('aria-expanded', String(open));
+    searchRow.hidden = !open;
+    if (open) searchRow.querySelector<HTMLInputElement>('[data-header-search]')?.focus();
+  };
+
   if (root && trigger && panel && scrim) {
     let timer: number | undefined;
     const set = (open: boolean) => {
+      if (open) setSearch(false);
       trigger.setAttribute('aria-expanded', String(open));
       panel.hidden = !open;
       scrim.hidden = !open;
     };
     const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
     trigger.addEventListener('click', () => set(!isOpen()));
-    const intent = (open: boolean) => {
+    const intent = (open: boolean, ms: number) => {
       window.clearTimeout(timer);
-      timer = window.setTimeout(() => set(open), 150);
+      timer = window.setTimeout(() => set(open), ms);
     };
-    trigger.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && intent(true));
+    trigger.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && intent(true, 150));
     panel.addEventListener('pointerenter', () => window.clearTimeout(timer));
-    root.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && isOpen() && intent(false));
+    root.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && isOpen() && intent(false, 300));
     scrim.addEventListener('click', () => set(false));
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen()) {
+      if (e.key !== 'Escape') return;
+      if (isOpen()) {
         set(false);
         trigger.focus();
+      } else if (searchBtn?.getAttribute('aria-expanded') === 'true') {
+        setSearch(false);
+        searchBtn.focus();
       }
     });
   }
+  searchBtn?.addEventListener('click', () => setSearch(searchBtn.getAttribute('aria-expanded') !== 'true'));
 </script>

@@ -66,6 +66,16 @@ export const MENU_LINKS: Record<string, string> = {
 
 export const menuHref = (label: string) => MENU_LINKS[label] ?? '';
 
+/** v2 header nav (navigation.json → header_main_nav_v2), after "Shop all". */
+export const NAV_V2: [string, string][] = [
+  ['iPad booths', '/collections/ipad-booths'],
+  ['DSLR booths', '/collections/dslr-booths'],
+  ['360° booths', '/collections/360-booths'],
+  ['Accessories', '/collections/accessories'],
+  ['System packages', '/collections/system-packages'],
+  ['Support', '/pages/contact'],
+];
+
 export const NAV_LINKS = ['iPad Booths', 'DSLR Booths', '360 Booths', 'Mirror Booth Package', 'Vintage Enclosed', 'Accessories', 'System Packages', 'DJ Gear', 'Shop by Price'];
 
 export interface MenuGroup {

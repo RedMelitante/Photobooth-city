@@ -23,9 +23,12 @@ export interface CardProduct {
   line: Omit<CartLine, 'quantity'> | null;
   /** merchandised position (Featured sort) */
   rank: number;
+  /** mono category label on the card */
+  cat?: string;
 }
 
-export function toCardProduct(p: Product, rank = 0): CardProduct {
+/** `cat` comes from cardCategory() in catalog.ts (server only; this module also ships to islands). */
+export function toCardProduct(p: Product, rank = 0, cat?: string): CardProduct {
   return {
     handle: p.handle,
     title: p.title,
@@ -37,6 +40,7 @@ export function toCardProduct(p: Product, rank = 0): CardProduct {
     images: p.images.slice(0, 2).map((i) => ({ url: i.url, alt: i.alt })),
     line: p.variants.length === 1 ? toCartLine(p, p.variants[0]) : null,
     rank,
+    cat,
   };
 }
 

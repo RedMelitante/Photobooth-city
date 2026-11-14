@@ -1,75 +1,93 @@
 @import "tailwindcss";
 @import "@fontsource-variable/manrope";
-@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/jetbrains-mono";
 
+/* v2 (Nov 2026) tokens: dark ink bands + cyan accent. Copied from the handoff's
+   starter/global.css (Tokens board), plus aliases for the v1 names still used
+   in components (brand → teal, flash → cyan, canvas → paper). */
 @theme {
   /* ── Typography ─────────────────────────────── */
-  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --font-display: "Manrope Variable", "Manrope", system-ui, sans-serif;
   --font-sans: "Manrope Variable", "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
 
-  --text-display-xl: 4.75rem;  --text-display-xl--line-height: 0.98; --text-display-xl--letter-spacing: -0.035em;
-  --text-display:    3.5rem;   --text-display--line-height: 1;       --text-display--letter-spacing: -0.035em;
-  --text-h1:         2.5rem;   --text-h1--line-height: 1.1;          --text-h1--letter-spacing: -0.025em;
-  --text-h2:         2rem;     --text-h2--line-height: 1.125;        --text-h2--letter-spacing: -0.02em;
-  --text-h3:         1.5rem;   --text-h3--line-height: 1.2;
-  --text-h4:         1.25rem;  --text-h4--line-height: 1.3;
-  --text-body-lg:    1.0625rem; --text-body-lg--line-height: 1.6;
-  --text-body:       1rem;     --text-body--line-height: 1.5;
-  --text-sm:         0.875rem; --text-sm--line-height: 1.43;
+  --text-display-xl: 6.75rem;  --text-display-xl--line-height: 0.91; --text-display-xl--letter-spacing: -0.087em;
+  --text-display:    4.5rem;   --text-display--line-height: 0.99;    --text-display--letter-spacing: -0.073em;
+  --text-h1:         3.5rem;   --text-h1--line-height: 1;            --text-h1--letter-spacing: -0.07em;
+  --text-h2:         2.25rem;  --text-h2--line-height: 1.05;         --text-h2--letter-spacing: -0.055em;
+  --text-h3:         1.375rem; --text-h3--line-height: 1.2;          --text-h3--letter-spacing: -0.045em;
+  --text-h4:         1.125rem; --text-h4--line-height: 1.2;          --text-h4--letter-spacing: -0.045em;
+  --text-body-lg:    1.1875rem; --text-body-lg--line-height: 1.6;
+  --text-body:       0.9375rem; --text-body--line-height: 1.6;
+  --text-sm:         0.8125rem; --text-sm--line-height: 1.4;
   --text-xs:         0.75rem;  --text-xs--line-height: 1.33;
-  --text-eyebrow:    0.75rem;  --text-eyebrow--letter-spacing: 0.1em;
+  --text-eyebrow:    0.6875rem; --text-eyebrow--letter-spacing: 0.14em;
 
   /* ── Color: ink (text + dark surfaces) ──────── */
-  --color-ink-950: #0B1020;   /* announcement bar, footer, hero */
-  --color-ink-900: #141B2D;   /* body text, secondary buttons */
-  --color-ink-700: #394257;   /* secondary text */
-  --color-ink-500: #5B6376;   /* muted text — 6:1 on white */
-  --color-ink-300: #A9AEBB;   /* decorative only */
-  --color-ink-200: #C9CDD8;   /* muted text on ink-950 */
-  --color-line: #E4E6EB;
-  --color-line-strong: #CDD1D9;
-  --color-chip: #F1F2F5;      /* icon buttons, neutral chips */
+  --color-ink-950: #101316;
+  --color-ink-900: #111416;
+  --color-ink-850: #14191C;
+  --color-ink-800: #1B2226;
+  --color-ink-700: #515C61;
+  --color-ink-500: #5A666B;
+  --color-ink-300: #A3AFB4;
+  --color-ink-200: #C2D2D7;   /* alias of fog */
+  --color-fog: #C2D2D7;
+  --color-line: #DCE1DF;
+  --color-line-strong: #CBD3D2;
+  --color-line-dark: #303A40;
+  --color-line-dark-strong: #556067;
 
   /* ── Color: surfaces ───────────────────────── */
+  --color-paper: #F7F8F6;
   --color-surface: #FFFFFF;
-  --color-canvas: #F6F6F3;    /* alt sections, summaries */
-  --color-tile: #EFEFEA;      /* product image ground */
-  --color-tile-hover: #E7E8E1;
+  --color-tile: #EEF2F2;
+  --color-tile-hover: #E6ECEC;
+  --color-canvas: #F7F8F6;    /* alias of paper */
+  --color-chip: #EEF2F2;      /* alias of tile */
 
-  /* ── Color: brand ──────────────────────────── */
-  --color-brand-50: #EEF2FF;
-  --color-brand-100: #DDE4FF;
-  --color-brand-600: #1F3FD1; /* primary CTA — 7.8:1 with white */
-  --color-brand-700: #1A33A8; /* hover / pressed */
-
-  /* ── Color: flash (promo energy) ───────────── */
-  --color-flash-100: #FFF6D6;
-  --color-flash-400: #FFD23F; /* always with ink-950 text */
+  /* ── Color: accent ─────────────────────────── */
+  --color-cyan-400: #74EDF5;
+  --color-cyan-300: #A3F1F6;
+  --color-cyan-50: #E2F8F9;
+  --color-teal-700: #295862;
+  --color-teal-800: #1E4650;
+  --color-focus: #138A93;
+  /* v1 names */
+  --color-brand-50: #E2F8F9;
+  --color-brand-100: #A3F1F6;
+  --color-brand-600: #295862;
+  --color-brand-700: #1E4650;
+  --color-flash-100: #E2F8F9;
+  --color-flash-400: #74EDF5;
 
   /* ── Color: status ─────────────────────────── */
+  --color-sale-600: #C2183B;
+  --color-sale-300: #FF8FA3;
   --color-sale-50: #FDECEF;
-  --color-sale-600: #C2183B;  /* sale price, badges — 6:1 with white */
-  --color-success-50: #E7F6EE;
   --color-success-700: #0F7A4A;
-  --color-star: #D99A00;
+  --color-success-300: #5BE3A0;
+  --color-success-50: #E7F6EE;
+  --color-star: #F5B400;
 
-  /* ── Radius ────────────────────────────────── */
-  --radius-sm: 6px;     /* chips, payment marks */
-  --radius-md: 10px;    /* inputs, small buttons */
-  --radius-lg: 12px;    /* buttons */
-  --radius-card: 16px;  /* product tiles, cards */
-  --radius-panel: 20px; /* summaries, banners on mobile */
-  --radius-hero: 24px;  /* hero, promo, newsletter */
+  /* ── Radius (squared-off) ──────────────────── */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 5px;     /* v1 buttons → md */
+  --radius-card: 6px;
+  --radius-panel: 8px;
+  --radius-hero: 8px;
 
-  /* ── Shadow ────────────────────────────────── */
-  --shadow-xs: 0 1px 2px rgb(11 16 32 / 0.06);
-  --shadow-pop: 0 6px 20px -6px rgb(11 16 32 / 0.25);
-  --shadow-menu: 0 24px 48px -12px rgb(11 16 32 / 0.22);
-  --shadow-drawer: -24px 0 48px -12px rgb(11 16 32 / 0.35);
+  /* ── Shadow (flat system: borders over shadows) ── */
+  --shadow-xs: 0 0 #0000;
+  --shadow-pop: 0 12px 28px -12px rgb(16 19 22 / 0.35);
+  --shadow-menu: 0 24px 48px -12px rgb(16 19 22 / 0.5);
+  --shadow-drawer: -24px 0 48px -12px rgb(16 19 22 / 0.35);
+  --shadow-glow: 0 40px 80px -20px rgb(116 237 245 / 0.35);
 
   /* ── Layout + motion ───────────────────────── */
-  --container-page: 90rem;   /* 1440 max, px-10 desktop / px-4 mobile */
+  --container-page: 90rem;
   --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
   --animate-drawer-in: drawer-in 220ms var(--ease-out-soft);
   --animate-sheet-up: sheet-up 200ms var(--ease-out-soft);
@@ -83,7 +101,7 @@
 @layer base {
   html { -webkit-text-size-adjust: 100%; }
   body {
-    background: var(--color-surface);
+    background: var(--color-paper);
     color: var(--color-ink-900);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -92,11 +110,12 @@
   a:hover { color: var(--color-brand-700); }
   button, input, select, textarea { font: inherit; }
   button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
-  :focus-visible { outline: 3px solid var(--color-brand-600); outline-offset: 2px; }
+  :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .dark-band :focus-visible { outline-color: var(--color-cyan-400); }
   input:focus-visible, select:focus-visible, textarea:focus-visible {
     outline: none;
-    border-color: var(--color-brand-600) !important;
-    box-shadow: 0 0 0 4px var(--color-brand-100);
+    border-color: var(--color-focus) !important;
+    box-shadow: 0 0 0 3px rgb(19 138 147 / 0.25);
   }
   @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
@@ -133,10 +152,20 @@
   font-size: 1rem;
   line-height: 1.65;
   & > * + * { margin-top: 0.9em; }
-  & h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.75rem; line-height: 1.15; letter-spacing: -0.02em; color: var(--color-ink-900); margin-top: 1.6em; }
+  & h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.75rem; line-height: 1.1; letter-spacing: -0.045em; color: var(--color-ink-900); margin-top: 1.6em; }
   & h3 { font-weight: 800; font-size: 1.125rem; color: var(--color-ink-900); margin-top: 1.4em; }
   & ul { list-style: disc; padding-left: 1.25rem; }
   & ol { list-style: decimal; padding-left: 1.25rem; }
   & li + li { margin-top: 0.35em; }
   & strong { color: var(--color-ink-900); }
+}
+
+/* Mono uppercase label ("— THE PHOTOBOOTH CITY CATALOG") */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }

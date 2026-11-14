@@ -4,7 +4,7 @@ import CollectionHeader from '@/components/collection/CollectionHeader.astro';
 import CollectionBrowser from '@/components/collection/CollectionBrowser';
 import MoreText from '@/components/collection/MoreText.astro';
 import HelpBanner from '@/components/collection/HelpBanner.astro';
-import { collectionProducts, getCollection, listCollections } from '@/lib/catalog';
+import { cardCategory, collectionProducts, getCollection, listCollections } from '@/lib/catalog';
 import { PAGE_SIZE, toCardProduct } from '@/lib/collection';
 import { collectionUrl, menuHref, productUrl } from '@/lib/routes';
 
@@ -16,7 +16,7 @@ const { handle } = Astro.params as { handle: string };
 const c = getCollection(handle)!;
 const parent = c.parent ? getCollection(c.parent) : undefined;
 const products = collectionProducts(handle);
-const cards = products.map((p, i) => toCardProduct(p, i));
+const cards = products.map((p, i) => toCardProduct(p, i, cardCategory(p)));
 
 // iPad Photo Booths uses the hand-picked "Popular in this collection" links from
 // the CollectionDesktop board; every other collection shows its related chips.

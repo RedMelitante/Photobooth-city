@@ -14,21 +14,12 @@ export default function CartButton({ variant }: { variant: 'desktop' | 'mobile' 
     openCart();
   };
 
-  if (variant === 'mobile') {
-    return (
-      <a href="/cart" onClick={onClick} aria-label={label} className="relative flex size-11 items-center justify-center rounded-md text-ink-900 hover:text-ink-900">
-        <Icon name="bag" size={22} />
-        {n > 0 && (
-          <span className="absolute top-1 right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-flash-400 px-[5px] text-[11px] font-extrabold text-ink-950">{n}</span>
-        )}
-      </a>
-    );
-  }
   return (
-    <a href="/cart" onClick={onClick} aria-label={label} className="relative flex h-11 items-center gap-2 rounded-full bg-ink-900 px-4 text-sm font-bold text-white no-underline hover:bg-ink-950 hover:text-white">
-      <Icon name="bag" size={20} />
-      Cart
-      <span className="flex h-[22px] min-w-[22px] items-center justify-center rounded-full bg-flash-400 px-1.5 text-xs font-extrabold text-ink-950">{n}</span>
+    <a href="/cart" onClick={onClick} aria-label={label} className="relative flex size-11 items-center justify-center rounded-md text-[#F6F8F8] hover:bg-ink-800 hover:text-[#F6F8F8]">
+      <Icon name="bag" size={variant === 'mobile' ? 22 : 20} />
+      {n > 0 && (
+        <span className="absolute top-1 right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-xs bg-cyan-400 px-[5px] text-[11px] font-extrabold text-ink-950">{n}</span>
+      )}
     </a>
   );
 }

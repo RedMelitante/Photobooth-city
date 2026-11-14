@@ -14,6 +14,7 @@ export interface SiteEntry {
 }
 
 export interface ProductExtras {
+  cat?: string;
   image2?: string;
   line?: Omit<CartLine, 'quantity'>;
 }
@@ -115,6 +116,7 @@ export default function SearchApp({ articles, pages, extras, popular, fallback }
         image: p.img,
         image2: extras[p.h]?.image2,
         line: extras[p.h]?.line,
+        cat: extras[p.h]?.cat,
       })),
       cats: r.collections.slice(0, 6),
     };
