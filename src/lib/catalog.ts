@@ -47,6 +47,9 @@ export function cardCategory(p: Product): string {
   const in_ = new Set(collectionsFor(p.handle).map((c) => c.handle));
   const t = p.title.toLowerCase();
   if (/lounge|sapphire|mirror|vintage/.test(t)) return 'Mirror & vintage';
+  // accessories also listed under a booth type (Roamer Stand, wall bracket, 360 backdrop)
+  if (in_.has('roamer-accessories')) return 'Roamer accessories';
+  if (/backdrop/.test(t)) return 'Backdrops & enclosures';
   if (in_.has('system-packages')) return 'System packages';
   if (in_.has('dj-gear')) return 'DJ gear';
   if (in_.has('360-booths')) return '360° booths';
