@@ -43,7 +43,6 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
   const [errors, setErrors] = useState<Errors>({});
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState<string | null>(null);
-  const [shopNote, setShopNote] = useState(false);
   const [fields, setFields] = useState({ firstName: '', lastName: '', email: '', password: '', marketing: true });
   const headingRef = useRef<HTMLHeadingElement>(null);
   const uid = useId();
@@ -65,7 +64,6 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
     setMode(m);
     setErrors({});
     setSent(null);
-    setShopNote(false);
     try {
       window.history.replaceState(null, '', MODE_URL[m]);
     } catch {
@@ -143,29 +141,6 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
         {copy.heading}
       </h1>
       <p className="-mt-2 text-base leading-6 text-ink-700">{copy.sub}</p>
-
-      {on('login') && (
-        <>
-          <button
-            type="button"
-            aria-label="Sign in with Shop"
-            onClick={() => setShopNote(true)}
-            className="flex h-[52px] items-center justify-center gap-2 rounded-md border-0 bg-[#5A31F4] text-base font-extrabold text-white transition-colors hover:bg-[#4A22E0]"
-          >
-            Sign in with <span className="font-display text-xl font-extrabold tracking-[-0.02em]">shop</span>
-          </button>
-          {shopNote && (
-            <p role="status" className="-mt-3 text-[13px] font-semibold text-ink-700">
-              Shop sign-in isn’t connected yet. Use your email below.
-            </p>
-          )}
-          <p aria-hidden="true" className="flex items-center gap-3 text-[13px] font-bold text-ink-500">
-            <span className="h-px flex-1 bg-line" />
-            or
-            <span className="h-px flex-1 bg-line" />
-          </p>
-        </>
-      )}
 
       {sent ? (
         <div role="status" className="flex flex-col gap-3.5">
