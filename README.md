@@ -1,11 +1,12 @@
 # Photobooth City — Storefront + Medusa backend
 
 The redesigned photoboothcity.com, built from the *Photobooth City — Storefront Redesign*
-design canvas.
+design canvas, restyled in Nov 2026 to the v2 look (dark ink bands, cyan accent, Manrope 800 display,
+JetBrains Mono labels, squared radii) from the client's Codex handoff pack.
 
 - **Storefront** (repo root): an **Astro 7** static site with **React 19** islands for anything interactive,
   **Tailwind CSS v4** using the design tokens as a CSS-first `@theme` (`src/styles/global.css`),
-  and Manrope + Bricolage Grotesque self-hosted via Fontsource.
+  and Manrope + JetBrains Mono self-hosted via Fontsource.
 - **Backend** (`backend/`): **Medusa v2.22**, seeded with the store as it is on Shopify (76 products, 25
   categories, US region, Economy shipping tiers, California tax, FLASHSALE2026).
 
