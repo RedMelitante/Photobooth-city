@@ -16,25 +16,25 @@ const perks = [
 ];
 ---
 
-<div class="mx-auto flex max-w-[1200px] flex-wrap items-stretch gap-7 px-4 pt-6 pb-14 lg:gap-16 lg:px-10 lg:pt-[72px] lg:pb-24">
+<div class="mx-auto flex max-w-[1280px] flex-wrap items-stretch gap-7 px-4 pt-6 pb-14 lg:gap-16 lg:px-10 lg:pt-[72px] lg:pb-24">
   <section aria-labelledby="acct-title" class="min-w-0 flex-[1_1_440px]">
     <AuthForm client:load initialMode={mode} />
   </section>
 
-  <aside aria-label="Account benefits" class="flex flex-[1_1_380px] flex-col justify-center gap-[22px] rounded-hero bg-ink-950 px-5 py-6 text-white lg:p-12">
-    <h2 class="m-0 font-display text-[26px] leading-[1.1] font-bold lg:text-[34px]">Your booth business, organized</h2>
+  <aside aria-label="Account benefits" class="flex flex-[1_1_380px] flex-col justify-center gap-[22px] dark-band rounded-panel bg-ink-950 px-5 py-6 text-white lg:p-12">
+    <h2 class="m-0 font-display text-[26px] leading-[1.1] font-extrabold lg:text-[34px]">Your booth business, organized</h2>
     <ul class="m-0 flex list-none flex-col gap-4 p-0">
       {
         perks.map((p) => (
           <li class="flex gap-3.5">
-            <span class="flex size-10 flex-none items-center justify-center rounded-lg bg-flash-400/16 text-flash-400">
+            <span class="flex size-10 flex-none items-center justify-center rounded-md bg-cyan-400/12 text-cyan-400">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d={p.icon} />
               </svg>
             </span>
             <span class="flex flex-col gap-0.5">
               <strong class="text-base">{p.t}</strong>
-              <span class="text-sm leading-[21px] text-ink-200">{p.d}</span>
+              <span class="text-sm leading-[21px] text-fog">{p.d}</span>
             </span>
           </li>
         ))
@@ -42,7 +42,7 @@ const perks = [
     </ul>
     <a
       href={STORE.phoneHref}
-      class="flex h-12 items-center self-start rounded-lg border-[1.5px] border-white/35 px-[18px] font-bold text-white no-underline transition-colors hover:border-white hover:text-white"
+      class="flex h-12 items-center self-start rounded-md border-[1.5px] border-line-dark-strong px-[18px] font-bold text-white no-underline transition-colors hover:border-cyan-400 hover:text-white"
     >
       Need help? {STORE.phone}
     </a>

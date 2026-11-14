@@ -7,8 +7,8 @@ import type { CartLine } from '@/lib/types';
 import { btnSmDark, btnSmOutline } from './ui';
 
 const STATUS_STYLE: Record<Order['status'], string> = {
-  processing: 'bg-flash-100 text-[#7A5A00]',
-  shipped: 'bg-brand-50 text-brand-700',
+  processing: 'bg-cyan-50 text-teal-800',
+  shipped: 'bg-cyan-50 text-teal-800',
   delivered: 'bg-success-50 text-success-700',
 };
 
@@ -37,7 +37,7 @@ export default function AccountOrders({ orders, reorder }: Props) {
     <div className="flex flex-col gap-3.5">
       <h2 className="mb-1 text-[22px] font-extrabold">Orders</h2>
       {orders.length === 0 && (
-        <div className="flex flex-col items-start gap-3 rounded-panel bg-canvas p-6">
+        <div className="flex flex-col items-start gap-3 rounded-panel bg-tile p-6">
           <strong className="text-lg">No orders yet</strong>
           <a href="/" className={btnSmDark}>
             Start shopping
@@ -48,19 +48,19 @@ export default function AccountOrders({ orders, reorder }: Props) {
         const isOpen = open === i;
         const panelId = `order-${o.id}`;
         return (
-          <article key={o.id} className="overflow-hidden rounded-[18px] border border-line">
+          <article key={o.id} className="overflow-hidden rounded-card border border-line">
             <button
               type="button"
               onClick={() => setOpen(isOpen ? -1 : i)}
               aria-expanded={isOpen}
               aria-controls={panelId}
-              className="flex w-full flex-wrap items-center gap-x-6 gap-y-3 border-0 bg-surface px-5 py-[18px] text-left text-ink-900 transition-colors hover:bg-canvas/60"
+              className="flex w-full flex-wrap items-center gap-x-6 gap-y-3 border-0 bg-surface px-5 py-[18px] text-left text-ink-900 transition-colors hover:bg-paper"
             >
               <span className="flex min-w-[120px] flex-col gap-0.5">
                 <strong className="text-base">Order {o.displayId}</strong>
                 <span className="text-[13px] text-ink-500">{dateFmt.format(new Date(o.createdAt))}</span>
               </span>
-              <span className={'flex h-[30px] items-center gap-2 rounded-full px-3 text-[13px] font-extrabold ' + STATUS_STYLE[o.status]}>
+              <span className={'flex h-[30px] items-center gap-2 rounded-sm px-3 text-[13px] font-extrabold ' + STATUS_STYLE[o.status]}>
                 <span className="size-2 rounded-full bg-current" />
                 {o.statusLabel}
               </span>
@@ -88,7 +88,7 @@ export default function AccountOrders({ orders, reorder }: Props) {
                 <ol aria-label="Shipment progress" className="mt-3.5 grid list-none grid-cols-3 gap-2 p-0">
                   {STEPS.map((label, j) => (
                     <li key={label} className="flex flex-col gap-1.5" aria-current={j === o.step - 1 ? 'step' : undefined}>
-                      <span className={'h-1.5 rounded-full ' + (j < o.step ? 'bg-success-700' : 'bg-line')} />
+                      <span className={'h-1.5 rounded-sm ' + (j < o.step ? 'bg-success-700' : 'bg-line')} />
                       <span className="text-[13px] font-bold">
                         {label}
                         <span className="sr-only">{j < o.step ? ' — done' : ' — pending'}</span>
@@ -99,10 +99,10 @@ export default function AccountOrders({ orders, reorder }: Props) {
                 <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
                   {o.lines.map((l) => (
                     <li key={l.variantId || l.handle} className="flex items-center gap-3">
-                      <a href={productUrl(l.handle)} tabIndex={-1} aria-hidden="true" className="size-12 flex-none overflow-hidden rounded-md bg-canvas">
+                      <a href={productUrl(l.handle)} tabIndex={-1} aria-hidden="true" className="size-12 flex-none overflow-hidden rounded-md bg-tile">
                         {l.image && <img src={l.image} alt="" loading="lazy" className="product-shot block size-full" />}
                       </a>
-                      <a href={productUrl(l.handle)} className="flex-1 text-sm leading-[19px] font-bold text-ink-900 no-underline hover:text-ink-900 hover:underline">
+                      <a href={productUrl(l.handle)} className="flex-1 text-sm leading-[19px] font-bold text-ink-900 no-underline hover:text-teal-700 hover:underline">
                         {l.title}
                         {l.variantTitle && ` — ${l.variantTitle}`}
                         {l.quantity > 1 && ` × ${l.quantity}`}

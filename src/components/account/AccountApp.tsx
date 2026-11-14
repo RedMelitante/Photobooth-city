@@ -76,11 +76,11 @@ export default function AccountApp({ reorder }: Props) {
       <header className="mb-5 flex flex-wrap items-end justify-between gap-4 lg:mb-10">
         <div className="flex flex-col gap-1.5">
           <span className="text-sm font-bold text-ink-500">My account</span>
-          <h1 className="m-0 font-display text-[34px] leading-none font-extrabold tracking-[-0.035em] lg:text-[52px]">
-            {ready ? (name ? `Hi, ${name}` : 'Hi there') : <span className="inline-block h-[0.9em] w-[5em] animate-pulse rounded-md bg-chip align-middle" aria-label="Loading account" />}
+          <h1 className="m-0 font-display text-[34px] leading-none font-extrabold tracking-[-0.03em] lg:text-[52px]">
+            {ready ? (name ? `Hi, ${name}` : 'Hi there') : <span className="inline-block h-[0.9em] w-[5em] animate-pulse rounded-md bg-tile align-middle" aria-label="Loading account" />}
           </h1>
         </div>
-        <a href={PAGES.login} onClick={signOut} className="flex min-h-11 items-center text-sm font-bold text-ink-700 underline hover:text-ink-900">
+        <a href={PAGES.login} onClick={signOut} className="flex min-h-11 items-center text-sm font-bold text-ink-700 underline hover:text-teal-700">
           Log out
         </a>
       </header>
@@ -105,8 +105,8 @@ export default function AccountApp({ reorder }: Props) {
                     onClick={() => pick(t)}
                     onKeyDown={(e) => onTabKey(e, i)}
                     className={
-                      'min-h-12 w-full rounded-lg border-0 px-4 text-left text-[15px] font-extrabold whitespace-nowrap transition-colors ' +
-                      (on ? 'bg-ink-900 text-white' : 'bg-chip text-ink-900 hover:bg-line')
+                      'min-h-12 w-full rounded-md border-0 px-4 text-left text-[15px] font-extrabold whitespace-nowrap transition-colors ' +
+                      (on ? 'bg-ink-900 text-white' : 'bg-tile text-ink-900 hover:bg-tile-hover')
                     }
                   >
                     {t}
@@ -117,19 +117,19 @@ export default function AccountApp({ reorder }: Props) {
           </ul>
           <a
             href={STORE.phoneHref}
-            className="mt-5 hidden flex-col gap-1 rounded-card bg-ink-950 p-[18px] text-white no-underline hover:text-white lg:flex"
+            className="dark-band mt-5 hidden flex-col gap-1 rounded-card bg-ink-950 p-[18px] text-white no-underline hover:text-white lg:flex"
           >
             <strong className="text-[15px]">Help with an order?</strong>
-            <span className="text-sm text-ink-200">{STORE.phone}</span>
+            <span className="text-sm text-fog">{STORE.phone}</span>
           </a>
         </nav>
 
         <section id="acct-panel" role="tabpanel" aria-labelledby={`acct-tab-${TAB_HASH[tab]}`} className="min-w-0 flex-[999_1_640px]">
           {!ready ? (
             <div className="flex flex-col gap-3.5" aria-busy="true">
-              <span className="h-7 w-28 animate-pulse rounded-md bg-chip" />
-              <span className="h-[78px] animate-pulse rounded-[18px] bg-canvas" />
-              <span className="h-[78px] animate-pulse rounded-[18px] bg-canvas" />
+              <span className="h-7 w-28 animate-pulse rounded-md bg-tile" />
+              <span className="h-[78px] animate-pulse rounded-card bg-tile" />
+              <span className="h-[78px] animate-pulse rounded-card bg-tile" />
             </div>
           ) : tab === 'Orders' ? (
             <AccountOrders orders={orders} reorder={reorder} />

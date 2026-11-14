@@ -124,12 +124,12 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
 
   const tabCls = (active: boolean) =>
     'h-12 rounded-md border-0 text-[15px] font-extrabold text-ink-900 transition-[background-color,box-shadow] duration-150 ' +
-    (active ? 'bg-surface shadow-[0_1px_3px_rgb(11_16_32/0.15)]' : 'bg-transparent hover:bg-surface/60');
+    (active ? 'bg-surface shadow-[0_1px_3px_rgb(16_19_22/0.15)]' : 'bg-transparent hover:bg-surface/60');
 
   return (
     <div className="flex flex-col gap-[22px]">
       {!on('recover') && (
-        <div role="tablist" aria-label="Account" className="grid grid-cols-2 rounded-[14px] bg-chip p-1">
+        <div role="tablist" aria-label="Account" className="grid grid-cols-2 rounded-card bg-tile p-1">
           <button type="button" role="tab" aria-selected={on('login')} onClick={() => go('login', false)} className={tabCls(on('login'))}>
             Log in
           </button>
@@ -150,7 +150,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
             type="button"
             aria-label="Sign in with Shop"
             onClick={() => setShopNote(true)}
-            className="flex h-[52px] items-center justify-center gap-2 rounded-lg border-0 bg-[#5A31F4] text-base font-extrabold text-white transition-colors hover:bg-[#4A22E0]"
+            className="flex h-[52px] items-center justify-center gap-2 rounded-md border-0 bg-[#5A31F4] text-base font-extrabold text-white transition-colors hover:bg-[#4A22E0]"
           >
             Sign in with <span className="font-display text-xl font-extrabold tracking-[-0.02em]">shop</span>
           </button>
@@ -177,7 +177,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
               We’ve sent you an email with a link to update your password. Check <strong>{sent}</strong>.
             </span>
           </div>
-          <button type="button" onClick={() => go('login')} className="h-12 rounded-lg border-[1.5px] border-line-strong bg-surface text-[15px] font-bold text-ink-900 hover:border-ink-900">
+          <button type="button" onClick={() => go('login')} className="h-12 rounded-md border-[1.5px] border-line-strong bg-surface text-[15px] font-bold text-ink-900 hover:border-ink-900">
             Back to log in
           </button>
         </div>
@@ -217,7 +217,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
               <span className="flex items-center justify-between gap-3">
                 <label htmlFor={ids.pw}>Password</label>
                 {on('login') && (
-                  <button type="button" onClick={() => go('recover')} className="-my-3 min-h-11 border-0 bg-transparent p-0 text-[13px] font-bold text-brand-600 underline hover:text-brand-700">
+                  <button type="button" onClick={() => go('recover')} className="-my-3 min-h-11 border-0 bg-transparent p-0 text-[13px] font-bold text-teal-700 underline hover:text-teal-800">
                     Forgot your password?
                   </button>
                 )}
@@ -238,7 +238,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
                   onClick={() => setShowPw((s) => !s)}
                   aria-label={showPw ? 'Hide password' : 'Show password'}
                   aria-pressed={showPw}
-                  className="absolute top-1.5 right-1.5 h-10 rounded-lg border-0 bg-chip px-3 text-[13px] font-bold text-ink-900 hover:bg-line"
+                  className="absolute top-1.5 right-1.5 h-10 rounded-sm border-0 bg-tile px-3 text-[13px] font-bold text-ink-900 hover:bg-tile-hover"
                 >
                   {showPw ? 'Hide' : 'Show'}
                 </button>
@@ -254,7 +254,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
 
           {on('register') && (
             <label className="flex min-h-8 items-center gap-2.5 text-sm font-medium text-ink-900">
-              <input type="checkbox" checked={fields.marketing} onChange={set('marketing')} className="m-0 size-5 flex-none accent-brand-600" />
+              <input type="checkbox" checked={fields.marketing} onChange={set('marketing')} className="m-0 size-5 flex-none accent-teal-700" />
               Email me flash sales and new booth launches
             </label>
           )}
@@ -269,12 +269,12 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
             type="submit"
             disabled={busy}
             aria-busy={busy}
-            className="mt-1.5 h-14 rounded-lg border-0 bg-brand-600 text-base font-extrabold text-white transition-colors hover:bg-brand-700 disabled:cursor-progress disabled:opacity-80"
+            className="mt-1.5 h-14 rounded-md border-0 bg-cyan-400 text-base font-extrabold text-ink-950 transition-colors hover:bg-cyan-300 disabled:cursor-progress disabled:opacity-80"
           >
             {busy ? copy.busy : copy.cta}
           </button>
           {on('recover') && (
-            <button type="button" onClick={() => go('login')} className="h-12 rounded-lg border-[1.5px] border-line-strong bg-surface text-[15px] font-bold text-ink-900 hover:border-ink-900">
+            <button type="button" onClick={() => go('login')} className="h-12 rounded-md border-[1.5px] border-line-strong bg-surface text-[15px] font-bold text-ink-900 hover:border-ink-900">
               Cancel — back to log in
             </button>
           )}
@@ -284,7 +284,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: Auth
 {!sent && (
       <p className="m-0 text-sm text-ink-700">
         {copy.switchText}{' '}
-        <button type="button" onClick={() => go(copy.switchTo)} className="border-0 bg-transparent p-0 text-sm font-extrabold text-brand-600 underline hover:text-brand-700">
+        <button type="button" onClick={() => go(copy.switchTo)} className="border-0 bg-transparent p-0 text-sm font-extrabold text-teal-700 underline hover:text-teal-800">
           {copy.switchLink}
         </button>
       </p>

@@ -67,7 +67,7 @@ export default function AccountDetails({ customer, onSaved }: { customer: Custom
         )}
       </label>
       <label className="flex min-h-8 items-center gap-2.5 text-sm">
-        <input type="checkbox" checked={d.acceptsMarketing} onChange={set('acceptsMarketing')} className="m-0 size-5 flex-none accent-brand-600" />
+        <input type="checkbox" checked={d.acceptsMarketing} onChange={set('acceptsMarketing')} className="m-0 size-5 flex-none accent-teal-700" />
         Email me flash sales and new booth launches
       </label>
       <div className="flex flex-wrap items-center gap-2.5">

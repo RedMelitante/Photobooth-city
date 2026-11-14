@@ -70,7 +70,7 @@ function AddressForm({ initial, onCancel, onSaved }: { initial: Draft; onCancel:
   );
 
   return (
-    <form ref={ref} noValidate onSubmit={submit} aria-label={d.id ? 'Edit address' : 'Add a new address'} className="col-span-full flex max-w-[560px] flex-col gap-3.5 rounded-[18px] border border-line p-5">
+    <form ref={ref} noValidate onSubmit={submit} aria-label={d.id ? 'Edit address' : 'Add a new address'} className="col-span-full flex max-w-[560px] flex-col gap-3.5 rounded-card border border-line p-5">
       <strong className="text-base">{d.id ? 'Edit address' : 'Add a new address'}</strong>
       <div className="grid grid-cols-2 gap-3">
         {field('firstName', 'First name', 'given-name')}
@@ -103,7 +103,7 @@ function AddressForm({ initial, onCancel, onSaved }: { initial: Draft; onCancel:
         {field('postalCode', 'ZIP code', 'postal-code')}
       </div>
       <label className="flex min-h-8 items-center gap-2.5 text-sm font-medium">
-        <input type="checkbox" checked={d.isDefault} onChange={set('isDefault')} className="m-0 size-5 flex-none accent-brand-600" />
+        <input type="checkbox" checked={d.isDefault} onChange={set('isDefault')} className="m-0 size-5 flex-none accent-teal-700" />
         Set as default address
       </label>
       <div className="flex flex-wrap gap-2.5">
@@ -139,8 +139,8 @@ export default function AccountAddresses() {
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-3.5">
         {(list ?? []).map((a) =>
           editing?.id === a.id ? null : (
-            <div key={a.id} className={'flex flex-col gap-1.5 rounded-[18px] border-2 p-5 text-[15px] leading-[23px] ' + (a.isDefault ? 'border-ink-900' : 'border-line')}>
-              {a.isDefault && <span className="self-start rounded-full bg-ink-900 px-2.5 py-0.5 text-xs font-extrabold text-white">Default</span>}
+            <div key={a.id} className={'flex flex-col gap-1.5 rounded-card border-2 p-5 text-[15px] leading-[23px] ' + (a.isDefault ? 'border-ink-900' : 'border-line')}>
+              {a.isDefault && <span className="self-start rounded-sm bg-ink-900 px-2.5 py-0.5 text-xs font-extrabold text-white">Default</span>}
               <strong>
                 {a.firstName} {a.lastName}
               </strong>
@@ -158,7 +158,7 @@ export default function AccountAddresses() {
                 {a.country}
               </span>
               <span className="mt-1.5 flex gap-4">
-                <button type="button" onClick={() => setEditing(a)} className="-my-2.5 min-h-11 border-0 bg-transparent p-0 font-bold text-brand-600 underline hover:text-brand-700" aria-label={`Edit address for ${a.firstName} ${a.lastName}`}>
+                <button type="button" onClick={() => setEditing(a)} className="-my-2.5 min-h-11 border-0 bg-transparent p-0 font-bold text-teal-700 underline hover:text-teal-800" aria-label={`Edit address for ${a.firstName} ${a.lastName}`}>
                   Edit
                 </button>
                 <button
@@ -180,7 +180,7 @@ export default function AccountAddresses() {
             ref={addRef}
             type="button"
             onClick={() => setEditing({ ...EMPTY, isDefault: !list?.length })}
-            className="min-h-[180px] rounded-[18px] border-2 border-dashed border-line-strong bg-surface text-[15px] font-extrabold text-ink-900 transition-colors hover:border-ink-900"
+            className="min-h-[180px] rounded-card border-2 border-dashed border-line-strong bg-surface text-[15px] font-extrabold text-ink-900 transition-colors hover:border-ink-900"
           >
             + Add a new address
           </button>
