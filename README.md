@@ -7,7 +7,7 @@ JetBrains Mono labels, squared radii) from the client's Codex handoff pack.
 - **Storefront** (repo root): an **Astro 7** static site with **React 19** islands for anything interactive,
   **Tailwind CSS v4** using the design tokens as a CSS-first `@theme` (`src/styles/global.css`),
   and Manrope + JetBrains Mono self-hosted via Fontsource.
-- **Backend** (`backend/`): **Medusa v2.22**, seeded with the store as it is on Shopify (76 products, 25
+- **Backend** (`backend/`): **Medusa v2.22**, seeded with the store as it is on Shopify (79 products, 25
   categories, US region, Economy shipping tiers, California tax, FLASHSALE2026).
 
 The storefront runs in two modes:
@@ -66,7 +66,7 @@ Service settings (set in Railway, not in files):
 | Service | Build | Pre-deploy | Start |
 | --- | --- | --- | --- |
 | backend | `cd apps/backend && npx medusa build` | `cd apps/backend/.medusa/server && npx medusa db:migrate` + admin user from `MEDUSA_ADMIN_EMAIL` / `MEDUSA_ADMIN_PASSWORD` | `cd apps/backend/.medusa/server && npx medusa start` |
-| storefront | `npm run build` | none | `npx serve@14.2.4 dist -l tcp://0.0.0.0:$PORT` |
+| storefront | `npm run build` (service variable `NO_CACHE=1`, so every deploy re-reads the catalog) | none | `npx serve@14.2.4 dist -l tcp://0.0.0.0:$PORT` |
 
 Backend variables: `DATABASE_URL=${{Postgres.DATABASE_URL}}`, `REDIS_URL=${{Redis.REDIS_URL}}`,
 `JWT_SECRET`, `COOKIE_SECRET`, `STORE_CORS` (storefront URL), `ADMIN_CORS` (backend URL), `AUTH_CORS`
@@ -87,7 +87,7 @@ Medusa's DTC starter (a Turborepo workspace; the app is `backend/apps/backend`).
 - **Warehouse** Mira Loma, 3827 Wacker Dr.
 - **Shipping** Economy (5–8 business days) to the contiguous US, priced by order value: $20 up to $50, $50 to $499, $100 to $1,800, $200 above
 - **Categories** the 25 storefront collections; merchandised order is kept in `metadata.product_order`
-- **Products** all 76 products and 889 variants, with Shopify image URLs. Compare-at prices are the base price, and the "Storefront sale prices" price list (332 prices) holds what the item actually sells for
+- **Products** all 76 products and 889 variants (plus 3 added later by `add-shopify-extra-products.ts`: Darkroom software, Height Adjustable Roamer Stand, Side mount Printer Shelf, stock untracked), with Shopify image URLs. Compare-at prices are the base price, and the "Storefront sale prices" price list (332 prices) holds what the item actually sells for
 - **Inventory** 25 units for each available variant and 0 for sold-out ones (Shopify doesn't track stock)
 - **Promotion** FLASHSALE2026: 7% off items when the item subtotal is $3,500 or more
 
