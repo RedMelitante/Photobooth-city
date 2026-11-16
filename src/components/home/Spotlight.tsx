@@ -35,20 +35,25 @@ export default function Spotlight({ slides }: { slides: SpotlightSlide[] }) {
 
         <div className="relative flex h-[88%] w-full items-end justify-center pb-[5%]">
           {slides.map((x, n) => (
-            <img
+            <svg
               key={x.idx}
-              src={x.img}
-              alt={n === i ? x.name : ''}
+              viewBox={x.art.viewBox}
+              role={n === i ? 'img' : undefined}
+              aria-label={n === i ? x.alt : undefined}
               aria-hidden={n === i ? undefined : true}
-              width={x.w}
-              height={x.h}
-              loading={n === 0 ? 'eager' : 'lazy'}
-              decoding="async"
+              preserveAspectRatio="xMidYMax meet"
               className={cx(
-                'absolute bottom-[5%] left-1/2 h-full max-w-[80%] -translate-x-1/2 object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.55)] transition-opacity duration-300',
+                'absolute bottom-[5%] left-1/2 h-full w-[80%] -translate-x-1/2 drop-shadow-[0_24px_30px_rgba(0,0,0,0.55)] transition-opacity duration-300',
                 n === i ? 'opacity-100' : 'opacity-0',
               )}
-            />
+            >
+              <clipPath id={`spot-cut-${x.idx}`} clipPathUnits="userSpaceOnUse">
+                <path d={x.art.d} fillRule={x.art.fillRule} clipRule={x.art.fillRule} />
+              </clipPath>
+              <g clipPath={`url(#spot-cut-${x.idx})`}>
+                <image href={x.art.src} width={x.art.width} height={x.art.height} />
+              </g>
+            </svg>
           ))}
         </div>
         <span className={cx(callout, 'top-[24%] left-0 min-w-[150px]')}>{s.c1}</span>

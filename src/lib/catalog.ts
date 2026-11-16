@@ -6,6 +6,7 @@ import data from '@/data/catalog.json';
 import blobMap from '@/data/blob-map.json';
 import { medusaEnabled } from './medusa';
 import { loadMedusaCatalog } from './medusa-catalog';
+import { cardImages } from './product';
 import type { Collection, Product } from './types';
 
 const source = medusaEnabled ? await loadMedusaCatalog() : (data as { products: Product[]; collections: Collection[] });
@@ -108,7 +109,7 @@ export function searchIndex(): { products: SearchEntry[]; collections: { h: stri
       h: p.handle,
       t: p.title,
       k: [p.kind, ...collectionsFor(p.handle).map((c) => c.title)].join(' '),
-      img: p.images[0]?.url ?? '',
+      img: cardImages(p)[0]?.url ?? '',
       min: p.minPrice,
       max: p.maxPrice,
       cmp: p.compareAtPrice,

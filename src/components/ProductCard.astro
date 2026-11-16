@@ -4,7 +4,7 @@ import QuickAdd from './react/QuickAdd';
 import Icon from './Icon.astro';
 import { cardCategory, isOnSale } from '@/lib/catalog';
 import { formatShort, priceLabel } from '@/lib/money';
-import { sized, toCartLine } from '@/lib/product';
+import { cardImages, sized, toCartLine } from '@/lib/product';
 import { productUrl } from '@/lib/routes';
 import type { Product } from '@/lib/types';
 
@@ -22,7 +22,7 @@ const { product: p, eager = false, badge, cat, class: className } = Astro.props;
 const href = productUrl(p.handle);
 const sale = isOnSale(p) && p.available;
 const soldOut = !p.available;
-const [img1, img2] = p.images;
+const [img1, img2] = cardImages(p);
 const single = p.variants.length === 1;
 const line = single ? toCartLine(p, p.variants[0]) : null;
 const label = cat ?? cardCategory(p);

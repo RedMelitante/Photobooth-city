@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import SearchApp, { type ProductExtras } from '@/components/account/SearchApp';
 import { designImage, listProducts, cardCategory } from '@/lib/catalog';
-import { toCartLine } from '@/lib/product';
+import { cardImages, toCartLine } from '@/lib/product';
 import { PAGES } from '@/lib/routes';
 import { POPULAR_SEARCHES, SEARCH_FALLBACK, SITE_ARTICLES, SITE_PAGES } from '@/lib/account-search';
 
@@ -17,7 +17,8 @@ const articles = SITE_ARTICLES.map((a) => ({ t: a.t, img: designImage(a.img), h:
 const extras: Record<string, ProductExtras> = {};
 for (const p of listProducts()) {
   const e: ProductExtras = { cat: cardCategory(p) };
-  if (p.images[1]) e.image2 = p.images[1].url;
+  const imgs = cardImages(p);
+  if (imgs[1]) e.image2 = imgs[1].url;
   if (p.variants.length === 1) e.line = toCartLine(p, p.variants[0]);
   extras[p.handle] = e;
 }

@@ -1,7 +1,7 @@
 // Collection page helpers shared by the static page (build time) and the
 // filtering island (browser). Keep this file free of `@/lib/catalog` imports
 // so the catalog JSON never ships to the client.
-import { toCartLine } from './product';
+import { cardImages, toCartLine } from './product';
 import type { CartLine, Product } from './types';
 
 /** The slim product shape a card needs (serialised into island props). */
@@ -37,7 +37,7 @@ export function toCardProduct(p: Product, rank = 0, cat?: string): CardProduct {
     compareAtPrice: p.compareAtPrice,
     available: p.available,
     sale: !!p.compareAtPrice && p.compareAtPrice > p.minPrice,
-    images: p.images.slice(0, 2).map((i) => ({ url: i.url, alt: i.alt })),
+    images: cardImages(p).map((i) => ({ url: i.url, alt: i.alt })),
     line: p.variants.length === 1 ? toCartLine(p, p.variants[0]) : null,
     rank,
     cat,

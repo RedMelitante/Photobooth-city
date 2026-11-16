@@ -1,4 +1,4 @@
-import type { CartLine, Product, ProductVariant } from './types';
+import type { CartLine, Product, ProductImage, ProductVariant } from './types';
 
 export function toCartLine(p: Product, v: ProductVariant): Omit<CartLine, 'quantity'> {
   return {
@@ -26,6 +26,21 @@ export function valueAvailable(p: Product, sel: Record<string, string>, name: st
 }
 
 /** Shopify CDN images take a width parameter; local images pass through. */
+/**
+ * Card photo overrides from the client reference site: these products lead with a
+ * different shot on cards (the catalog's first photo becomes the hover image).
+ */
+const CARD_PHOTOS: Record<string, string> = {
+  'lumia-m-basic-led-photobooth-diy-shell': '/images/ref/lumia-angle.webp',
+  'ring-roamer-10-5-v2-app-controlled': '/images/ref/roamer-options.webp',
+};
+
+/** First two images for product cards (main + hover). */
+export function cardImages(p: Pick<Product, 'handle' | 'title' | 'images'>): ProductImage[] {
+  const own = CARD_PHOTOS[p.handle];
+  return own ? [{ url: own, alt: p.title }, ...p.images.slice(0, 1)] : p.images.slice(0, 2);
+}
+
 export function sized(url: string, width: number): string {
   if (!url.includes('cdn.shopify.com')) return url;
   const u = new URL(url);

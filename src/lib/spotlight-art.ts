@@ -1,0 +1,38 @@
+// Cut-outs from the client reference site (photobooth-city.atagirl.chatgpt.site): each
+// render is a product photo clipped to a hand-drawn outline, framed by its viewBox.
+export interface SpotlightArt { viewBox: string; d: string; fillRule: "evenodd" | "nonzero"; src: string; width: number; height: number }
+
+export const SPOTLIGHT_ART: Record<"helio" | "lumia" | "orbit" | "roamer", SpotlightArt> = {
+  "helio": {
+    "viewBox": "140 37 413 1003",
+    "d": "M345 47 C409 45 447 100 452 158 C464 158 462 209 449 238 C443 253 429 270 413 280 L417 941 L538 958 Q550 961 539 968 C484 994 447 1017 426 1033 Q418 1038 406 1036 L155 989 Q145 985 152 980 C216 958 257 939 283 920 L278 281 C240 253 228 204 236 164 C240 103 280 49 345 47Z",
+    "fillRule": "nonzero",
+    "src": "/images/ref/helio.webp",
+    "width": 1080,
+    "height": 1080
+  },
+  "lumia": {
+    "viewBox": "560 53 350 1106",
+    "d": "M618 62 L834 62 Q853 62 855 83 L861 217 L862 408 Q860 432 838 436 L806 436 L809 446 L809 462 L792 464 L794 682 L867 684 L894 702 L894 711 L811 716 L810 762 L814 767 L814 786 L797 789 L798 1036 L835 1036 Q856 1036 858 1048 Q857 1084 879 1123 Q891 1141 861 1142 L614 1146 Q587 1144 595 1130 Q614 1088 614 1051 Q614 1043 627 1041 L676 1040 L672 791 L655 789 L653 768 L663 763 L663 716 L575 717 L575 707 L596 690 L671 683 L669 465 L652 463 L651 445 L655 437 L618 436 Q596 427 596 408 L594 222 L599 215 L597 86 Q597 65 618 62Z",
+    "fillRule": "nonzero",
+    "src": "/images/ref/lumia-angle.webp",
+    "width": 1200,
+    "height": 1200
+  },
+  "orbit": {
+    "viewBox": "0 38 650 962",
+    "d": "M45 59 C70 49 101 78 117 112 C132 152 124 197 87 206 L86 241 L150 251 L155 256 L155 266 L99 276 L116 478 L124 484 L125 505 L129 534 L151 532 L156 572 L131 578 L141 653 L189 734 C220 722 285 708 357 708 C507 698 624 744 627 800 L628 829 Q626 844 623 851 Q635 867 628 888 L633 896 L630 906 Q603 948 560 967 L541 972 L538 980 L517 983 L509 980 Q383 1008 257 987 L246 985 Q232 990 225 980 C185 970 158 948 141 921 Q127 922 131 900 Q126 881 136 853 Q129 831 130 809 Q127 776 166 749 L165 737 L125 660 L115 578 L110 577 L104 516 L108 505 L103 481 L77 294 L76 273 L75 253 L70 225 L70 206 C38 200 18 165 15 127 C9 92 23 66 45 59Z M47 80 C24 86 27 129 32 149 C40 169 46 180 62 185 L61 176 L68 171 L69 158 L82 154 L92 159 L102 157 L106 151 C103 117 79 75 47 80Z",
+    "fillRule": "evenodd",
+    "src": "/images/ref/orbit.webp",
+    "width": 1000,
+    "height": 1000
+  },
+  "roamer": {
+    "viewBox": "401 109 299 293",
+    "d": "M551 115 C629 113 691 177 692 254 C696 321 649 374 604 388 Q550 409 497 389 C448 374 408 321 407 262 C406 181 472 115 551 115Z",
+    "fillRule": "nonzero",
+    "src": "/images/ref/roamer-options.webp",
+    "width": 774,
+    "height": 483
+  }
+};
