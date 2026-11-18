@@ -2,23 +2,35 @@ import { loadEnv, defineConfig } from "@medusajs/framework/utils"
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd())
 
-// Stripe (cards, Apple Pay, Google Pay, Affirm, Klarna via the Payment
-// Element) is enabled when STRIPE_API_KEY is set. Without it the store runs on
-// Medusa's system payment provider, which authorizes every payment (dev only).
-const paymentProviders = process.env.STRIPE_API_KEY
-  ? [
-      {
-        resolve: "@medusajs/medusa/payment-stripe",
-        id: "stripe",
-        options: {
-          apiKey: process.env.STRIPE_API_KEY,
-          webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-          automaticPaymentMethods: true,
-          capture: false,
-        },
-      },
-    ]
-  : []
+// Stripe is enabled when STRIPE_API_KEY is set, PayPal when PAYPAL_CLIENT_ID and
+// PAYPAL_CLIENT_SECRET are. Without them the store runs on Medusa's system
+// payment provider, which authorizes every payment (dev only).
+const paymentProviders: { resolve: string; id: string; options: Record<string, unknown> }[] = []
+if (process.env.STRIPE_API_KEY) {
+  paymentProviders.push({
+    resolve: "@medusajs/medusa/payment-stripe",
+    id: "stripe",
+    options: {
+      apiKey: process.env.STRIPE_API_KEY,
+      webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+      automaticPaymentMethods: true,
+      capture: false,
+    },
+  })
+}
+// PayPal Checkout (src/modules/paypal-payment): sandbox unless PAYPAL_ENVIRONMENT=live.
+if (process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET) {
+  paymentProviders.push({
+    resolve: "./src/modules/paypal-payment",
+    id: "paypal",
+    options: {
+      clientId: process.env.PAYPAL_CLIENT_ID,
+      clientSecret: process.env.PAYPAL_CLIENT_SECRET,
+      environment: process.env.PAYPAL_ENVIRONMENT === "live" ? "live" : "sandbox",
+      ...(process.env.PAYPAL_API_BASE ? { apiBase: process.env.PAYPAL_API_BASE } : {}),
+    },
+  })
+}
 
 module.exports = defineConfig({
   projectConfig: {

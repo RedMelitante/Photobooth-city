@@ -7,6 +7,8 @@ import { medusaEnabled } from '@/lib/medusa';
 import { completeCart, completeOrder, prepareCheckout, type PlacedOrder, type PreparedCheckout } from '@/lib/medusa-checkout';
 import { stripeEnabled } from '@/lib/stripe';
 import StripePayment, { type StripeResult } from './StripePayment';
+import PayPalPayment from './PayPalPayment';
+import { PAYPAL_PROVIDER, paypalEnabled } from '@/lib/paypal';
 import {
   STEPS,
   formatAddress,
@@ -97,6 +99,9 @@ export default function Checkout() {
   const [express, setExpress] = useState<string | null>(null);
   // Stripe: the backend cart is prepared (address, shipping, PaymentIntent) when the payment step opens.
   const [prepared, setPrepared] = useState<(PreparedCheckout & { key: string }) | null>(null);
+  // Card (Stripe or the test form) or PayPal; PayPal only when its client id is configured.
+  const [payWith, setPayWith] = useState<'card' | 'paypal'>('card');
+  const usePayPal = paypalEnabled && payWith === 'paypal';
   const heading = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
@@ -156,9 +161,10 @@ export default function Checkout() {
     if (quoteOnly && p?.step === 'payment') setP((cur) => (cur ? { ...cur, step: 'shipping' } : cur));
   }, [quoteOnly, p?.step]);
 
-  const prepKey = p ? JSON.stringify([p.email.trim(), p.address, sel?.id]) : '';
+  // Re-prepare when anything that changes the total changes, so a PayPal order always matches the cart.
+  const prepKey = p ? JSON.stringify([p.email.trim(), p.address, sel?.id, usePayPal, cart.lines.map((l) => [l.id, l.quantity]), promo]) : '';
   useEffect(() => {
-    if (!stripeEnabled || !p || order || quoteOnly || p.step !== 'payment' || prepared?.key === prepKey) return;
+    if ((!stripeEnabled && !usePayPal) || !p || order || quoteOnly || p.step !== 'payment' || prepared?.key === prepKey) return;
     let live = true;
     setPrepared(null);
     const a = p.address;
@@ -166,6 +172,7 @@ export default function Checkout() {
       email: p.email.trim(),
       address: { firstName: a.first, lastName: a.last, company: a.company, line1: a.line1, line2: a.line2, city: a.city, state: a.state, zip: a.zip, phone: a.phone },
       shipping: sel.id,
+      provider: usePayPal ? PAYPAL_PROVIDER : undefined,
     })
       .then((r) => live && setPrepared({ ...r, key: prepKey }))
       .catch((e: Error) => live && setDeclined({ kind: 'error', message: e.message }));
@@ -626,7 +633,79 @@ export default function Checkout() {
           {step === 'address' && addressStep}
           {(step === 'shipping' || step === 'payment') && review}
           {(step === 'shipping' || (step === 'payment' && quoteOnly)) && shippingStep}
-          {step === 'payment' && !quoteOnly && stripeEnabled && (
+          {step === 'payment' && !quoteOnly && paypalEnabled && (
+            <fieldset className="m-0 flex flex-col gap-2.5 border-0 p-0">
+              <legend className="p-0 pb-3">
+                <h2 ref={usePayPal ? heading : undefined} tabIndex={-1} className="m-0 text-xl font-extrabold outline-none lg:text-[22px]">Payment method</h2>
+              </legend>
+              {([
+                ['card', 'Credit or debit card', 'Visa, Mastercard, Amex, Discover'],
+                ['paypal', 'PayPal', 'Pay with your PayPal account'],
+              ] as const).map(([id, name, detail]) => {
+                const on = payWith === id;
+                return (
+                  <label key={id} className={`flex cursor-pointer items-center gap-3 rounded-card border-2 p-4 lg:px-5 ${on ? 'border-teal-700 bg-cyan-50' : 'border-line bg-surface'}`}>
+                    <input
+                      type="radio"
+                      name="pay-with"
+                      checked={on}
+                      disabled={paying}
+                      onChange={() => {
+                        setDeclined(null);
+                        setPayWith(id);
+                      }}
+                      className="m-0 size-5 flex-none accent-teal-700"
+                    />
+                    <span className="flex flex-1 flex-col gap-0.5">
+                      <span className="text-[15px] font-extrabold lg:text-base">{name}</span>
+                      <span className="text-[13px] text-ink-700 lg:text-sm">{detail}</span>
+                    </span>
+                    {id === 'paypal' && <span className="text-[15px] font-extrabold tracking-[-0.02em] text-[#003087] italic">Pay<span className="text-[#0079C1]">Pal</span></span>}
+                  </label>
+                );
+              })}
+            </fieldset>
+          )}
+          {step === 'payment' && !quoteOnly && usePayPal && (
+            prepared?.paypalOrderId ? (
+              <PayPalPayment
+                orderId={prepared.paypalOrderId}
+                declined={declined}
+                paying={paying}
+                setPaying={setPaying}
+                onApproved={async () => {
+                  rememberInfo(p);
+                  try {
+                    confirmPlaced(await completeCart(prepared), prepared.paypalOrderId ?? '', 'PayPal');
+                  } catch (e) {
+                    setPaying(false);
+                    setDeclined({ kind: 'error', message: (e as Error).message });
+                  }
+                }}
+              />
+            ) : declined ? (
+              <div className="flex flex-col gap-4">
+                <DeclinedAlert>{declined.kind === 'error' ? declined.message : 'PayPal isn’t available right now.'}</DeclinedAlert>
+                <button
+                  type="button"
+                  className={primaryBtn}
+                  onClick={() => {
+                    setDeclined(null);
+                    setPrepared(null);
+                    update({ step: 'shipping' });
+                    requestAnimationFrame(() => update({ step: 'payment' }));
+                  }}
+                >
+                  Try again
+                </button>
+              </div>
+            ) : (
+              <div className="flex h-24 items-center justify-center" role="status" aria-label="Preparing PayPal">
+                <Spinner />
+              </div>
+            )
+          )}
+          {step === 'payment' && !quoteOnly && !usePayPal && stripeEnabled && (
             prepared?.clientSecret ? (
               <StripePayment
                 headingRef={heading}
@@ -664,7 +743,7 @@ export default function Checkout() {
               </div>
             )
           )}
-          {step === 'payment' && !quoteOnly && !stripeEnabled && (
+          {step === 'payment' && !quoteOnly && !usePayPal && !stripeEnabled && (
             <PaymentStep
               headingRef={heading}
               pay={p.pay as PayMethod}

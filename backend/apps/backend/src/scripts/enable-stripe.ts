@@ -2,17 +2,20 @@ import { ExecArgs } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { updateRegionsWorkflow } from "@medusajs/medusa/core-flows"
 
-const STRIPE = "pp_stripe_stripe"
-
 /**
- * Adds Stripe to every region's payment providers once STRIPE_API_KEY is set.
- * Idempotent; runs on each deploy (`medusa exec`), so adding the key in
- * Railway and redeploying is all it takes.
+ * Adds the configured payment providers to every region: Stripe once
+ * STRIPE_API_KEY is set, PayPal once PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET
+ * are. Idempotent; runs on each deploy (`medusa exec`), so adding the keys in
+ * Railway and redeploying is all it takes. (File name kept for the deploy command.)
  */
-export default async function enableStripe({ container }: ExecArgs) {
+export default async function enablePaymentProviders({ container }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
-  if (!process.env.STRIPE_API_KEY) {
-    logger.info("Stripe: STRIPE_API_KEY not set, skipping")
+  const wanted = [
+    process.env.STRIPE_API_KEY ? "pp_stripe_stripe" : null,
+    process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET ? "pp_paypal_paypal" : null,
+  ].filter((p): p is string => !!p)
+  if (!wanted.length) {
+    logger.info("Payments: no Stripe or PayPal keys set, skipping")
     return
   }
   const query = container.resolve(ContainerRegistrationKeys.QUERY)
@@ -22,15 +25,16 @@ export default async function enableStripe({ container }: ExecArgs) {
   })
   for (const region of regions) {
     const current = (region.payment_providers ?? []).map((p) => p!.id)
-    if (current.includes(STRIPE)) {
+    const missing = wanted.filter((p) => !current.includes(p))
+    if (!missing.length) {
       continue
     }
     await updateRegionsWorkflow(container).run({
       input: {
         selector: { id: region.id },
-        update: { payment_providers: [...current, STRIPE] },
+        update: { payment_providers: [...current, ...missing] },
       },
     })
-    logger.info(`Stripe: enabled for region "${region.name}"`)
+    logger.info(`Payments: enabled ${missing.join(", ")} for region "${region.name}"`)
   }
 }

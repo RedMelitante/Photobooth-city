@@ -40,6 +40,8 @@ export interface PreparedCheckout {
   shipName: string;
   /** Stripe PaymentIntent client secret (Stripe mode only) */
   clientSecret: string | null;
+  /** PayPal order id for the PayPal buttons (PayPal only) */
+  paypalOrderId: string | null;
   /** cents, as Medusa computed it */
   total: number;
 }
@@ -84,7 +86,8 @@ function friendly(e: unknown): CheckoutError {
 }
 
 /** Address, shipping method and a payment session on the backend cart. */
-export async function prepareCheckout(input: { email: string; address: OrderAddress; shipping: string }): Promise<PreparedCheckout> {
+export async function prepareCheckout(input: { email: string; address: OrderAddress; shipping: string; provider?: string }): Promise<PreparedCheckout> {
+  const provider = input.provider ?? paymentProviderId;
   try {
     const cartId = await backendCartId();
     const path = `/store/carts/${cartId}`;
@@ -100,17 +103,23 @@ export async function prepareCheckout(input: { email: string; address: OrderAddr
     const { payment_collection } = await medusa<{ payment_collection: { id: string } }>('/store/payment-collections', {
       body: { cart_id: cartId },
     });
-    const session = await medusa<{ payment_collection: { payment_sessions: { provider_id: string; data: { client_secret?: string } }[] } }>(
+    const session = await medusa<{ payment_collection: { payment_sessions: { provider_id: string; data: { client_secret?: string; id?: string } }[] } }>(
       `/store/payment-collections/${payment_collection.id}/payment-sessions`,
-      { body: { provider_id: paymentProviderId } },
+      { body: { provider_id: provider } },
     );
-    const s = session.payment_collection.payment_sessions.find((x) => x.provider_id === paymentProviderId);
+    const s = session.payment_collection.payment_sessions.find((x) => x.provider_id === provider);
     try {
       sessionStorage.setItem(CART_KEY, JSON.stringify({ cartId, shipName: option.name }));
     } catch {
       /* ignore */
     }
-    return { cartId, shipName: option.name, clientSecret: s?.data?.client_secret ?? null, total: toCents(cart.total) };
+    return {
+      cartId,
+      shipName: option.name,
+      clientSecret: s?.data?.client_secret ?? null,
+      paypalOrderId: provider === 'pp_paypal_paypal' ? (s?.data?.id ?? null) : null,
+      total: toCents(cart.total),
+    };
   } catch (e) {
     throw friendly(e);
   }

@@ -192,7 +192,12 @@ export const FAQS: { q: string; a: string }[] = [
   { q: 'Where do you ship?', a: 'We ship within the United States only — all 50 states and Puerto Rico. Economy shipping starts at $20; for Hawaii, Alaska and Puerto Rico we quote shipping by phone.' },
   { q: 'Which photo booth is best for beginners?', a: 'For most new businesses, an iPad photo booth is an excellent starting point because it is portable, easy to operate and quick to set up at events. Call us and we will help you compare options.' },
   { q: 'Can I customize a booth for my brand?', a: 'Yes. Many of our photo booths can be customized with your business logo, branded graphics, color options, and accessories.' },
-  { q: 'Can I pay over time?', a: 'Checkout currently takes card payments: Visa, Mastercard, American Express and Discover. If you would like to talk about financing, call our team at 1 (888) 312-4449.' },
+  {
+    q: 'Can I pay over time?',
+    a: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID
+      ? 'Checkout takes Visa, Mastercard, American Express and Discover, and PayPal, which may offer Pay Later to eligible buyers. If you would like to talk about financing, call our team at 1 (888) 312-4449.'
+      : 'Checkout currently takes card payments: Visa, Mastercard, American Express and Discover. If you would like to talk about financing, call our team at 1 (888) 312-4449.',
+  },
 ];
 
 export function faqJsonLd() {

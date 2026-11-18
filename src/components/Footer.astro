@@ -9,8 +9,8 @@ const socials = [
   ['Instagram', 'https://www.instagram.com/myphotoboothcity/'],
   ['YouTube', 'https://www.youtube.com/channel/UCS1p7x2qLRKwtKgI8URavcQ'],
 ];
-// Only methods checkout accepts today (cards through Stripe).
-const payments = ['Visa', 'Mastercard', 'Amex', 'Discover'];
+// Only methods checkout accepts: cards (Stripe), plus PayPal once its client id is set.
+const payments = ['Visa', 'Mastercard', 'Amex', 'Discover', ...(import.meta.env.PUBLIC_PAYPAL_CLIENT_ID ? ['PayPal'] : [])];
 ---
 
 <footer class="dark-band w-full bg-ink-850 text-[#F6F8F8]">
