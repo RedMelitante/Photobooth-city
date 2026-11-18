@@ -103,7 +103,11 @@ export default function BraintreePayment(p: Props) {
           <strong>Sandbox mode.</strong> No real money moves. Test card 4111 1111 1111 1111, any future date, any CVV; or PayPal with a sandbox buyer account.
         </p>
       )}
-      {message && <DeclinedAlert>{message} No payment was taken and your cart is saved.</DeclinedAlert>}
+      {message && (
+        <DeclinedAlert>
+          {message} {/charged|taken/i.test(message) ? 'Your cart is saved.' : 'No payment was taken and your cart is saved.'}
+        </DeclinedAlert>
+      )}
       {loadError ? (
         <DeclinedAlert>{loadError}</DeclinedAlert>
       ) : (

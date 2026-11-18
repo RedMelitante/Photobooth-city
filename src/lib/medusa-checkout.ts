@@ -82,6 +82,9 @@ async function chooseShipping(cartId: string, wanted: string) {
 
 function friendly(e: unknown): CheckoutError {
   if (e instanceof CheckoutError) return e;
+  if (e instanceof MedusaError && /not authorized with the provider|declined|do not honor/i.test(e.message)) {
+    return new CheckoutError('Your payment was declined. Check your card details, or try another card or PayPal. Nothing was charged.');
+  }
   if (e instanceof MedusaError && /inventory|stock/i.test(e.message)) {
     return new CheckoutError('Something in your cart just sold out. Review your cart and try again.');
   }
