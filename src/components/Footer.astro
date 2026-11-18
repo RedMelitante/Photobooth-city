@@ -10,7 +10,7 @@ const socials = [
   ['YouTube', 'https://www.youtube.com/channel/UCS1p7x2qLRKwtKgI8URavcQ'],
 ];
 // Only methods checkout accepts: cards, plus PayPal once PayPal or Braintree is on.
-const payments = ['Visa', 'Mastercard', 'Amex', 'Discover', ...(import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || import.meta.env.PUBLIC_BRAINTREE_ENABLED === 'true' ? ['PayPal'] : [])];
+const payments = ['Visa', 'Mastercard', 'Amex', 'Discover', ...(import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || (import.meta.env.PUBLIC_BRAINTREE_ENABLED === 'true' && import.meta.env.PUBLIC_BRAINTREE_PAYPAL === 'true') ? ['PayPal'] : [])];
 ---
 
 <footer class="dark-band w-full bg-ink-850 text-[#F6F8F8]">

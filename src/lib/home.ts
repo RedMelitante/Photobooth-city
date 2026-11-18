@@ -194,7 +194,7 @@ export const FAQS: { q: string; a: string }[] = [
   { q: 'Can I customize a booth for my brand?', a: 'Yes. Many of our photo booths can be customized with your business logo, branded graphics, color options, and accessories.' },
   {
     q: 'Can I pay over time?',
-    a: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || import.meta.env.PUBLIC_BRAINTREE_ENABLED === 'true'
+    a: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || (import.meta.env.PUBLIC_BRAINTREE_ENABLED === 'true' && import.meta.env.PUBLIC_BRAINTREE_PAYPAL === 'true')
       ? 'Checkout takes Visa, Mastercard, American Express and Discover, and PayPal, which may offer Pay Later to eligible buyers. If you would like to talk about financing, call our team at 1 (888) 312-4449.'
       : 'Checkout currently takes card payments: Visa, Mastercard, American Express and Discover. If you would like to talk about financing, call our team at 1 (888) 312-4449.',
   },

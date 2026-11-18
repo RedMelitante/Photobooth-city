@@ -5,14 +5,14 @@ import { $cart, $cartNotices, $promo, $subtotal, removeLine, setQuantity } from 
 import { lineCap } from '@/lib/product';
 import { PROMO, STORE, cartNeedsShipping } from '@/lib/commerce';
 import { paypalEnabled } from '@/lib/paypal';
-import { braintreeEnabled } from '@/lib/braintree';
+import { braintreePayPal } from '@/lib/braintree';
 import { formatMoney } from '@/lib/money';
 import { PAGES, collectionUrl, productUrl } from '@/lib/routes';
 import { useHydrated } from '@/lib/useHydrated';
 import type { CartLine } from '@/lib/types';
 
 // Only methods checkout accepts today (cards through Stripe).
-const PAYMENTS = ['Visa', 'Mastercard', 'Amex', 'Discover', ...(paypalEnabled || braintreeEnabled ? ['PayPal'] : [])];
+const PAYMENTS = ['Visa', 'Mastercard', 'Amex', 'Discover', ...(paypalEnabled || braintreePayPal ? ['PayPal'] : [])];
 const COLS = 'grid grid-cols-[minmax(0,1fr)_140px_160px_120px] gap-4';
 const SHOP = collectionUrl('ipad-booths');
 

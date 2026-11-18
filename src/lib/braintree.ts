@@ -7,6 +7,13 @@ import { medusaEnabled } from './medusa';
  */
 export const braintreeEnabled = medusaEnabled && import.meta.env.PUBLIC_BRAINTREE_ENABLED === 'true';
 
+/**
+ * PayPal inside the Drop-in. Needs a PayPal account linked in the Braintree control
+ * panel (Settings → Processing → PayPal) or the button shows a developer error, so it
+ * stays off until PUBLIC_BRAINTREE_PAYPAL=true.
+ */
+export const braintreePayPal = braintreeEnabled && import.meta.env.PUBLIC_BRAINTREE_PAYPAL === 'true';
+
 export const BRAINTREE_PROVIDER = 'pp_braintree_braintree';
 
 export interface DropinInstance {

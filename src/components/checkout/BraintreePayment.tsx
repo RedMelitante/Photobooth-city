@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Icon from '@/components/react/Icon';
-import { loadDropin, type DropinInstance } from '@/lib/braintree';
+import { braintreePayPal, loadDropin, type DropinInstance } from '@/lib/braintree';
 import { formatMoney } from '@/lib/money';
 import { DeclinedAlert, Spinner, linkBtn, primaryBtn } from './ui';
 import type { Declined } from './PaymentStep';
@@ -46,7 +46,9 @@ export default function BraintreePayment(p: Props) {
           authorization: p.clientToken,
           container: mount.current,
           card: { cardholderName: { required: false } },
-          paypal: { flow: 'checkout', amount: (p.total / 100).toFixed(2), currency: 'USD', buttonStyle: { color: 'gold', shape: 'rect', size: 'responsive' } },
+          ...(braintreePayPal
+            ? { paypal: { flow: 'checkout', amount: (p.total / 100).toFixed(2), currency: 'USD', buttonStyle: { color: 'gold', shape: 'rect', size: 'responsive' } } }
+            : {}),
           vaultManager: false,
         });
       })
@@ -73,7 +75,7 @@ export default function BraintreePayment(p: Props) {
     try {
       payload = await dropin.requestPaymentMethod();
     } catch {
-      setError('Check your card details, or choose PayPal.');
+      setError(braintreePayPal ? 'Check your card details, or choose PayPal.' : 'Check your card details.');
       return;
     }
     p.setPaying(true);
@@ -100,7 +102,7 @@ export default function BraintreePayment(p: Props) {
       </div>
       {isSandbox(p.clientToken) && (
         <p role="note" className="m-0 rounded-md border-[1.5px] border-cyan-400 bg-cyan-50 px-4 py-3 text-sm leading-5 text-ink-950">
-          <strong>Sandbox mode.</strong> No real money moves. Test card 4111 1111 1111 1111, any future date, any CVV; or PayPal with a sandbox buyer account.
+          <strong>Sandbox mode.</strong> No real money moves. Test card 4111 1111 1111 1111, any future date, any CVV{braintreePayPal ? '; or PayPal with a sandbox buyer account' : ''}.
         </p>
       )}
       {message && (
