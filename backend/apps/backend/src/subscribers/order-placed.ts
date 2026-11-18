@@ -30,6 +30,7 @@ export default async function orderPlacedHandler({ event: { data }, container }:
       "tax_total",
       "total",
       "items.*",
+      "items.requires_shipping",
       "items.adjustments.code",
       "items.variant.product.metadata",
       "shipping_address.*",
@@ -72,6 +73,7 @@ export default async function orderPlacedHandler({ event: { data }, container }:
     promo_codes: [],
     shipping: num(order.shipping_total),
     shipping_method: order.shipping_methods?.[0]?.name ?? "",
+    ships: (order.items ?? []).some((i) => i?.requires_shipping !== false),
     tax: num(order.tax_total),
     total: num(order.total),
     address: [

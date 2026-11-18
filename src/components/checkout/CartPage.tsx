@@ -3,7 +3,7 @@ import CartPanel, { PromoForm, type Upsell } from '@/components/react/CartPanel'
 import Icon from '@/components/react/Icon';
 import { $cart, $cartNotices, $promo, $subtotal, removeLine, setQuantity } from '@/lib/cart';
 import { lineCap } from '@/lib/product';
-import { PROMO, STORE } from '@/lib/commerce';
+import { PROMO, STORE, cartNeedsShipping } from '@/lib/commerce';
 import { formatMoney } from '@/lib/money';
 import { PAGES, collectionUrl, productUrl } from '@/lib/routes';
 import { useHydrated } from '@/lib/useHydrated';
@@ -137,7 +137,7 @@ function Desktop({ ready }: { ready: boolean }) {
               {promo.applied && (
                 <div className="flex justify-between text-success-700"><dt>Discount ({PROMO.percent}%)</dt><dd className="m-0 font-bold">−{formatMoney(promo.discount)}</dd></div>
               )}
-              <div className="flex justify-between"><dt className="text-ink-700">Shipping</dt><dd className="m-0 text-ink-700">Calculated at checkout</dd></div>
+              <div className="flex justify-between"><dt className="text-ink-700">Shipping</dt><dd className="m-0 text-ink-700">{cartNeedsShipping(cart.lines) ? 'Calculated at checkout' : 'Not needed'}</dd></div>
               <div className="flex justify-between"><dt className="text-ink-700">Taxes</dt><dd className="m-0 text-ink-700">Calculated at checkout</dd></div>
               <div className="flex items-baseline justify-between border-t border-line-strong pt-3">
                 <dt className="text-[17px] font-extrabold">Estimated total</dt>

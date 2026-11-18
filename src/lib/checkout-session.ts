@@ -34,7 +34,7 @@ export interface CheckoutProgress {
   marketing: boolean;
   saveInfo: boolean;
   address: Address;
-  ship: 'economy' | 'ups';
+  ship: 'economy' | 'ups' | 'none';
   pay: string;
   billingSame: boolean;
   billing: BillingAddress;

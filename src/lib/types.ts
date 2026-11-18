@@ -55,6 +55,8 @@ export interface Product {
   leadTime: string;
   note: string;
   faq: { heading: string; items: { q: string; a: string }[] } | null;
+  /** false for software and other items that aren't shipped */
+  requiresShipping?: boolean;
 }
 
 export interface Collection {
@@ -85,4 +87,6 @@ export interface CartLine {
   maxQuantity?: number | null;
   /** e.g. "ships within 3–5 days" (empty when the product has none) */
   leadTime?: string;
+  /** false for software: no shipping step or shipping charge */
+  requiresShipping?: boolean;
 }

@@ -46,7 +46,8 @@ export default async function addShopifyExtraProducts({ container }: { container
         subtitle: p.kind,
         description: p.body.filter((b) => b.type !== "heading").map((b) => b.text).join("\n"),
         status: ProductStatus.PUBLISHED,
-        shipping_profile_id: profiles[0].id,
+        // Software isn't shipped: no shipping profile, so its cart lines don't require shipping
+        ...(p.requiresShipping ? { shipping_profile_id: profiles[0].id } : {}),
         thumbnail: p.images[0],
         images: p.images.map((url) => ({ url })),
         category_ids: p.categories.map((h) => categoryId.get(h)).filter((id): id is string => !!id),
@@ -70,6 +71,7 @@ export default async function addShopifyExtraProducts({ container }: { container
           note: p.note,
           body: p.body,
           faq: null,
+          ...(p.requiresShipping ? {} : { requires_shipping: false }),
         },
       })),
     },

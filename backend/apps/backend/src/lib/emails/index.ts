@@ -24,6 +24,8 @@ export type OrderEmailData = {
   promo_codes: string[]
   shipping: number
   shipping_method: string
+  /** false when nothing in the order is shipped (software only) */
+  ships?: boolean
   tax: number
   total: number
   address: string[]
@@ -103,7 +105,7 @@ function totals(d: OrderEmailData): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px;">
 ${row("Subtotal", money(d.subtotal))}
 ${d.discount > 0 ? row(`Discount${d.promo_codes.length ? ` (${esc(d.promo_codes.join(", "))})` : ""}`, "−" + money(d.discount), C.success) : ""}
-${row(`Shipping${d.shipping_method ? ` · ${esc(d.shipping_method)}` : ""}`, money(d.shipping))}
+${d.ships === false ? row("Shipping", "Not needed") : row(`Shipping${d.shipping_method ? ` · ${esc(d.shipping_method)}` : ""}`, money(d.shipping))}
 ${row("Tax", money(d.tax))}
 <tr><td colspan="2" style="border-top:1px solid ${C.line};padding-top:8px;"></td></tr>
 ${row("Total", money(d.total) + " USD", C.ink900, true)}
@@ -116,12 +118,12 @@ function orderPlaced(d: OrderEmailData): RenderedEmail {
   const body = `
 <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:${C.ink500};">Order ${esc(d.number)} · ${esc(dateLabel(d.placed_at))}</p>
 <h1 style="margin:0 0 12px;font-size:28px;line-height:32px;font-weight:800;letter-spacing:-0.02em;">${hi}</h1>
-<p style="margin:0 0 20px;font-size:15px;line-height:23px;color:${C.ink700};">Your order is confirmed. We'll email you tracking as soon as it ships from our Mira Loma, CA warehouse. Lead times are listed under each item.</p>
+<p style="margin:0 0 20px;font-size:15px;line-height:23px;color:${C.ink700};">${d.ships === false ? "Your order is confirmed. It's software only, so there's nothing to ship." : "Your order is confirmed. We'll email you tracking as soon as it ships from our Mira Loma, CA warehouse. Lead times are listed under each item."}</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${itemRows(d)}</table>
 ${totals(d)}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;background:${C.canvas};border-radius:6px;">
 <tr><td style="padding:16px 18px;font-size:14px;line-height:21px;">
-<strong>Shipping to</strong><br><span style="color:${C.ink700};">${d.address.map(esc).join("<br>")}</span>
+<strong>${d.ships === false ? "Billing address" : "Shipping to"}</strong><br><span style="color:${C.ink700};">${d.address.map(esc).join("<br>")}</span>
 </td></tr></table>
 <p style="margin:24px 0 0;"><a href="${esc(d.storefront_url)}/account" style="display:inline-block;background:${C.brand};color:#FFFFFF;font-weight:800;font-size:15px;text-decoration:none;border-radius:5px;padding:14px 22px;">View your account</a></p>`
   const text = [
@@ -131,11 +133,11 @@ ${totals(d)}
     "",
     `Subtotal ${money(d.subtotal)}`,
     ...(d.discount > 0 ? [`Discount -${money(d.discount)}`] : []),
-    `Shipping ${money(d.shipping)}`,
+    d.ships === false ? "Shipping not needed" : `Shipping ${money(d.shipping)}`,
     `Tax ${money(d.tax)}`,
     `Total ${money(d.total)} USD`,
     "",
-    "Shipping to:",
+    d.ships === false ? "Billing address:" : "Shipping to:",
     ...d.address,
     "",
     `Questions? Call ${STORE_DETAILS.support_phone} or reply to this email.`,

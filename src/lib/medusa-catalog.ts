@@ -99,6 +99,7 @@ function toProduct(p: MProduct): Product {
     body: (meta.body as RichBlock[]) ?? (p.description ?? '').split('\n').filter(Boolean).map((text) => ({ type: 'p' as const, text })),
     lead: meta.lead ?? '',
     leadTime: meta.lead_time ?? '',
+    requiresShipping: meta.requires_shipping !== false,
     note: meta.note ?? '',
     faq: meta.faq ?? null,
   };

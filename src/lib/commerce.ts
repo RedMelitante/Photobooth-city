@@ -54,7 +54,7 @@ export function economyRate(subtotal: number): number {
 }
 
 export interface ShippingOption {
-  id: 'economy';
+  id: 'economy' | 'none';
   name: string;
   detail: string;
   /** cents; null only for the "quote by phone" placeholder */
@@ -69,9 +69,20 @@ export const QUOTE_STATES = ['HI', 'AK', 'PR'];
  * for Hawaii, Alaska and Puerto Rico) aren't connected yet, so they aren't
  * offered; those three states get a phone quote instead (empty list).
  */
-export function shippingOptions(subtotal: number, state: string): ShippingOption[] {
+export function shippingOptions(subtotal: number, state: string, needsShipping = true): ShippingOption[] {
+  // Software-only orders: nothing ships, so no carrier, quote or charge.
+  if (!needsShipping) return [{ id: 'none', name: 'No shipping needed', detail: 'Software · nothing ships', amount: 0 }];
   if (QUOTE_STATES.includes(state)) return [];
   return [{ id: 'economy', name: 'Economy', detail: '5–8 business days', amount: economyRate(subtotal) }];
+}
+
+/** Lines that ship (software doesn't), and their subtotal: the Economy tier's basis. */
+export function shippableSubtotal(lines: { unitPrice: number; quantity: number; requiresShipping?: boolean }[]): number {
+  return lines.filter((l) => l.requiresShipping !== false).reduce((s, l) => s + l.unitPrice * l.quantity, 0);
+}
+
+export function cartNeedsShipping(lines: { requiresShipping?: boolean }[]): boolean {
+  return lines.some((l) => l.requiresShipping !== false);
 }
 
 /**

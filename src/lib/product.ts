@@ -11,6 +11,7 @@ export function toCartLine(p: Product, v: ProductVariant): Omit<CartLine, 'quant
     compareAtPrice: v.compareAtPrice,
     maxQuantity: v.maxQuantity ?? null,
     leadTime: leadTimeLabel(p.leadTime),
+    ...(p.requiresShipping === false ? { requiresShipping: false } : {}),
   };
 }
 

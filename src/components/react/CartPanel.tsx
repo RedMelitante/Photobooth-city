@@ -3,7 +3,7 @@ import { useStore } from '@nanostores/react';
 import Icon from './Icon';
 import { $cart, $cartNotices, $promo, $subtotal, addLine, closeCart, removeLine, saveCode, setQuantity } from '@/lib/cart';
 import { lineCap } from '@/lib/product';
-import { PROMO, isPromoCode } from '@/lib/commerce';
+import { PROMO, cartNeedsShipping, isPromoCode } from '@/lib/commerce';
 import { formatMoney } from '@/lib/money';
 import type { CartLine } from '@/lib/types';
 
@@ -198,7 +198,7 @@ export default function CartPanel({ upsells = [], mode = 'drawer', titleId = 'ca
             {promo.applied && (
               <div className="flex justify-between text-success-700"><dt>Discount ({PROMO.percent}%)</dt><dd className="font-bold">−{formatMoney(promo.discount)}</dd></div>
             )}
-            <div className="flex justify-between"><dt className="text-ink-700">Shipping</dt><dd className="text-ink-700">Calculated at checkout</dd></div>
+            <div className="flex justify-between"><dt className="text-ink-700">Shipping</dt><dd className="text-ink-700">{cartNeedsShipping(cart.lines) ? 'Calculated at checkout' : 'Not needed'}</dd></div>
             <div className="flex items-baseline justify-between border-t border-line pt-2">
               <dt className="text-base font-extrabold">Estimated total</dt>
               <dd className="text-[22px] font-extrabold tracking-[-0.02em]">{formatMoney(total)}</dd>

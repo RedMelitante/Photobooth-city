@@ -91,8 +91,11 @@ export async function prepareCheckout(input: { email: string; address: OrderAddr
     const address = medusaAddress(input.address);
     await medusa(path, { body: { email: input.email, shipping_address: address, billing_address: address } });
 
-    const option = await chooseShipping(cartId, input.shipping);
-    const { cart } = await medusa<{ cart: { total: number } }>(`${path}/shipping-methods`, { body: { option_id: option.id } });
+    // Software-only carts have no line that requires shipping: no shipping method.
+    const option = input.shipping === 'none' ? { id: '', name: 'No shipping needed' } : await chooseShipping(cartId, input.shipping);
+    const { cart } = option.id
+      ? await medusa<{ cart: { total: number } }>(`${path}/shipping-methods`, { body: { option_id: option.id } })
+      : await medusa<{ cart: { total: number } }>(path, { query: { fields: 'total' } });
 
     const { payment_collection } = await medusa<{ payment_collection: { id: string } }>('/store/payment-collections', {
       body: { cart_id: cartId },

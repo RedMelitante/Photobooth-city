@@ -109,7 +109,8 @@
         "compare_at": null,
         "grams": null
       }
-    ]
+    ],
+    "requiresShipping": false
   },
   {
     "shopify_id": 7420532588626,
@@ -214,7 +215,8 @@
         "compare_at": null,
         "grams": null
       }
-    ]
+    ],
+    "requiresShipping": true
   },
   {
     "shopify_id": 7416903893074,
@@ -283,6 +285,7 @@
         "compare_at": null,
         "grams": 3175
       }
-    ]
+    ],
+    "requiresShipping": true
   }
 ]

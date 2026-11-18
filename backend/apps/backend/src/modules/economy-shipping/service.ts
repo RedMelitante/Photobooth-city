@@ -29,12 +29,14 @@ class EconomyShippingService extends AbstractFulfillmentProviderService {
     _data: CalculateShippingOptionPriceDTO["data"],
     context: CalculateShippingOptionPriceDTO["context"]
   ): Promise<CalculatedShippingOptionPrice> {
-    const subtotal = (context.items ?? []).reduce(
-      (sum, item) => sum + Number(item.unit_price ?? 0) * Number(item.quantity ?? 0),
-      0
+    // Only items that ship count toward the tier (software doesn't). A cart left
+    // with nothing to ship keeps any earlier method at $0 instead of $20.
+    const shippable = (context.items ?? []).filter(
+      (item) => (item as { requires_shipping?: boolean }).requires_shipping !== false
     )
+    const subtotal = shippable.reduce((sum, item) => sum + Number(item.unit_price ?? 0) * Number(item.quantity ?? 0), 0)
     return {
-      calculated_amount: economyRate(subtotal),
+      calculated_amount: shippable.length ? economyRate(subtotal) : 0,
       is_calculated_price_tax_inclusive: false,
     }
   }

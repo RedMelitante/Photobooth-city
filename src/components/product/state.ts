@@ -5,7 +5,7 @@ import type { Product } from '@/lib/types';
 export const $variantId = atom<string | null>(null);
 
 /** The fields the client islands need (keeps body copy out of the island props). */
-export type ClientProduct = Pick<Product, 'id' | 'handle' | 'title' | 'images' | 'options' | 'variants' | 'leadTime' | 'available' | 'minPrice' | 'compareAtPrice'>;
+export type ClientProduct = Pick<Product, 'id' | 'handle' | 'title' | 'images' | 'options' | 'variants' | 'leadTime' | 'available' | 'minPrice' | 'compareAtPrice' | 'requiresShipping'>;
 
 export function toClientProduct(p: Product): ClientProduct {
   return {
@@ -19,6 +19,7 @@ export function toClientProduct(p: Product): ClientProduct {
     available: p.available,
     minPrice: p.minPrice,
     compareAtPrice: p.compareAtPrice,
+    ...(p.requiresShipping === false ? { requiresShipping: false } : {}),
   };
 }
 

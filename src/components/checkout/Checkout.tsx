@@ -23,7 +23,7 @@ import {
   type OrderSnapshot,
   type StepId,
 } from '@/lib/checkout-session';
-import { STORE, US_STATES, estimateTax, promoState, shippingOptions } from '@/lib/commerce';
+import { STORE, US_STATES, cartNeedsShipping, estimateTax, promoState, shippableSubtotal, shippingOptions } from '@/lib/commerce';
 import { formatMoney } from '@/lib/money';
 import { PAGES, collectionUrl } from '@/lib/routes';
 import Confirmed from './Confirmed';
@@ -143,7 +143,10 @@ export default function Checkout() {
   }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const state = p?.address.state ?? '';
-  const options = useMemo(() => shippingOptions(sub, state), [sub, state]);
+  // Software doesn't ship: it's left out of the Economy tier, and a software-only cart needs no shipping.
+  const needsShipping = cartNeedsShipping(cart.lines);
+  const shipSub = shippableSubtotal(cart.lines);
+  const options = useMemo(() => shippingOptions(shipSub, state, needsShipping), [shipSub, state, needsShipping]);
   // Hawaii, Alaska and Puerto Rico: no priced option yet, so the order can't reach payment.
   const quoteOnly = options.length === 0;
   const sel = options.find((o) => o.id === p?.ship) ?? options[0] ?? { id: 'economy' as const, name: 'Shipping quote', detail: '', amount: null };
@@ -470,7 +473,7 @@ export default function Checkout() {
   const review = (
     <dl className="m-0 rounded-card border border-line px-4 lg:px-5">
       {reviewRow('Contact', p.email, () => goTo('address'))}
-      {reviewRow('Ship to', formatAddress(p.address, true), () => goTo('address'), step === 'shipping')}
+      {reviewRow(needsShipping ? 'Ship to' : 'Bill to', formatAddress(p.address, true), () => goTo('address'), step === 'shipping')}
       {step === 'payment' && reviewRow('Method', `${sel.name} · ${shipPrice}`, () => goTo('shipping'), true)}
     </dl>
   );
@@ -519,7 +522,7 @@ export default function Checkout() {
       </section>
 
       <section aria-labelledby="sh-title" className="flex flex-col gap-3 lg:gap-3.5">
-        <h2 id="sh-title" className="m-0 text-xl font-extrabold lg:text-[22px]">Shipping address</h2>
+        <h2 id="sh-title" className="m-0 text-xl font-extrabold lg:text-[22px]">{needsShipping ? 'Shipping address' : 'Billing address'}</h2>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="f-country" className="text-[13px] font-bold">Country / region</label>
           <select id="f-country" autoComplete="country-name" className="box-border h-[52px] w-full rounded-md border-[1.5px] border-line-strong bg-surface px-3 text-base text-ink-900 lg:px-3.5">
@@ -591,10 +594,19 @@ export default function Checkout() {
           })
         )}
       </fieldset>
-      {!quoteOnly && (
+      {!quoteOnly && needsShipping && (
         <p className="m-0 flex gap-2.5 rounded-md bg-cyan-50 px-4 py-3.5 text-sm leading-5 font-semibold text-teal-800">
           <Icon name="truck" size={18} className="mt-px" />
-          <span>Ships from our Mira Loma, CA warehouse once your order is ready; each item's lead time is shown in your cart. Economy is $20–$200 depending on order value.</span>
+          <span>
+            Ships from our Mira Loma, CA warehouse once your order is ready; each item's lead time is shown in your cart. Economy is $20–$200 depending on order value
+            {cart.lines.some((l) => l.requiresShipping === false) ? ' (software isn’t counted)' : ''}.
+          </span>
+        </p>
+      )}
+      {!needsShipping && (
+        <p className="m-0 flex gap-2.5 rounded-md bg-cyan-50 px-4 py-3.5 text-sm leading-5 font-semibold text-teal-800">
+          <Icon name="info" size={18} className="mt-px" />
+          <span>Your order is software only, so there's nothing to ship and no shipping charge.</span>
         </p>
       )}
       <div className="flex items-center justify-between gap-4 pt-2 lg:pt-3">
