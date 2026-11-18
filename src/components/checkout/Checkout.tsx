@@ -4,10 +4,12 @@ import Icon from '@/components/react/Icon';
 import { $cart, $promo, $subtotal, clearCart } from '@/lib/cart';
 import { confirmPayment, type CardInput, type PayMethod } from '@/lib/checkout-payments';
 import { medusaEnabled } from '@/lib/medusa';
-import { completeCart, completeOrder, prepareCheckout, type PlacedOrder, type PreparedCheckout } from '@/lib/medusa-checkout';
+import { attachBraintreeNonce, completeCart, completeOrder, prepareCheckout, type PlacedOrder, type PreparedCheckout } from '@/lib/medusa-checkout';
 import { stripeEnabled } from '@/lib/stripe';
 import StripePayment, { type StripeResult } from './StripePayment';
 import PayPalPayment from './PayPalPayment';
+import BraintreePayment from './BraintreePayment';
+import { BRAINTREE_PROVIDER, braintreeEnabled } from '@/lib/braintree';
 import { PAYPAL_PROVIDER, paypalEnabled } from '@/lib/paypal';
 import {
   STEPS,
@@ -101,7 +103,9 @@ export default function Checkout() {
   const [prepared, setPrepared] = useState<(PreparedCheckout & { key: string }) | null>(null);
   // Card (Stripe or the test form) or PayPal; PayPal only when its client id is configured.
   const [payWith, setPayWith] = useState<'card' | 'paypal'>('card');
-  const usePayPal = paypalEnabled && payWith === 'paypal';
+  // Braintree (cards + PayPal in one Drop-in) replaces the Stripe / PayPal options when it's on.
+  const useBraintree = braintreeEnabled;
+  const usePayPal = !useBraintree && paypalEnabled && payWith === 'paypal';
   const heading = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
@@ -162,9 +166,9 @@ export default function Checkout() {
   }, [quoteOnly, p?.step]);
 
   // Re-prepare when anything that changes the total changes, so a PayPal order always matches the cart.
-  const prepKey = p ? JSON.stringify([p.email.trim(), p.address, sel?.id, usePayPal, cart.lines.map((l) => [l.id, l.quantity]), promo]) : '';
+  const prepKey = p ? JSON.stringify([p.email.trim(), p.address, sel?.id, usePayPal, useBraintree, cart.lines.map((l) => [l.id, l.quantity]), promo]) : '';
   useEffect(() => {
-    if ((!stripeEnabled && !usePayPal) || !p || order || quoteOnly || p.step !== 'payment' || prepared?.key === prepKey) return;
+    if ((!stripeEnabled && !usePayPal && !useBraintree) || !p || order || quoteOnly || p.step !== 'payment' || prepared?.key === prepKey) return;
     let live = true;
     setPrepared(null);
     const a = p.address;
@@ -172,7 +176,7 @@ export default function Checkout() {
       email: p.email.trim(),
       address: { firstName: a.first, lastName: a.last, company: a.company, line1: a.line1, line2: a.line2, city: a.city, state: a.state, zip: a.zip, phone: a.phone },
       shipping: sel.id,
-      provider: usePayPal ? PAYPAL_PROVIDER : undefined,
+      provider: useBraintree ? BRAINTREE_PROVIDER : usePayPal ? PAYPAL_PROVIDER : undefined,
     })
       .then((r) => live && setPrepared({ ...r, key: prepKey }))
       .catch((e: Error) => live && setDeclined({ kind: 'error', message: e.message }));
@@ -633,7 +637,46 @@ export default function Checkout() {
           {step === 'address' && addressStep}
           {(step === 'shipping' || step === 'payment') && review}
           {(step === 'shipping' || (step === 'payment' && quoteOnly)) && shippingStep}
-          {step === 'payment' && !quoteOnly && paypalEnabled && (
+          {step === 'payment' && !quoteOnly && useBraintree && (
+            prepared?.braintreeClientToken ? (
+              <BraintreePayment
+                headingRef={heading}
+                clientToken={prepared.braintreeClientToken}
+                total={prepared.total}
+                declined={declined}
+                paying={paying}
+                setPaying={setPaying}
+                onBack={() => goTo('shipping')}
+                onPay={async (nonce, label, deviceData) => {
+                  setDeclined(null);
+                  rememberInfo(p);
+                  await attachBraintreeNonce(prepared, nonce, deviceData);
+                  confirmPlaced(await completeCart(prepared), '', label);
+                }}
+              />
+            ) : declined ? (
+              <div className="flex flex-col gap-4">
+                <DeclinedAlert>{declined.kind === 'error' ? declined.message : 'Payment isn’t available right now.'}</DeclinedAlert>
+                <button
+                  type="button"
+                  className={primaryBtn}
+                  onClick={() => {
+                    setDeclined(null);
+                    setPrepared(null);
+                    update({ step: 'shipping' });
+                    requestAnimationFrame(() => update({ step: 'payment' }));
+                  }}
+                >
+                  Try again
+                </button>
+              </div>
+            ) : (
+              <div className="flex h-40 items-center justify-center" role="status" aria-label="Preparing secure payment">
+                <Spinner />
+              </div>
+            )
+          )}
+          {step === 'payment' && !quoteOnly && !useBraintree && paypalEnabled && (
             <fieldset className="m-0 flex flex-col gap-2.5 border-0 p-0">
               <legend className="p-0 pb-3">
                 <h2 ref={usePayPal ? heading : undefined} tabIndex={-1} className="m-0 text-xl font-extrabold outline-none lg:text-[22px]">Payment method</h2>
@@ -705,7 +748,7 @@ export default function Checkout() {
               </div>
             )
           )}
-          {step === 'payment' && !quoteOnly && !usePayPal && stripeEnabled && (
+          {step === 'payment' && !quoteOnly && !useBraintree && !usePayPal && stripeEnabled && (
             prepared?.clientSecret ? (
               <StripePayment
                 headingRef={heading}
@@ -743,7 +786,7 @@ export default function Checkout() {
               </div>
             )
           )}
-          {step === 'payment' && !quoteOnly && !usePayPal && !stripeEnabled && (
+          {step === 'payment' && !quoteOnly && !useBraintree && !usePayPal && !stripeEnabled && (
             <PaymentStep
               headingRef={heading}
               pay={p.pay as PayMethod}

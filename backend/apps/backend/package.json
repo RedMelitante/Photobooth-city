@@ -32,6 +32,7 @@
     "@medusajs/medusa": "2.22.1",
     "@medusajs/ui": "4.2.6",
     "@tanstack/react-query": "5.64.2",
+    "braintree": "^3.41.0",
     "react-i18next": "13.5.0",
     "react-router-dom": "7.18.2",
     "zod": "4.2.0"
@@ -40,6 +41,7 @@
     "@medusajs/test-utils": "2.22.1",
     "@swc/core": "^1.7.28",
     "@swc/jest": "^0.2.36",
+    "@types/braintree": "^3.4.5",
     "@types/jest": "^29.5.13",
     "@types/node": "^20.12.11",
     "@types/react": "^18.3.2",

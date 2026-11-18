@@ -5,7 +5,7 @@ import { updateRegionsWorkflow } from "@medusajs/medusa/core-flows"
 /**
  * Adds the configured payment providers to every region: Stripe once
  * STRIPE_API_KEY is set, PayPal once PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET
- * are. Idempotent; runs on each deploy (`medusa exec`), so adding the keys in
+ * are, Braintree once the three BRAINTREE_* keys are. Idempotent; runs on each deploy (`medusa exec`), so adding the keys in
  * Railway and redeploying is all it takes. (File name kept for the deploy command.)
  */
 export default async function enablePaymentProviders({ container }: ExecArgs) {
@@ -13,9 +13,12 @@ export default async function enablePaymentProviders({ container }: ExecArgs) {
   const wanted = [
     process.env.STRIPE_API_KEY ? "pp_stripe_stripe" : null,
     process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET ? "pp_paypal_paypal" : null,
+    process.env.BRAINTREE_MERCHANT_ID && process.env.BRAINTREE_PUBLIC_KEY && process.env.BRAINTREE_PRIVATE_KEY
+      ? "pp_braintree_braintree"
+      : null,
   ].filter((p): p is string => !!p)
   if (!wanted.length) {
-    logger.info("Payments: no Stripe or PayPal keys set, skipping")
+    logger.info("Payments: no Stripe, PayPal or Braintree keys set, skipping")
     return
   }
   const query = container.resolve(ContainerRegistrationKeys.QUERY)

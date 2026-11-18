@@ -2,8 +2,8 @@ import { loadEnv, defineConfig } from "@medusajs/framework/utils"
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd())
 
-// Stripe is enabled when STRIPE_API_KEY is set, PayPal when PAYPAL_CLIENT_ID and
-// PAYPAL_CLIENT_SECRET are. Without them the store runs on Medusa's system
+// Stripe is enabled when STRIPE_API_KEY is set, Braintree when the three
+// BRAINTREE_* keys are, PayPal when PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET are. Without them the store runs on Medusa's system
 // payment provider, which authorizes every payment (dev only).
 const paymentProviders: { resolve: string; id: string; options: Record<string, unknown> }[] = []
 if (process.env.STRIPE_API_KEY) {
@@ -15,6 +15,20 @@ if (process.env.STRIPE_API_KEY) {
       webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
       automaticPaymentMethods: true,
       capture: false,
+    },
+  })
+}
+// Braintree, cards + PayPal (src/modules/braintree-payment): sandbox unless BRAINTREE_ENVIRONMENT=production.
+if (process.env.BRAINTREE_MERCHANT_ID && process.env.BRAINTREE_PUBLIC_KEY && process.env.BRAINTREE_PRIVATE_KEY) {
+  paymentProviders.push({
+    resolve: "./src/modules/braintree-payment",
+    id: "braintree",
+    options: {
+      merchantId: process.env.BRAINTREE_MERCHANT_ID,
+      publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+      privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+      environment: process.env.BRAINTREE_ENVIRONMENT === "production" ? "production" : "sandbox",
+      ...(process.env.BRAINTREE_MERCHANT_ACCOUNT_ID ? { merchantAccountId: process.env.BRAINTREE_MERCHANT_ACCOUNT_ID } : {}),
     },
   })
 }

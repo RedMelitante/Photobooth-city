@@ -42,6 +42,9 @@ export interface PreparedCheckout {
   clientSecret: string | null;
   /** PayPal order id for the PayPal buttons (PayPal only) */
   paypalOrderId: string | null;
+  /** Braintree Drop-in client token (Braintree only) */
+  braintreeClientToken: string | null;
+  paymentCollectionId: string;
   /** cents, as Medusa computed it */
   total: number;
 }
@@ -103,7 +106,7 @@ export async function prepareCheckout(input: { email: string; address: OrderAddr
     const { payment_collection } = await medusa<{ payment_collection: { id: string } }>('/store/payment-collections', {
       body: { cart_id: cartId },
     });
-    const session = await medusa<{ payment_collection: { payment_sessions: { provider_id: string; data: { client_secret?: string; id?: string } }[] } }>(
+    const session = await medusa<{ payment_collection: { payment_sessions: { provider_id: string; data: { client_secret?: string; id?: string; client_token?: string } }[] } }>(
       `/store/payment-collections/${payment_collection.id}/payment-sessions`,
       { body: { provider_id: provider } },
     );
@@ -118,8 +121,24 @@ export async function prepareCheckout(input: { email: string; address: OrderAddr
       shipName: option.name,
       clientSecret: s?.data?.client_secret ?? null,
       paypalOrderId: provider === 'pp_paypal_paypal' ? (s?.data?.id ?? null) : null,
+      braintreeClientToken: s?.data?.client_token ?? null,
+      paymentCollectionId: payment_collection.id,
       total: toCents(cart.total),
     };
+  } catch (e) {
+    throw friendly(e);
+  }
+}
+
+/**
+ * Braintree: hands the Drop-in's one-time nonce to the backend by re-creating
+ * the payment session with it; completeCart then authorizes the payment.
+ */
+export async function attachBraintreeNonce(prepared: Pick<PreparedCheckout, 'paymentCollectionId'>, nonce: string, deviceData?: string) {
+  try {
+    await medusa(`/store/payment-collections/${prepared.paymentCollectionId}/payment-sessions`, {
+      body: { provider_id: 'pp_braintree_braintree', data: { payment_method_nonce: nonce, ...(deviceData ? { device_data: deviceData } : {}) } },
+    });
   } catch (e) {
     throw friendly(e);
   }
